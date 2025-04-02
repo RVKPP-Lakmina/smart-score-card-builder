@@ -14,7 +14,7 @@ export default new Map([
   [
     "templates",
     {
-      component: React.lazy(() => import("../pages/settings/Page")),
+      component: React.lazy(() => import("../pages/templates/Page")),
       Icon: Home,
       title: "Score Card Templates",
     },

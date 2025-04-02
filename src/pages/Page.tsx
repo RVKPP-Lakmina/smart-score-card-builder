@@ -1,21 +1,17 @@
-import { useState } from "react";
 import Navigations from "../components/navigation/Navigations";
 import useNavigation from "../hooks/useNavigation";
 import { cn } from "../lib/util";
 import { Menu, Sun, Moon } from "lucide-react";
 import React from "react";
 import route from "../routes/route";
+import useTheme from "../hooks/useTheme";
 
 const Page = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode, toggleTheme: toggleDarkMode } = useTheme();
   const {
     currentPage,
     navigationPanel: { isNavOpen, toggleNav },
   } = useNavigation();
-
-  const toggleDarkMode = () => {
-    setIsDarkMode((prev) => !prev);
-  };
 
   return (
     <div className="flex h-screen overflow-hidden">
