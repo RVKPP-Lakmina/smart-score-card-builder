@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronRight } from "lucide-react";
+// import { ChevronRight } from "lucide-react";
 import { cn } from "../../lib/util";
 
 interface BreadcrumbProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -17,8 +17,8 @@ const Breadcrumb = React.forwardRef<HTMLDivElement, BreadcrumbProps>(
   (
     {
       className,
-      separator = <ChevronRight size={16} />,
-      showHomeIcon = true,
+      // separator = <ChevronRight size={16} />,
+      // showHomeIcon = true,
       ...props
     },
     ref
@@ -53,7 +53,7 @@ interface BreadcrumbItemProps extends React.HTMLAttributes<HTMLLIElement> {
 }
 
 const BreadcrumbItem = React.forwardRef<HTMLLIElement, BreadcrumbItemProps>(
-  ({ className, isHome = false, ...props }, ref) => {
+  ({ className = false, ...props }, ref) => {
     return (
       <li
         ref={ref}
@@ -91,7 +91,7 @@ interface BreadcrumbLinkProps
 }
 
 const BreadcrumbLink = React.forwardRef<HTMLAnchorElement, BreadcrumbLinkProps>(
-  ({ className, asChild = false, isHome = false, ...props }, ref) => {
+  ({ className, isHome = false, ...props }, ref) => {
     return (
       <a
         ref={ref}
