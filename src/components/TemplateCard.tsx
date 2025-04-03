@@ -1,6 +1,7 @@
 import { Edit, Copy, Info, Trash2 } from "lucide-react";
 import moment from "moment";
 import { useModal } from "../hooks/useModal";
+import React from "react";
 
 interface TemplateCardProps {
   template: {
@@ -13,30 +14,22 @@ interface TemplateCardProps {
 function TemplateCard({ template }: TemplateCardProps) {
   const { openModal } = useModal();
 
+  const deleteTemplate = async () => {
+    new Promise((resolve) => setTimeout(resolve, 2000));
+  };
+
   const handleDelete = () => {
     openModal({
       title: "Delete Template",
       childrenkey: "sampleDelete",
-      footer: (
-        <div className="flex justify-end space-x-2">
-          <button
-            className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all"
-            // disabled={isDeleting}
-          >
-            Cancel
-          </button>
-          <button
-            // onClick={handleDelete}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md shadow-md transition-all disabled:opacity-50"
-            // disabled={isDeleting}
-          >
-            Delete
-            {/* {isDeleting ? "Deleting..." : "Delete"} */}
-          </button>
-        </div>
-      ),
-      size: "sm",
-      closeOnOutsideClick: false,
+      footerProps: {
+        handleDelete: deleteTemplate,
+      },
+      props: {
+        message: "Are you sure you want to delete this template?",
+        subMessage:
+          "This action cannot be undone. Please confirm that you want to delete this.",
+      },
     });
   };
 

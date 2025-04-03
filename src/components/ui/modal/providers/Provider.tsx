@@ -4,6 +4,7 @@ import { OpenModalProps, PropsRef } from "../types/types";
 import modalMap from "../modalMap";
 import { Modal } from "../Modal";
 import React from "react";
+import modalFooterMap from "../modalFotter";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -26,7 +27,8 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
   const openModal: (props: OpenModalProps) => void = ({
     title = "",
     childrenkey,
-    footer,
+    footerProps = {},
+    props = {},
     size = "md",
     closeOnOutsideClick = true,
   }: OpenModalProps) => {
@@ -34,7 +36,8 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
       title,
       childrenkey,
       Child: modalMap.has(childrenkey) ? modalMap.get(childrenkey) : <></>,
-      footer,
+      props,
+      footerProps,
       size,
       closeOnOutsideClick,
     };
@@ -52,34 +55,42 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
       {children}
 
       {Boolean(propsRef.current) && (
-        <Modal
-          isOpen={isOpen}
-          footer={
-            propsRef.current?.footer ? (
-              typeof propsRef.current.footer === "function" ? (
-                propsRef.current.footer
-              ) : null
-            ) : (
-              <></>
-            )
-          }
-          title={propsRef.current?.title}
-          size={propsRef.current?.size}
-          onClose={closeModal}
-          closeOnOutsideClick={propsRef.current?.closeOnOutsideClick || true}
-          children={
-            <Suspense fallback={<div>Loading...</div>}>
-              {propsRef.current?.childrenkey &&
-              modalMap.has(propsRef.current.childrenkey) ? (
-                React.createElement(
-                  modalMap.get(propsRef.current.childrenkey) || (() => <></>)
-                )
-              ) : (
-                <></>
-              )}
-            </Suspense>
-          }
-        />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Modal
+            isOpen={isOpen}
+            footer={
+              <>
+                {propsRef.current?.childrenkey &&
+                modalFooterMap.has(propsRef.current.childrenkey) ? (
+                  React.createElement(
+                    modalFooterMap.get(propsRef.current.childrenkey) ||
+                      (() => <></>),
+                    propsRef.current.footerProps as Record<string, unknown>
+                  )
+                ) : (
+                  <></>
+                )}
+              </>
+            }
+            title={propsRef.current?.title}
+            size={propsRef.current?.size}
+            onClose={closeModal}
+            closeOnOutsideClick={propsRef.current?.closeOnOutsideClick || true}
+            children={
+              <>
+                {propsRef.current?.childrenkey &&
+                modalMap.has(propsRef.current.childrenkey) ? (
+                  React.createElement(
+                    modalMap.get(propsRef.current.childrenkey) || (() => <></>),
+                    propsRef.current.footerProps as Record<string, unknown>
+                  )
+                ) : (
+                  <></>
+                )}
+              </>
+            }
+          />
+        </Suspense>
       )}
     </ContextProvider>
   );

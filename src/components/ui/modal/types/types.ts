@@ -11,7 +11,8 @@ export interface PropsRef extends OpenModalProps {
 export type OpenModalProps = {
   title?: string;
   childrenkey: string;
-  footer?: React.ReactNode;
+  footerProps?: unknown;
+  props?: unknown;
   size?: Size;
   closeOnOutsideClick?: boolean;
 };

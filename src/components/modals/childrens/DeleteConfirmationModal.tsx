@@ -1,4 +1,12 @@
-const DeleteConfirmationModal = () => {
+interface DeleteConfirmationModalProps {
+  message: string;
+  subMessage: string;
+}
+
+const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
+  message,
+  subMessage,
+}: DeleteConfirmationModalProps) => {
   return (
     <div className="text-center py-4">
       <div className="mx-auto w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-4">
@@ -17,9 +25,12 @@ const DeleteConfirmationModal = () => {
           />
         </svg>
       </div>
-      <p className="mb-2">Are you sure you want to delete this template?</p>
+      <p className="mb-2">
+        {message || "Are you sure you want to delete this?"}{" "}
+      </p>
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        This action cannot be undone.
+        {subMessage ||
+          "This action cannot be undone. Please confirm that you want to delete this."}
       </p>
     </div>
   );
