@@ -1,10 +1,10 @@
 import { Suspense, useRef, useState } from "react";
 import ModalContext from "../context/context";
 import { OpenModalProps, PropsRef } from "../types/types";
-import modalMap from "../modalMap";
+import modalMap from "../../../modals/modalMap";
 import { Modal } from "../Modal";
 import React from "react";
-import modalFooterMap from "../modalFotter";
+import modalFooterMap from "../../../modals/modalFotter";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -58,18 +58,20 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
         <Suspense fallback={<div>Loading...</div>}>
           <Modal
             isOpen={isOpen}
+            isFooterVisible={Boolean(
+              propsRef.current?.childrenkey &&
+                modalFooterMap.has(propsRef.current.childrenkey)
+            )}
             footer={
               <>
                 {propsRef.current?.childrenkey &&
-                modalFooterMap.has(propsRef.current.childrenkey) ? (
-                  React.createElement(
-                    modalFooterMap.get(propsRef.current.childrenkey) ||
-                      (() => <></>),
-                    propsRef.current.footerProps as Record<string, unknown>
-                  )
-                ) : (
-                  <></>
-                )}
+                modalFooterMap.has(propsRef.current.childrenkey)
+                  ? React.createElement(
+                      modalFooterMap.get(propsRef.current.childrenkey) ||
+                        (() => <></>),
+                      propsRef.current.footerProps as Record<string, unknown>
+                    )
+                  : null}
               </>
             }
             title={propsRef.current?.title}
@@ -79,14 +81,13 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
             children={
               <>
                 {propsRef.current?.childrenkey &&
-                modalMap.has(propsRef.current.childrenkey) ? (
-                  React.createElement(
-                    modalMap.get(propsRef.current.childrenkey) || (() => <></>),
-                    propsRef.current.footerProps as Record<string, unknown>
-                  )
-                ) : (
-                  <></>
-                )}
+                modalMap.has(propsRef.current.childrenkey)
+                  ? React.createElement(
+                      modalMap.get(propsRef.current.childrenkey) ||
+                        (() => <></>),
+                      propsRef.current.props as Record<string, unknown>
+                    )
+                  : null}
               </>
             }
           />

@@ -2,13 +2,15 @@ import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { cn } from "../../../lib/util";
+import useTheme from "../../../hooks/useTheme";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  footer?: React.ReactNode;
+  footer?: React.ReactNode | null;
+  isFooterVisible?: boolean;
   size?: "sm" | "md" | "lg" | "xl";
   closeOnOutsideClick?: boolean;
 }
@@ -20,10 +22,12 @@ export function Modal({
   children,
   footer,
   size = "md",
+  isFooterVisible = false,
   closeOnOutsideClick = true,
 }: ModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     if (isOpen) {
@@ -79,7 +83,8 @@ export function Modal({
       <div
         ref={modalRef}
         className={cn(
-          "bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full transform transition-all duration-300",
+          "rounded-xl shadow-xl w-full transform transition-all duration-300",
+          isDarkMode ? "dark:bg-gray-800" : "bg-white",
           sizeClasses[size],
           isVisible && isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
         )}
@@ -88,11 +93,23 @@ export function Modal({
           <div className="h-2 bg-gradient-to-r from-blue-500 to-green-400 rounded-t-xl"></div>
 
           {title && (
-            <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
+            <div
+              className={cn(
+                "flex items-center justify-between p-4 border-b ",
+                isDarkMode
+                  ? "dark dark:border-gray-700 dark:text-gray-400"
+                  : "border-gray-200"
+              )}
+            >
               <h3 className="text-lg font-semibold">{title}</h3>
               <button
                 onClick={onClose}
-                className="p-1 rounded-md text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={cn(
+                  "p-2 text-gray-500 hover:bg-gray-100  rounded-md transition-all",
+                  isDarkMode
+                    ? "dark:text-gray-400 dark:hover:bg-gray-700"
+                    : "text-gray-700"
+                )}
                 aria-label="Close modal"
               >
                 <X size={20} />
@@ -103,8 +120,15 @@ export function Modal({
 
         <div className="p-4 max-h-[70vh] overflow-y-auto">{children}</div>
 
-        {footer && (
-          <div className="p-4 border-t dark:border-gray-700 rounded-b-xl bg-gray-50 dark:bg-gray-900">
+        {isFooterVisible && (
+          <div
+            className={cn(
+              "p-4 border-t",
+              isDarkMode
+                ? "dark:border-gray-700 dark:bg-gray-800"
+                : "border-gray-200 bg-white"
+            )}
+          >
             {footer}
           </div>
         )}

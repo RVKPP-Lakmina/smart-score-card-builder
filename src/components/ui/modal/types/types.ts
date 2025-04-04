@@ -17,3 +17,11 @@ export type OpenModalProps = {
   closeOnOutsideClick?: boolean;
 };
 export type Size = "sm" | "md" | "lg" | "xl";
+
+export type ModalFooterKey = "sampleDelete" | "anotherAction"; // Add your keys here
+
+export interface ModalFooterProps {
+  onClose: () => void;
+  onConfirm?: () => void;
+  // Add more props that all footers share
+}

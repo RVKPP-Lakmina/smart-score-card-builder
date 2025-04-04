@@ -50,11 +50,7 @@ const Page = () => {
         </header>
 
         <main className="p-6">
-          {/* Content for each tab can be conditionally rendered here */}
-
           <React.Suspense fallback={<div>Loading...</div>}>
-            {/* Dynamically render the component based on the active tab */}
-
             {React.createElement(getComponent(currentPage))}
           </React.Suspense>
         </main>

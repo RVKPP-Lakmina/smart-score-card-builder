@@ -1,20 +1,27 @@
 import { Edit, Copy, Info, Trash2 } from "lucide-react";
-import moment from "moment";
 import { useModal } from "../hooks/useModal";
 import React from "react";
+import templates from "../services/configs/templates";
+import { formatedDate } from "../lib/util";
 
 interface TemplateCardProps {
+  onClickLable: () => void;
   template: {
     id: number;
     name: string;
     lastEdited: string;
+    createdAt?: string;
+    description?: string;
+    countOfEdits?: number;
+    createdBy?: string;
   };
 }
 
-function TemplateCard({ template }: TemplateCardProps) {
+function TemplateCard({ template, onClickLable }: TemplateCardProps) {
   const { openModal } = useModal();
 
   const deleteTemplate = async () => {
+    delete templates[template.id];
     new Promise((resolve) => setTimeout(resolve, 2000));
   };
 
@@ -39,7 +46,12 @@ function TemplateCard({ template }: TemplateCardProps) {
       <div className="p-4 flex justify-between items-center">
         <div>
           <div className="flex items-center mb-4 gap-5">
-            <h4 className="text-lg font-semibold">{template.name}</h4>
+            <h4
+              onClick={onClickLable}
+              className="text-lg font-semibold cursor-pointer hover:border-b-2 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-200 ease-in-out group-hover:scale-105"
+            >
+              {template.name}
+            </h4>
             <Info
               className="ml-2 opacity-0 text-green-500 dark:text-green-400
               cursor-pointer
@@ -49,13 +61,21 @@ function TemplateCard({ template }: TemplateCardProps) {
             />
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Last edited: {template.lastEdited}
+            {template.description || ""}
           </p>
+          {Boolean(template.lastEdited) && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Last edited: {formatedDate(template?.lastEdited)}
+            </p>
+          )}
+          {Boolean(template?.countOfEdits) && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              Edited: {template?.countOfEdits} times
+            </p>
+          )}
+
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Edited: 4 times
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-            Created At: {moment().fromNow()}
+            Created At: {formatedDate(template?.createdAt)}
           </p>
         </div>
 

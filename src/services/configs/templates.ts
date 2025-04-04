@@ -33,5 +33,9 @@ export default templates as {
     id: number;
     name: string;
     lastEdited: string;
+    description?: string;
+    createdAt?: string;
+    countOfEdits?: number;
+    createdBy?: string;
   };
 };

@@ -7,11 +7,11 @@ interface TemplateData {
 }
 
 interface CreateTemplateModalProps {
-  saveTemplate: (templateData: TemplateData) => Promise<void>;
+  hanldeSave: (templateData: TemplateData) => Promise<void>;
 }
 
 const CreateTemplateModal: React.FC<CreateTemplateModalProps> = ({
-  saveTemplate,
+  hanldeSave,
 }: CreateTemplateModalProps) => {
   const { closeModal } = useModal();
   const [formData, setFormData] = React.useState<TemplateData>({
@@ -24,7 +24,7 @@ const CreateTemplateModal: React.FC<CreateTemplateModalProps> = ({
       <div className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-1">
-            Template Name
+            Template Name <span className="text-red-500">*</span>
           </label>
           <input
             id="name"
@@ -64,7 +64,7 @@ const CreateTemplateModal: React.FC<CreateTemplateModalProps> = ({
           </button>
           <button
             onClick={async () => {
-              await saveTemplate(formData);
+              await hanldeSave(formData);
               closeModal();
             }}
             className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white rounded-md shadow-md transition-all"

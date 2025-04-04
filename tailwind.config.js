@@ -15,6 +15,9 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        maxHeight: {
+          "screen-minus-100": "calc(100vh - 100px) !important",
+        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -69,6 +72,7 @@ module.exports = {
         },
       },
       borderRadius: {
+        full: "9999px !important",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
