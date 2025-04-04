@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^22.14.0",
     "clsx": "^2.1.1",
     "install": "^0.13.0",
     "lucide-react": "^0.486.0",
