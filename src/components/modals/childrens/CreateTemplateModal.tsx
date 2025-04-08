@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useModal } from "../../../hooks/useModal";
 
 interface TemplateData {
@@ -8,6 +8,7 @@ interface TemplateData {
 
 interface CreateTemplateModalProps {
   hanldeSave: (templateData: TemplateData) => Promise<void>;
+  exisitingTemplate?: TemplateData;
 }
 
 const CreateTemplateModal: React.FC<CreateTemplateModalProps> = ({
@@ -18,6 +19,8 @@ const CreateTemplateModal: React.FC<CreateTemplateModalProps> = ({
     name: "",
     description: "",
   });
+
+  useEffect(() => {}, []);
 
   return (
     <>

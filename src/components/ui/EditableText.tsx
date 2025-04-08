@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "../../lib/util";
 
 interface EditableTextProps {
   label: string;
@@ -11,11 +12,27 @@ const EditableText: React.FC<EditableTextProps> = ({
 }: EditableTextProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text] = useState(label);
-  // const [isFocused, setIsFocused] = useState(false);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Enter" && isEditing) {
+        setIsEditing(false);
+      }
+      if (event.key === "Escape" && isEditing) {
+        setIsEditing(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isEditing]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value || 0.0);
@@ -31,21 +48,21 @@ const EditableText: React.FC<EditableTextProps> = ({
 
   return (
     <div className="text-btn">
-      {isEditing ? (
+      {isEditing && (
         <input
-          value={text || "0.00"}
           type="number"
-          onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-            const value = Number(e.target.value);
-            if (value > 1) e.target.value = "1.00";
-            if (value < 0) e.target.value = "0.00";
-          }}
           onChange={handleChange}
           onBlur={handleBlur}
-          autoFocus
+          className={cn(
+            "w-16 p-1 rounded-md dark:bg-gray-800 dark:text-white text-right",
+            "focus:outline-none",
+            "border-none"
+          )}
         />
-      ) : (
-        <span className="text-gray-400" onDoubleClick={handleDoubleClick}>
+      )}
+
+      {!isEditing && (
+        <span className={cn("text-gray-400")} onDoubleClick={handleDoubleClick}>
           {text}
         </span>
       )}

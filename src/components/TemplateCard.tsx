@@ -1,44 +1,16 @@
 import { Edit, Copy, Info, Trash2 } from "lucide-react";
-import { useModal } from "../hooks/useModal";
 import React from "react";
-import templates from "../services/configs/templates";
 import { formatedDate } from "../lib/util";
+import { TemplatesPropsWithId } from "../types/responseTypes";
+import useTemplateStore from "../hooks/useTemplateStore";
 
 interface TemplateCardProps {
   onClickLable: () => void;
-  template: {
-    id: number;
-    name: string;
-    lastEdited: string;
-    createdAt?: string;
-    description?: string;
-    countOfEdits?: number;
-    createdBy?: string;
-  };
+  template: TemplatesPropsWithId;
 }
 
 function TemplateCard({ template, onClickLable }: TemplateCardProps) {
-  const { openModal } = useModal();
-
-  const deleteTemplate = async () => {
-    delete templates[template.id];
-    new Promise((resolve) => setTimeout(resolve, 2000));
-  };
-
-  const handleDelete = () => {
-    openModal({
-      title: "Delete Template",
-      childrenkey: "sampleDelete",
-      footerProps: {
-        handleDelete: deleteTemplate,
-      },
-      props: {
-        message: "Are you sure you want to delete this template?",
-        subMessage:
-          "This action cannot be undone. Please confirm that you want to delete this.",
-      },
-    });
-  };
+  const { handleDelete, cloneTemplate } = useTemplateStore();
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
@@ -83,11 +55,14 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
           <button className="p-2 text-blue-500 hover:bg-blue-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md">
             <Edit size={18} />
           </button>
-          <button className="p-2 text-green-500 hover:bg-green-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md">
+          <button
+            onClick={() => cloneTemplate(template.id)}
+            className="p-2 text-green-500 hover:bg-green-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md"
+          >
             <Copy size={18} />
           </button>
           <button
-            onClick={handleDelete}
+            onClick={() => handleDelete(template.id)}
             className=" p-2 text-red-500 hover:bg-green-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md"
           >
             <Trash2 size={18} />

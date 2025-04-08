@@ -24,13 +24,11 @@ export default React.memo(function Layout({
     if (!currPage || currPage === "templates") {
       setAddressList(["templates"]);
     } else {
-      const newAddressList = [...addressList, currPage];
-      setAddressList(newAddressList);
+      setAddressList((prev) => [...prev, currPage]);
     }
   }, [currPage]);
 
   const handleSelect = (index: number, item: string) => {
-    console.log("item", item);
     handlePageChange(item);
     const newAddressList = addressList.slice(0, index + 1);
     setAddressList(newAddressList);
@@ -40,37 +38,41 @@ export default React.memo(function Layout({
     <div className="space-y-6">
       <div>
         <Breadcrumb>
-          <BreadcrumbList>
+          <BreadcrumbList key={`div-div-BreadcrumbList-${addressList}`}>
             {addressList.map((item, index) => (
-              <BreadcrumbItem key={`div-div-Breadcrumb-BreadcrumbList-${item}`}>
-                {index !== addressList.length - 1 && (
-                  <BreadcrumbLink
-                    key={`div-div-Breadcrumb-BreadcrumbLink-${item}`}
-                    isHome={index === 0}
-                    onClick={() => handleSelect(index, item)}
-                    href="#"
-                    className="flex items-center"
-                  >
-                    {item}
-                  </BreadcrumbLink>
-                )}
+              <React.Fragment key={`div-div-Breadcrumb-fragment-${item}`}>
+                <BreadcrumbItem
+                  key={`div-div-Breadcrumb-fragment-BreadcrumbList-${item}`}
+                >
+                  {index !== addressList.length - 1 && (
+                    <BreadcrumbLink
+                      key={`div-div-Breadcrumb-BreadcrumbLink-${item}`}
+                      isHome={index === 0}
+                      onClick={() => handleSelect(index, item)}
+                      href="#"
+                      className="flex items-center"
+                    >
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </BreadcrumbLink>
+                  )}
+                  {index === addressList.length - 1 && index !== 0 ? (
+                    <BreadcrumbPage
+                      key={`div-div-Breadcrumb-BreadcrumbPage-${item}`}
+                      className="flex items-center"
+                    >
+                      <Users size={16} className="mr-1" />
+                      {item.charAt(0).toUpperCase() + item.slice(1)}
+                    </BreadcrumbPage>
+                  ) : null}
+                </BreadcrumbItem>
                 {index < addressList.length - 1 && (
                   <BreadcrumbSeparator
-                    key={`div-div-Breadcrumb-BreadcrumbSeparator-${item}`}
+                    key={`div-div-Breadcrumb-fragment-BreadcrumbSeparator-${item}`}
                   >
                     <ChevronRight size={16} />
                   </BreadcrumbSeparator>
                 )}
-                {index === addressList.length - 1 && index !== 0 ? (
-                  <BreadcrumbPage
-                    key={`div-div-Breadcrumb-BreadcrumbPage-${item}`}
-                    className="flex items-center"
-                  >
-                    <Users size={16} className="mr-1" />
-                    {item}
-                  </BreadcrumbPage>
-                ) : null}
-              </BreadcrumbItem>
+              </React.Fragment>
             ))}
           </BreadcrumbList>
         </Breadcrumb>

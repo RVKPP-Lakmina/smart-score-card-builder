@@ -23,7 +23,7 @@ export default React.memo(
         <button
           onClick={onClick}
           className={cn(
-            "flex items-center w-full p-2 rounded-md text-white hover:bg-white/10",
+            "flex items-center w-full p-2 rounded-md text-white hover:bg-white/10 text-left",
             isActive && "bg-white/20"
           )}
         >

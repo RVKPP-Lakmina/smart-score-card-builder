@@ -1,5 +1,7 @@
+import { Trash2 } from "lucide-react";
 import EditableText from "./ui/EditableText";
 import { RiskBox } from "./ui/RiskBox";
+import { useModal } from "../hooks/useModal";
 
 interface SectionCardProps {
   title: string;
@@ -11,8 +13,23 @@ const SectionCard: React.FC<SectionCardProps> = ({
   title,
   value,
 }: SectionCardProps) => {
+  const { openModal } = useModal();
+  const addNewRule = () => {
+    openModal({
+      title: "Select Rules",
+      childrenkey: "selectRules",
+      size: "lg",
+      closeOnOutsideClick: true,
+      props: {},
+    });
+  };
+
   return (
-    <RiskBox title={title} value={Number(value || "0.00") as number}>
+    <RiskBox
+      title={title}
+      value={Number(value || "0.00") as number}
+      onAdd={addNewRule}
+    >
       <ul>
         {[
           "Age",
@@ -28,15 +45,21 @@ const SectionCard: React.FC<SectionCardProps> = ({
         ].map((item) => (
           <li
             key={item}
-            className="p-2 cursor-pointer m-2 border rounded-lg border-gray-200 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-200 ease-in-out"
+            className="p-2 cursor-pointer 
+            m-2 border rounded-lg border-gray-200 
+            flex items-center justify-between hover:bg-gray-200 
+            dark:hover:bg-gray-700 transition duration-200 delay-100 ease-in-out"
           >
             <h5 className=" flex-2 font-semibold w-32">{item}</h5>
 
-            <button className="flex-1 max-w-20 rounded-full bg-green-400 dark:bg-blue-400 text-white px-5 py-1 hover:bg-green-600 dark:hover:bg-blue-600 transition duration-200">
-              Edit
-            </button>
+            <div className="flex space-x-2 items-center">
+              <EditableText label={"0.00"} onValueChange={() => {}} />
 
-            <EditableText label={"0.00"} onValueChange={() => {}} />
+              <Trash2
+                className="text-gray-400 hover:text-red-500 cursor-pointer transition-all duration-300 ease-in-out"
+                size={20}
+              />
+            </div>
           </li>
         ))}
       </ul>
