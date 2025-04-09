@@ -5,6 +5,7 @@ import modalMap from "../../../modals/modalMap";
 import { Modal } from "../Modal";
 import React from "react";
 import modalFooterMap from "../../../modals/modalFotter";
+import modalHeaderMap from "../../../modals/modalHeader";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -62,6 +63,22 @@ const Provider: React.FC<ProviderProps> = ({ children }: ProviderProps) => {
               propsRef.current?.childrenkey &&
                 modalFooterMap.has(propsRef.current.childrenkey)
             )}
+            isHeaderVisible={Boolean(
+              propsRef.current?.childrenkey &&
+                modalHeaderMap.has(propsRef.current.childrenkey)
+            )}
+            header={
+              <>
+                {propsRef.current?.childrenkey &&
+                modalHeaderMap.has(propsRef.current.childrenkey)
+                  ? React.createElement(
+                      modalHeaderMap.get(propsRef.current.childrenkey) ||
+                        (() => <></>),
+                      propsRef.current.headerProps as Record<string, unknown>
+                    )
+                  : null}
+              </>
+            }
             footer={
               <>
                 {propsRef.current?.childrenkey &&

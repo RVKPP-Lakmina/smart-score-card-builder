@@ -1,14 +1,9 @@
 import React from "react";
 
 //@ts-expect-error: Suppressing type error due to dynamic import of footer components
-const modalFooterMap = new Map<
+const modalHeaderMap = new Map<
   string,
   React.LazyExoticComponent<React.FC<unknown>>
->([
-  [
-    "sampleDelete",
-    React.lazy(() => import("./footers/DeleteConfirmatiolFooter")),
-  ],
-]);
+>([["ruleEditor", React.lazy(() => import("./headers/RuleEditorHeader"))]]);
 
-export default modalFooterMap;
+export default modalHeaderMap;

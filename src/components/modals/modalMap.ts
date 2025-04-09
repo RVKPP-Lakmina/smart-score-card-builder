@@ -12,7 +12,8 @@ const modalMap = new Map<string, React.LazyExoticComponent<React.FC<unknown>>>([
   ],
 
   ["createSection", React.lazy(() => import("./childrens/CreateNewSection"))],
-  ["selectRules", React.lazy(() => import("./childrens/RuleSelection"))],
+  ["selectRules", React.lazy(() => import("./childrens/VariableSelector"))],
+  ["ruleEditor", React.lazy(() => import("./childrens/RuleEditorModal"))],
 ]);
 
 export default modalMap;

@@ -2,13 +2,10 @@ import { cn } from "../../../lib/util";
 
 interface VariableOption {
   id: string;
-  label: string;
+  name: string;
 }
 
-interface VariableSelectionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
+interface VariableSelectionProps {
   description?: string;
   variables: VariableOption[];
   selectedVariables?: string[];
@@ -16,13 +13,13 @@ interface VariableSelectionModalProps {
   onVariableToggle?: (id: string) => void;
 }
 
-export default function VariableSelectionModal({
+export default function VariableSelection({
   description = "Select variables are used to calculate the score in this section. They can be used in the formula and in the description.",
   variables = [],
   selectedVariables = [],
   onAddSelected,
   onVariableToggle,
-}: VariableSelectionModalProps) {
+}: VariableSelectionProps) {
   const handleVariableClick = (id: string) => {
     onVariableToggle?.(id);
   };
@@ -50,7 +47,7 @@ export default function VariableSelectionModal({
                     : "bg-white border-blue-300 text-blue-600 hover:bg-blue-50 dark:bg-gray-800 dark:border-blue-700 dark:text-blue-400 dark:hover:bg-gray-700"
                 )}
               >
-                {variable.label}
+                {variable.name}
               </button>
             ))}
           </div>

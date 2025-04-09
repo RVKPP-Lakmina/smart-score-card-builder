@@ -1,5 +1,10 @@
 import { templateParams } from "../types/requests";
-import { TemplatesProps, TemplatesPropsWithId } from "../types/responseTypes";
+import {
+  TemplateSections,
+  TemplatesProps,
+  TemplatesPropsWithId,
+} from "../types/responseTypes";
+import { getTemplateSections } from "./api/section/getTemplaterSection";
 import {
   cloneTemplate,
   deleteTemplate,
@@ -55,5 +60,19 @@ export const cloneTemplateFrom = async (
     }
   } catch (error) {
     alert("Error cloning template:" + (error as Error).message);
+  }
+};
+
+export const getSelectedSections = async (sectionIds: string[]) => {
+  try {
+    const response = await getTemplateSections(sectionIds);
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as TemplateSections;
+    } else {
+      alert("Error fetching selected sections:");
+    }
+  } catch (error) {
+    alert("Error getting selected sections:" + (error as Error).message);
   }
 };

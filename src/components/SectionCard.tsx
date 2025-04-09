@@ -24,6 +24,22 @@ const SectionCard: React.FC<SectionCardProps> = ({
     });
   };
 
+  const addEditNewProperties = (lable: string) => {
+    openModal({
+      title: lable,
+      childrenkey: "ruleEditor",
+      size: "lg",
+      closeOnOutsideClick: true,
+      props: {},
+      headerProps: {
+        items: [],
+        addItem: (index: number) => {
+          console.log("Add item at index:", index);
+        },
+      },
+    });
+  };
+
   return (
     <RiskBox
       title={title}
@@ -44,6 +60,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
           "No of loan cycles",
         ].map((item) => (
           <li
+            onClick={() => addEditNewProperties(item)}
             key={item}
             className="p-2 cursor-pointer 
             m-2 border rounded-lg border-gray-200 

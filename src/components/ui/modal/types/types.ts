@@ -12,6 +12,7 @@ export type OpenModalProps = {
   title?: string;
   childrenkey: string;
   footerProps?: unknown;
+  headerProps?: unknown;
   props?: unknown;
   size?: Size;
   closeOnOutsideClick?: boolean;

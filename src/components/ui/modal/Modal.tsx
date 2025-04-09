@@ -9,6 +9,8 @@ interface ModalProps {
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
+  header?: React.ReactNode | null;
+  isHeaderVisible?: boolean;
   footer?: React.ReactNode | null;
   isFooterVisible?: boolean;
   size?: "sm" | "md" | "lg" | "xl";
@@ -21,9 +23,11 @@ export function Modal({
   title,
   children,
   footer,
+  header,
   size = "md",
   isFooterVisible = false,
   closeOnOutsideClick = true,
+  isHeaderVisible = false,
 }: ModalProps) {
   const [isVisible, setIsVisible] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -102,18 +106,23 @@ export function Modal({
               )}
             >
               <h3 className="text-lg font-semibold">{title}</h3>
-              <button
-                onClick={onClose}
-                className={cn(
-                  "p-2 text-gray-500 hover:bg-gray-100  rounded-md transition-all",
-                  isDarkMode
-                    ? "dark:text-gray-400 dark:hover:bg-gray-700"
-                    : "text-gray-700"
+              <div className="flex items-center space-x-2">
+                {isHeaderVisible && (
+                  <div className="flex space-x-2">{header}</div>
                 )}
-                aria-label="Close modal"
-              >
-                <X size={20} />
-              </button>
+                <button
+                  onClick={onClose}
+                  className={cn(
+                    "p-2 text-gray-500 hover:bg-gray-100  rounded-md transition-all",
+                    isDarkMode
+                      ? "dark:text-gray-400 dark:hover:bg-gray-700"
+                      : "text-gray-700"
+                  )}
+                  aria-label="Close modal"
+                >
+                  <X size={20} />
+                </button>
+              </div>
             </div>
           )}
         </div>

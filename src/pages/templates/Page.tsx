@@ -9,11 +9,21 @@ import useTemplateStore from "../../hooks/useTemplateStore";
 
 function TemplatePage({
   handlePageChange,
+  paramRef,
 }: {
   handlePageChange: (page: string) => void;
+  paramRef: React.RefObject<Record<string, unknown>>;
 }) {
   const { createTemplte, templates } = useTemplateStore();
   const templateLen = Object.keys(templates).length;
+
+  const handleClickTemplate = (templateId: string) => {
+    paramRef.current = {
+      ...paramRef.current,
+      templateId,
+    };
+    handlePageChange("sections");
+  };
 
   return (
     <>
@@ -37,7 +47,7 @@ function TemplatePage({
           <TemplateCard
             key={key}
             template={template}
-            onClickLable={() => handlePageChange("sections")}
+            onClickLable={() => handleClickTemplate(template.id)}
           />
         ))}
         {Boolean(!templateLen) && <NewTemplateCard onClick={createTemplte} />}
@@ -48,6 +58,7 @@ function TemplatePage({
 
 export default React.memo(() => {
   const [currPage, setCurrPage] = React.useState<string | undefined>(undefined);
+  const paramRef = React.useRef<Record<string, unknown>>({});
 
   const handlePageChange = (page: string) => {
     setCurrPage(page);
@@ -58,6 +69,7 @@ export default React.memo(() => {
       <Layout currPage={currPage} handlePageChange={handlePageChange}>
         {React.createElement(Build(currPage as string), {
           handlePageChange,
+          paramRef,
         })}
       </Layout>
     </TemplateStoreProvider>
