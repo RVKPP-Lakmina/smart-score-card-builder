@@ -1,4 +1,6 @@
-import { cn } from "../../../lib/util";
+import React, { useCallback } from "react";
+import { SelectableList } from "../../ui/SeletableList";
+import { useModal } from "../../../hooks/useModal";
 
 interface VariableOption {
   id: string;
@@ -9,57 +11,57 @@ interface VariableSelectionProps {
   description?: string;
   variables: VariableOption[];
   selectedVariables?: string[];
-  onAddSelected?: () => void;
-  onVariableToggle?: (id: string) => void;
+  onVariableToggle?: (selected: string[]) => void;
 }
 
 export default function VariableSelection({
   description = "Select variables are used to calculate the score in this section. They can be used in the formula and in the description.",
   variables = [],
   selectedVariables = [],
-  onAddSelected,
   onVariableToggle,
 }: VariableSelectionProps) {
-  const handleVariableClick = (id: string) => {
-    onVariableToggle?.(id);
-  };
+  const [selected, setSelected] = React.useState<string[]>([]);
+  const { closeModal } = useModal();
+
+  React.useEffect(() => {
+    if (selectedVariables! == selected) {
+      setSelected(selectedVariables);
+    }
+  }, [selectedVariables]);
+
+  const handleVariableToggle = useCallback((ids: string[]) => {
+    setSelected(ids);
+  }, []);
 
   return (
     <div>
-      <div className="p-6">
-        {description && (
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            {description}
-          </p>
-        )}
-
-        <div className="border-t border-b border-gray-200 dark:border-gray-700 py-4 my-2">
-          <div className="flex flex-wrap gap-2">
-            {variables.map((variable) => (
-              <button
-                key={variable.id}
-                onClick={() => handleVariableClick(variable.id)}
-                className={cn(
-                  "px-3 py-2 text-sm rounded-md border transition-colors",
-                  "focus:outline-none focus:ring-2 focus:ring-blue-500",
-                  selectedVariables.includes(variable.id)
-                    ? "bg-blue-100 border-blue-300 text-blue-700 dark:bg-blue-900/30 dark:border-blue-700 dark:text-blue-300"
-                    : "bg-white border-blue-300 text-blue-600 hover:bg-blue-50 dark:bg-gray-800 dark:border-blue-700 dark:text-blue-400 dark:hover:bg-gray-700"
-                )}
-              >
-                {variable.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-end p-4 border-t border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+        Variables
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+        {description}
+      </p>
+      <SelectableList
+        items={variables}
+        selectedIds={selected}
+        onChange={handleVariableToggle}
+        maxHeight="max-h-[250px]"
+      />
+      <div className="flex justify-end space-x-2 py-3">
         <button
-          onClick={onAddSelected}
-          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white rounded-md shadow-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          onClick={closeModal}
+          className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all"
         >
-          ADD
+          Cancel
+        </button>
+        <button
+          onClick={() => {
+            onVariableToggle?.(selected);
+            closeModal();
+          }}
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white rounded-md shadow-md transition-all"
+        >
+          Save
         </button>
       </div>
     </div>

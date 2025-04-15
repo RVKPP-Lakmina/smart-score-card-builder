@@ -35,3 +35,29 @@ export const getTemplateSections = async (sectionIds: string[]) => {
     };
   }
 };
+
+export const getTemplateSectionById = async (sectionId: string) => {
+  try {
+    const section = sectionsList[sectionId];
+
+    if (!section) {
+      throw new Error("Section not found");
+    }
+
+    return {
+      status: 1,
+      data: section,
+    } as {
+      status: number;
+      data: TemplateSections[string];
+    };
+  } catch (error) {
+    return {
+      status: -1,
+      message: (error as Error).message,
+    } as {
+      status: number;
+      message: string;
+    };
+  }
+};

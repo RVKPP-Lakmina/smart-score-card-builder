@@ -1,94 +1,108 @@
 import generateUniqueId from "../../../lib/generateUniqueId";
 import {
-  Sections,
   TemplateSections,
   TemplatesPropsWithId,
 } from "../../../types/responseTypes";
 import templateSections from "../../configs/template-sections";
 import { getTemplateById, updateTemplate } from "../templateApis";
 import { createSection } from "./createSection";
-import { getSectionById } from "./getSections";
+import { getSectionById, getSections } from "./getSections";
 
 export const createTemplateSection = async (
   templateId: string,
-  section: {
-    id?: string;
-    name?: string;
-    newSection?: boolean;
-  }
+  section?: { id?: string; name?: string; newSection?: boolean },
+  sectionIds?: string[]
 ) => {
   try {
-    const template = await getTemplateById(templateId);
+    if (!templateId) throw new Error("Template not found");
+    if (!section?.id && !section?.name && !sectionIds?.length)
+      throw new Error("Section or sectionIds is required");
 
-    if (template.status !== 1 || !template.data) {
+    const [templateResponse, sectionsResponse] = await Promise.all([
+      getTemplateById(templateId),
+      getSections(),
+    ]);
+
+    if (templateResponse.status !== 1 || !templateResponse.data)
       throw new Error("Template not found");
-    }
 
-    if (!section?.id && !section?.name) {
-      throw new Error("Section ID or name is required");
+    if (sectionsResponse.status !== 1 || !sectionsResponse.data)
+      throw new Error("Sections not found");
+
+    const template = templateResponse.data;
+
+    if (sectionIds?.length) {
+      const mappedSections = await Promise.all(
+        sectionIds.map((id) =>
+          mapExistingSectionToTemplate({ section: { id }, template })
+        )
+      );
+
+      const validSections = mappedSections.filter((res) => res.status !== -1);
+
+      return {
+        status: 1,
+        data: validSections.map((res) => res.data),
+      };
     }
 
     if (section?.id) {
-      return await mapExisitingSectionToTemplate({
+      return mapExistingSectionToTemplate({
         section: { id: section.id },
-        template: template.data,
-      });
-    } else if (section?.newSection) {
-      if (!section.name) {
-        throw new Error("Section name is required");
-      }
-
-      const response = await createSection(section.name);
-
-      if (response.status !== 1 || !("data" in response && response.data)) {
-        throw new Error("Error creating section");
-      }
-
-      const { data }: { data: Sections[string] } = response;
-
-      return await mapExisitingSectionToTemplate({
-        section: { id: data.id },
-        template: template.data,
+        template,
       });
     }
+
+    if (section?.name) {
+      const createResponse = await createSection(section.name);
+
+      if (
+        createResponse.status !== 1 ||
+        !("data" in createResponse && createResponse.data)
+      )
+        throw new Error("Error creating section");
+
+      return mapExistingSectionToTemplate({
+        section: { id: createResponse.data.id },
+        template,
+      });
+    }
+
+    throw new Error("Invalid section input");
   } catch (error) {
     return {
       status: -1,
       message: (error as Error).message,
-    } as {
-      status: number;
-      message: string;
     };
   }
 };
 
-type MapExisitingSectionToTemplateProps = {
+type MapExistingSectionToTemplateProps = {
   template: TemplatesPropsWithId;
-  section: {
-    id: string;
-  };
+  section: { id: string };
 };
 
-const mapExisitingSectionToTemplate = async ({
+const mapExistingSectionToTemplate = async ({
   section,
   template,
-}: MapExisitingSectionToTemplateProps) => {
-  const data: TemplatesPropsWithId = template as TemplatesPropsWithId;
+}: MapExistingSectionToTemplateProps) => {
+  const sectionResponse = await getSectionById(section.id);
 
-  const sectionItem: {
-    status: number;
-    data?: Sections[string];
-  } = await getSectionById(section.id);
-
-  if (sectionItem.status !== 1 || !sectionItem.data) {
+  if (
+    sectionResponse.status !== 1 ||
+    !("data" in sectionResponse) ||
+    !sectionResponse.data
+  )
     throw new Error("Section not found");
-  }
 
-  const id: string = generateUniqueId();
-  templateSections[id] = {
+  const sectionData = sectionResponse.data;
+  const id = generateUniqueId();
+
+  const newTemplateSection: TemplateSections[string] = {
     id,
-    parentId: template.id,
-    name: sectionItem.data.name,
+    parentSectionId: section.id,
+    parentTemplateId: template.id,
+    name: sectionData.name,
     description: "",
     overallWeight: 0,
     sectionWeight: 0,
@@ -100,19 +114,16 @@ const mapExisitingSectionToTemplate = async ({
     rules: [],
   };
 
-  data.sectionIds = [...(data.sectionIds || []), id];
+  templateSections[id] = newTemplateSection;
+  template.sectionIds = [...(template.sectionIds || []), id];
 
-  const response = await updateTemplate(data);
+  const updateResponse = await updateTemplate(template);
 
-  if (response.status !== 1) {
+  if (updateResponse.status !== 1)
     throw new Error("Error updating template sections");
-  }
 
   return {
     status: 1,
-    data: templateSections[id],
-  } as {
-    status: number;
-    data: TemplateSections[string];
+    data: newTemplateSection,
   };
 };

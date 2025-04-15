@@ -1,18 +1,24 @@
-import { Trash2 } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
 import EditableText from "./ui/EditableText";
 import { RiskBox } from "./ui/RiskBox";
 import { useModal } from "../hooks/useModal";
+import useSectionStore from "../hooks/useSectionStore";
+import { NoRecords } from "./ui/DataNotFound";
+import { Button } from "./ui/Button";
 
 interface SectionCardProps {
   title: string;
   onChange?: (value: string) => void;
   value?: string;
+  id: string;
 }
 
 const SectionCard: React.FC<SectionCardProps> = ({
+  id,
   title,
   value,
 }: SectionCardProps) => {
+  const { sectionRules, rawRules } = useSectionStore();
   const { openModal } = useModal();
   const addNewRule = () => {
     openModal({
@@ -20,7 +26,12 @@ const SectionCard: React.FC<SectionCardProps> = ({
       childrenkey: "selectRules",
       size: "lg",
       closeOnOutsideClick: true,
-      props: {},
+      props: {
+        variables: rawRules,
+        onVariableToggle: (selected: string[]) => {
+          console.log("Selected rules:", selected);
+        },
+      },
     });
   };
 
@@ -47,38 +58,59 @@ const SectionCard: React.FC<SectionCardProps> = ({
       onAdd={addNewRule}
     >
       <ul>
-        {[
-          "Age",
-          "Education level",
-          "Residence type",
-          "Employment status",
-          "No of experience in employment",
-          "Employment Type",
-          "Dependent Income",
-          "Loan installment income percentage",
-          "Debt handling capacity",
-          "No of loan cycles",
-        ].map((item) => (
-          <li
-            onClick={() => addEditNewProperties(item)}
-            key={item}
-            className="p-2 cursor-pointer 
-            m-2 border rounded-lg border-gray-200 
-            flex items-center justify-between hover:bg-gray-200 
-            dark:hover:bg-gray-700 transition duration-200 delay-100 ease-in-out"
-          >
-            <h5 className=" flex-2 font-semibold w-32">{item}</h5>
+        {(sectionRules?.[id] || []).length ? (
+          <>
+            {(sectionRules?.[id] || []).map((item) => (
+              <li
+                onClick={() => addEditNewProperties(item.name)}
+                key={item.id}
+                className="p-2 cursor-pointer 
+  m-2 border rounded-lg border-gray-200 
+  flex items-center justify-between hover:bg-gray-200 
+  dark:hover:bg-gray-700 transition duration-200 delay-100 ease-in-out"
+              >
+                <h5 className=" flex-2 font-semibold w-32">{item.name}</h5>
 
-            <div className="flex space-x-2 items-center">
-              <EditableText label={"0.00"} onValueChange={() => {}} />
+                <div className="flex space-x-2 items-center">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // handle editable text interaction
+                    }}
+                    className="focus:outline-none"
+                  >
+                    <EditableText label={"0.00"} onValueChange={() => {}} />
+                  </button>
 
-              <Trash2
-                className="text-gray-400 hover:text-red-500 cursor-pointer transition-all duration-300 ease-in-out"
-                size={20}
-              />
-            </div>
-          </li>
-        ))}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // handle delete action
+                    }}
+                    className="text-gray-400 hover:text-red-500 cursor-pointer transition-all duration-300 ease-in-out p-0 bg-transparent border-none focus:outline-none"
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </>
+        ) : (
+          <NoRecords
+            variant="centered"
+            action={
+              <Button
+                onClick={addNewRule}
+                className="bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 flex items-center gap-2"
+              >
+                <PlusCircle size={16} />
+                Add Record
+              </Button>
+            }
+          />
+        )}
       </ul>
     </RiskBox>
   );

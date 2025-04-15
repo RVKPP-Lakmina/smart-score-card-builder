@@ -16,9 +16,11 @@ export const getSections = async () => {
     return {
       status: -1,
       message: (error as Error).message,
+      data: undefined,
     } as {
       status: number;
       message: string;
+      data: undefined;
     };
   }
 };

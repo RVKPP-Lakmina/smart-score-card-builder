@@ -24,7 +24,8 @@ export interface TemplateSectionProps {
 
 export interface TemplateSectionsPropsWithId extends TemplateSectionProps {
   id: string;
-  parentId: string;
+  parentSectionId: string;
+  parentTemplateId: string;
 }
 
 export type TemplateSections = {

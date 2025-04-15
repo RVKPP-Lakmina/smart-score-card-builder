@@ -1,9 +1,14 @@
+import { ItemsDD } from "../types/anyTypes";
 import { templateParams } from "../types/requests";
 import {
+  Sections,
   TemplateSections,
   TemplatesProps,
   TemplatesPropsWithId,
 } from "../types/responseTypes";
+import { getRules } from "./api/rules/getRules";
+import { createTemplateSection } from "./api/section/createTemplateSection";
+import { getSections } from "./api/section/getSections";
 import { getTemplateSections } from "./api/section/getTemplaterSection";
 import {
   cloneTemplate,
@@ -74,5 +79,69 @@ export const getSelectedSections = async (sectionIds: string[]) => {
     }
   } catch (error) {
     alert("Error getting selected sections:" + (error as Error).message);
+  }
+};
+
+export const getAllSections = async () => {
+  try {
+    const response = await getSections();
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as Sections;
+    } else {
+      alert("Error fetching all sections:");
+    }
+  } catch (error) {
+    alert("Error getting all sections:" + (error as Error).message);
+  }
+};
+
+export const addNewTemplateSection = async (
+  templateId: string,
+  sectionIds: string[]
+) => {
+  try {
+    const response = await createTemplateSection(templateId, {}, sectionIds);
+
+    if (response.status === 1 && "data" in response && response.data) {
+      alert("Template section added successfully:");
+      return response.data as TemplateSections[string][];
+    } else {
+      alert("Error adding new template section:");
+    }
+  } catch (error) {
+    alert("Error adding new template section:" + (error as Error).message);
+  }
+};
+
+export const addNewSectionToTemplate = async (
+  templateId: string,
+  section: { id?: string; name?: string; newSection?: boolean }
+) => {
+  try {
+    const response = await createTemplateSection(templateId, section);
+
+    if (response.status === 1 && "data" in response && response.data) {
+      alert("Template section added successfully:");
+      return response.data as TemplateSections[string][];
+    } else {
+      alert("Error adding new template section:");
+    }
+  } catch (error) {
+    alert("Error adding new template section:" + (error as Error).message);
+  }
+};
+
+export const getRawRules = async () => {
+  try {
+    const response = await getRules();
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as ItemsDD[];
+    } else {
+      alert("Error fetching all Rules:");
+    }
+  } catch (error) {
+    alert("Error getting all Rules:" + (error as Error).message);
   }
 };

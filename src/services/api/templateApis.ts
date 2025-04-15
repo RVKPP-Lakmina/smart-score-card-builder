@@ -97,29 +97,29 @@ export const updateTemplate = async (template: TemplatesPropsWithId) => {
       throw new Error("Template not found");
     }
 
-    delete (template as Partial<TemplatesPropsWithId>).id;
+    // delete (template as Partial<TemplatesPropsWithId>).id;
 
-    const changedKeys: string[] = Object.keys(
-      template as TemplatesProps
-    ).filter((key: string) => {
-      if (
-        !Object.hasOwn(thisTemplate, key) ||
-        template[key as keyof TemplatesProps] !==
-          thisTemplate[key as keyof TemplatesProps]
-      ) {
-        return key;
-      }
-    });
+    // const changedKeys: string[] = Object.keys(
+    //   template as TemplatesProps
+    // ).filter((key: string) => {
+    //   if (
+    //     !Object.hasOwn(thisTemplate, key) ||
+    //     template[key as keyof TemplatesProps] !==
+    //       thisTemplate[key as keyof TemplatesProps]
+    //   ) {
+    //     return key;
+    //   }
+    // });
 
-    if (!changedKeys.length) {
-      return {
-        status: 0,
-        message: "No changes made",
-      } as {
-        status: number;
-        message: string;
-      };
-    }
+    // if (!changedKeys.length) {
+    //   return {
+    //     status: 0,
+    //     message: "No changes made",
+    //   } as {
+    //     status: number;
+    //     message: string;
+    //   };
+    // }
 
     const updatedTemplate: TemplatesPropsWithId = {
       ...thisTemplate,

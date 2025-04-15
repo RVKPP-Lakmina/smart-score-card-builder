@@ -33,7 +33,7 @@ const Sections = () => {
         style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
       >
         {Object.entries(sections).map(([key, value]) => (
-          <SectionCard key={key} title={value.name} />
+          <SectionCard key={key} title={value.name} id={value.id} />
         ))}
 
         {Boolean(!sectionsLen) && (
