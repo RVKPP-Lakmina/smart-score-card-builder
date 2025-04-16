@@ -19,7 +19,7 @@ interface ScoreCardEditorModalProps {
 }
 
 export default function ScoreCardEditorModal({
-  initialItems = [],
+  // initialItems = [],
   onSave,
 }: ScoreCardEditorModalProps) {
   const [items, setItems] = React.useState<ScoreCardItem[]>([]);

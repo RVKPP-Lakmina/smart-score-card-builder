@@ -13,7 +13,7 @@ interface ModalProps {
   isHeaderVisible?: boolean;
   footer?: React.ReactNode | null;
   isFooterVisible?: boolean;
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
   closeOnOutsideClick?: boolean;
 }
 

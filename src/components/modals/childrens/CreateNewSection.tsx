@@ -87,6 +87,7 @@ const SectionManagement = React.memo((props: Props) => {
 });
 
 const CreateSection = (props: Props) => {
+  console.log("CreateSection", props);
   return (
     <div className="space-y-4 px-4">
       <div>
