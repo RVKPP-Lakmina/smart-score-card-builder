@@ -1,10 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TemplaterStoreContext from "../context/TemplateStoreContext";
 import { Templates } from "../types/responseTypes";
 import { useModal } from "../hooks/useModal";
 import {
   cloneTemplateFrom,
   createTemplate,
+  fetchTemplates,
   removeTemplate,
 } from "../services/services";
 import { templateParams } from "../types/requests";
@@ -12,6 +13,18 @@ import { templateParams } from "../types/requests";
 const TemplateStoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [templates, setTemplates] = useState<Templates>({} as Templates);
   const { openModal } = useModal();
+
+  const getTemplates = useCallback(async () => {
+    const response = await fetchTemplates();
+
+    if (response) {
+      setTemplates(response);
+    }
+  }, []);
+
+  useEffect(() => {
+    getTemplates();
+  }, [getTemplates]);
 
   const deleteTemplate = useCallback(async (templateId: string) => {
     const response = await removeTemplate(templateId);

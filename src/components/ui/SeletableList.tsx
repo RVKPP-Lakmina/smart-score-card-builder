@@ -13,7 +13,7 @@ interface SelectableListProps {
   items: SelectableItem[];
   selectedIds?: string[];
   onChange?: (selectedIds: string[]) => void;
-  className?: CSSModuleClasses;
+  className?: CSSModuleClasses | string;
   variant?: "default" | "card" | "compact";
   maxHeight?: string;
   disabled?: boolean;
@@ -79,6 +79,10 @@ export function SelectableList({
     setList(filteredItems);
   };
 
+  const onClear = () => {
+    setList(items);
+  };
+
   return (
     <div>
       <div className="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
@@ -91,7 +95,7 @@ export function SelectableList({
         </div>
 
         <div className="flex-2 flex items-center justify-center">
-          <Search size="sm" onChange={onSearch} />
+          <Search size="sm" onChange={onSearch} onClear={onClear} />
         </div>
 
         {Boolean(selectedIds.length || selected.length) && (

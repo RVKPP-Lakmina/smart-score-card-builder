@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import Sections from "./sections/Page";
 import TemplateStoreProvider from "../../providers/TemplateStoreProvider";
 import useTemplateStore from "../../hooks/useTemplateStore";
+import TemplateFlowPage from "../../components/template-flow/TemplateFlow";
 
 function TemplatePage({
   handlePageChange,
@@ -82,6 +83,8 @@ const Build = (page: string) => {
       return Sections;
     case "templates":
       return TemplatePage;
+    case "workflow":
+      return TemplateFlowPage;
     default:
       return TemplatePage;
   }

@@ -115,6 +115,7 @@ const mapExistingSectionToTemplate = async ({
   };
 
   templateSections[id] = newTemplateSection;
+  localStorage.setItem("templateSections", JSON.stringify(templateSections));
   template.sectionIds = [...(template.sectionIds || []), id];
 
   const updateResponse = await updateTemplate(template);

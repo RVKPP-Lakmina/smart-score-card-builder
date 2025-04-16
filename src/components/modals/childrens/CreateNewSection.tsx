@@ -130,13 +130,14 @@ const CreateSection = (props: Props) => {
 const SelectSection = (props: Props) => {
   const { useCreateNewSections, rawSections: sections } =
     props.useSectionStore();
-  const { selectedVariablesRef, onCheckedChange } = useCreateNewSections();
+  const { selectedVariables, onCheckedChange } = useCreateNewSections();
   return (
     <SelectableList
       items={sections}
-      selectedIds={selectedVariablesRef.current}
+      selectedIds={selectedVariables.current}
       onChange={onCheckedChange}
       maxHeight="max-h-[250px]"
+      className={"min-h-[250px]"}
     />
   );
 };

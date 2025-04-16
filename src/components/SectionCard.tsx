@@ -18,8 +18,9 @@ const SectionCard: React.FC<SectionCardProps> = ({
   title,
   value,
 }: SectionCardProps) => {
-  const { sectionRules, rawRules } = useSectionStore();
+  const { sectionRules, rawRules, saveSectionBulkRules } = useSectionStore();
   const { openModal } = useModal();
+
   const addNewRule = () => {
     openModal({
       title: "Select Rules",
@@ -28,8 +29,9 @@ const SectionCard: React.FC<SectionCardProps> = ({
       closeOnOutsideClick: true,
       props: {
         variables: rawRules,
-        onVariableToggle: (selected: string[]) => {
-          console.log("Selected rules:", selected);
+        selectedVariables: sectionRules?.[id]?.map((item) => item.parentRuleId),
+        onVariableToggle: async (selected: string[]) => {
+          await saveSectionBulkRules(id, selected);
         },
       },
     });
@@ -76,7 +78,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // handle editable text interaction
                     }}
                     className="focus:outline-none"
                   >
@@ -87,7 +88,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // handle delete action
                     }}
                     className="text-gray-400 hover:text-red-500 cursor-pointer transition-all duration-300 ease-in-out p-0 bg-transparent border-none focus:outline-none"
                   >

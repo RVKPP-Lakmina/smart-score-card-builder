@@ -11,7 +11,7 @@ const EditableText: React.FC<EditableTextProps> = ({
   onValueChange,
 }: EditableTextProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [text] = useState(label);
+  const [text, setText] = useState(label);
 
   const handleDoubleClick = () => {
     setIsEditing(true);
@@ -35,10 +35,27 @@ const EditableText: React.FC<EditableTextProps> = ({
   }, [isEditing]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value || 0.0);
-    if (value > 1) event.target.value = "1.00";
-    if (value < 0) event.target.value = "0.00";
-    onValueChange(event.target.value);
+    const input = event.target.value;
+
+    if (!input) {
+      setText("");
+      onValueChange("");
+      return;
+    }
+
+    // Convert to decimal: input 5 becomes 0.5
+    const number = Number(`0.${input.replace(".", "")}`);
+
+    if (isNaN(number)) {
+      setText("");
+      onValueChange("");
+      return;
+    }
+
+    const formattedValue = number.toFixed(3);
+
+    setText(formattedValue);
+    onValueChange(formattedValue);
   };
 
   const handleBlur = () => {
@@ -52,11 +69,14 @@ const EditableText: React.FC<EditableTextProps> = ({
         <input
           type="number"
           onChange={handleChange}
+          min={0}
+          max={1}
+          step={0.001}
           onBlur={handleBlur}
           className={cn(
             "w-16 p-1 rounded-md dark:bg-gray-800 dark:text-white text-right",
-            "focus:outline-none",
-            "border-none"
+            "border border-sky-500 dark:border-sky-500",
+            "focus:border-sky-500 focus:outline focus:outline-sky-500"
           )}
         />
       )}

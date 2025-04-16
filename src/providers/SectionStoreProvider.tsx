@@ -3,6 +3,7 @@ import SectionStoreContext from "../context/SectionStoreContext";
 import { Templates, TemplateSections } from "../types/responseTypes";
 import {
   addNewTemplateSection,
+  createSectionRules,
   getAllSections,
   getRawRules,
   getSelectedSections,
@@ -45,7 +46,11 @@ const SectionStoreProvider = ({
   const createNewSectionDataRef = React.useRef<CreateNewSectionProps>(
     {} as CreateNewSectionProps
   );
-  const selectedVariablesRef = React.useRef<string[]>([]);
+  const [selectedVariables, setSelectedVariables] = React.useState<{
+    current: string[];
+  }>({
+    current: [],
+  });
   const [, setChangeDetect] = React.useState<number>(1);
 
   const getSections = async () => {
@@ -119,13 +124,30 @@ const SectionStoreProvider = ({
 
       if (selectedSections) {
         const idMap = selectedSections.map((item) => item.parentSectionId);
-        selectedVariablesRef.current = idMap;
+        setSelectedVariables({
+          current: idMap,
+        });
         setChangeDetect((prev) => prev + 1);
       }
     }
 
     closeModal();
   }, [closeModal, templateId]);
+
+  const saveSectionBulkRules = useCallback(
+    async (sectionId: string, ruleIds: string[]) => {
+      const response: RuleWithId[] | undefined = await createSectionRules(
+        sectionId,
+        ruleIds
+      );
+      if (response) {
+        const updatedRules = { ...sectionRules };
+        updatedRules[sectionId] = response;
+        setSectionRules(updatedRules);
+      }
+    },
+    [sectionRules]
+  );
 
   const createTemplte = useCallback(() => {
     openModal({
@@ -142,6 +164,7 @@ const SectionStoreProvider = ({
         }),
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hanldeSaveCreatedSection, openModal, rawSections, sections]);
 
   const useCreateNewSections: () => UseCreateNewSectionsProps = () => {
@@ -160,14 +183,13 @@ const SectionStoreProvider = ({
       }),
       [isNewSection]
     );
-
     const onCheckedChange = useCallback((ids: string[]) => {
-      selectedVariablesRef.current = ids.map((id) => id);
+      setSelectedVariables({ current: ids.map((id) => id) });
       createNewSectionDataRef.current.ids = ids;
     }, []);
 
     return {
-      selectedVariablesRef,
+      selectedVariables,
       onCheckedChange,
       toggleNewSection,
     };
@@ -182,6 +204,7 @@ const SectionStoreProvider = ({
         useCreateNewSections,
         sectionRules,
         rawRules,
+        saveSectionBulkRules,
       }}
     >
       {children}

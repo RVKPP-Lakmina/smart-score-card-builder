@@ -27,4 +27,12 @@ export default new Map([
       title: "Settings",
     },
   ],
+  [
+    "workFlow",
+    {
+      component: React.lazy(() => import("../pages/templates/workflow/Page")),
+      Icon: Settings,
+      title: "WorkFlow",
+    },
+  ],
 ]) as Routes;

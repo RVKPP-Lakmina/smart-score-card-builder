@@ -20,13 +20,11 @@ export default function VariableSelection({
   selectedVariables = [],
   onVariableToggle,
 }: VariableSelectionProps) {
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const [selected, setSelected] = React.useState<string[]>(selectedVariables);
   const { closeModal } = useModal();
 
   React.useEffect(() => {
-    if (selectedVariables! == selected) {
-      setSelected(selectedVariables);
-    }
+    setSelected(selectedVariables);
   }, [selectedVariables]);
 
   const handleVariableToggle = useCallback((ids: string[]) => {
@@ -46,6 +44,7 @@ export default function VariableSelection({
         selectedIds={selected}
         onChange={handleVariableToggle}
         maxHeight="max-h-[250px]"
+        className={"min-h-[250px]"}
       />
       <div className="flex justify-end space-x-2 py-3">
         <button

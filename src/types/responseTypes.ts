@@ -1,3 +1,5 @@
+import { RuleWithId } from "./rules";
+
 export type Sections = {
   [key: string]: {
     id: string;
@@ -53,3 +55,12 @@ export interface TemplatesPropsWithId extends TemplatesProps {
 export interface Templates {
   [key: string]: TemplatesPropsWithId;
 }
+export type ExportLine = Record<
+  string,
+  TemplatesPropsWithId & {
+    sections: Record<
+      string,
+      TemplateSectionsPropsWithId & { ruleEntries: RuleWithId[] }
+    >;
+  }
+>;

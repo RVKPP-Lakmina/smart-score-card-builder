@@ -3,7 +3,7 @@ import { Sections } from "./responseTypes";
 import { RuleWithId } from "./rules";
 
 export interface UseCreateNewSectionsProps {
-  selectedVariablesRef: React.RefObject<string[]>;
+  selectedVariables: { current: string[] };
   onCheckedChange: (ids: string[]) => void;
   toggleNewSection: {
     get: () => boolean;
@@ -17,4 +17,5 @@ export interface SectionStoreContextType {
   useCreateNewSections: () => UseCreateNewSectionsProps;
   sectionRules: Record<string, RuleWithId[]>;
   rawRules: ItemsDD[];
+  saveSectionBulkRules: (sectionId: string, ruleIds: string[]) => Promise<void>;
 }

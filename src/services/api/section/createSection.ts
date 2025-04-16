@@ -26,6 +26,8 @@ export const createSection = async (section: string) => {
 
     configSections[sectionId] = data;
 
+    localStorage.setItem("templateSections", JSON.stringify(configSections));
+
     return {
       status: 1,
       data: data,

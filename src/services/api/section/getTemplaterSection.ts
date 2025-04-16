@@ -1,10 +1,12 @@
 import { TemplateSections } from "../../../types/responseTypes";
-import sectionsList from "../../configs/template-sections";
 
 export const getTemplateSections = async (sectionIds: string[]) => {
   try {
     const selectedSections: TemplateSections = {};
     const notFoundSections: string[] = [];
+
+    const response = localStorage.getItem("templateSections");
+    const sectionsList = response ? JSON.parse(response) : {};
 
     sectionIds.forEach((sectionId: string) => {
       if (Object.hasOwn(sectionsList, sectionId)) {
@@ -38,6 +40,8 @@ export const getTemplateSections = async (sectionIds: string[]) => {
 
 export const getTemplateSectionById = async (sectionId: string) => {
   try {
+    const response = localStorage.getItem("templateSections");
+    const sectionsList = response ? JSON.parse(response) : {};
     const section = sectionsList[sectionId];
 
     if (!section) {

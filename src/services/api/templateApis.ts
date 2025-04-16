@@ -8,7 +8,14 @@ import templates from "../configs/templates";
 const getCurrentTemplate = async (
   id: string
 ): Promise<TemplatesPropsWithId> => {
-  const templatesList: Templates = await getAllTemplates();
+  const templatesListResponse = await getAllTemplates();
+
+  if (templatesListResponse.status === -1) {
+    throw new Error(templatesListResponse.message);
+  }
+
+  const templatesList = templatesListResponse.data as Templates;
+
   const thisTemplate: TemplatesPropsWithId = templatesList[id];
 
   if (!thisTemplate) {
@@ -18,10 +25,35 @@ const getCurrentTemplate = async (
   return thisTemplate;
 };
 
-export const getAllTemplates = async (): Promise<Templates> => {
-  const response: Templates = templates;
+export const getAllTemplates = async () => {
+  try {
+    const savedTemplates: string | null = localStorage.getItem("templates");
+    const response: Templates = savedTemplates
+      ? JSON.parse(savedTemplates)
+      : templates;
 
-  return response;
+    const res: Templates = response as Templates;
+
+    return {
+      status: 1,
+      message: "Templates fetched successfully",
+      data: res,
+    } as {
+      status: number;
+      message: string;
+      data: Templates;
+    };
+  } catch (error) {
+    return {
+      status: -1,
+      message: (error as Error).message,
+      data: undefined,
+    } as {
+      status: number;
+      message: string;
+      data: undefined;
+    };
+  }
 };
 
 export const getTemplateById = async (id: string) => {
@@ -57,7 +89,13 @@ export const saveTemplate = async (template: TemplatesProps) => {
 
     const id: string = template.name.toUpperCase().replace(/\s+/g, "_");
 
-    const templatesList: Templates = await getAllTemplates();
+    const templatesListResponse = await getAllTemplates();
+
+    if (templatesListResponse.status === -1) {
+      throw new Error(templatesListResponse.message);
+    }
+
+    const templatesList = templatesListResponse.data as Templates;
 
     if (Object.hasOwn(templatesList, id)) {
       throw new Error("Template already exists");
@@ -69,6 +107,8 @@ export const saveTemplate = async (template: TemplatesProps) => {
       id,
       ...template,
     };
+
+    localStorage.setItem("templates", JSON.stringify(templates));
 
     return {
       status: 1,
@@ -132,6 +172,7 @@ export const updateTemplate = async (template: TemplatesPropsWithId) => {
 
     templates[template.id] = updatedTemplate;
 
+    localStorage.setItem("templates", JSON.stringify(templates));
     return {
       status: 1,
       message: "Template updated successfully",
@@ -154,13 +195,21 @@ export const updateTemplate = async (template: TemplatesPropsWithId) => {
 
 export const deleteTemplate = async (id: string) => {
   try {
-    const templatesList: Templates = await getAllTemplates();
+    const templatesListResponse = await getAllTemplates();
+
+    if (templatesListResponse.status === -1) {
+      throw new Error(templatesListResponse.message);
+    }
+
+    const templatesList = templatesListResponse.data as Templates;
 
     if (!Object.hasOwn(templatesList, id)) {
       throw new Error("Template not found");
     }
 
     delete templates[id];
+
+    localStorage.setItem("templates", JSON.stringify(templates));
 
     return {
       status: 1,
@@ -214,6 +263,8 @@ export const cloneTemplate = async (
     };
 
     templates[id] = newTemplate;
+
+    localStorage.setItem("templates", JSON.stringify(templates));
 
     return {
       status: 1,

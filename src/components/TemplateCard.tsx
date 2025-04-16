@@ -3,6 +3,7 @@ import React from "react";
 import { formatedDate } from "../lib/util";
 import { TemplatesPropsWithId } from "../types/responseTypes";
 import useTemplateStore from "../hooks/useTemplateStore";
+import { exportLine } from "../services/services";
 
 interface TemplateCardProps {
   onClickLable: () => void;
@@ -52,7 +53,12 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
         </div>
 
         <div className="flex flex-col space-y-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out justify-between">
-          <button className="p-2 text-blue-500 hover:bg-blue-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md">
+          <button
+            onClick={async () => {
+              console.log("Exported template:", await exportLine(template.id));
+            }}
+            className="p-2 text-blue-500 hover:bg-blue-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md"
+          >
             <Edit size={18} />
           </button>
           <button
