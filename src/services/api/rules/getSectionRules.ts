@@ -22,7 +22,11 @@ export const getSectionRules = async (sectionId: string) => {
       };
     }
 
-    const response = await rules;
+    const res: string | null = localStorage.getItem("rules");
+
+    let response = res ? JSON.parse(res) : undefined;
+
+    response = response ? response : rules;
 
     if (!response) {
       throw new Error("Rules not found");

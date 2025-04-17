@@ -108,6 +108,8 @@ export const saveTemplate = async (template: TemplatesProps) => {
       ...template,
     };
 
+    
+
     localStorage.setItem("templates", JSON.stringify(templates));
 
     return {

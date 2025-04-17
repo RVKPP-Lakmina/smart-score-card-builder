@@ -3,8 +3,8 @@ import { TemplateSectionsPropsWithId } from "../../../types/responseTypes";
 import { ReqRule, RuleWithId } from "../../../types/rules";
 import rulesList from "../../configs/sampleRules";
 import rules from "../../configs/section-Rules";
-import templateSections from "../../configs/template-sections";
 import { getTemplateSectionById } from "../section/getTemplaterSection";
+import { updateSection } from "../section/updateSection";
 
 export const createRules = async (
   sectionId: string,
@@ -116,9 +116,11 @@ const MapRulesToSection = async (
 
     rules[id] = data;
 
+    localStorage.setItem("rules", JSON.stringify(rules));
+
     section.rules.push(id);
 
-    templateSections[section.id] = section;
+    await updateSection(section.id, section);
 
     return {
       status: 1,
