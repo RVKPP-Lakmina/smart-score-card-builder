@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { Handle, Position } from "reactflow";
 import { FileText, Calendar, Edit } from "lucide-react";
+import { formatedDate } from "../../../lib/util";
 
 interface TemplateNodeProps {
   data: {
@@ -8,6 +9,7 @@ interface TemplateNodeProps {
     description?: string;
     score: number;
     lastEdited: string;
+    createdAt: string;
     countOfEdits?: number;
   };
   isConnectable: boolean;
@@ -45,7 +47,7 @@ export const TemplateNode = memo(
         <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mt-2">
           <div className="flex items-center">
             <Calendar size={12} className="mr-1" />
-            {data.lastEdited}
+            {formatedDate(data.createdAt) || "N/A"}
           </div>
           <div className="flex items-center">
             <Edit size={12} className="mr-1" />

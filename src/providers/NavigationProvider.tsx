@@ -8,7 +8,7 @@ import {
 const NavigationProvider: React.FC<NavigationProviderProps> = ({
   children,
 }: NavigationProviderProps) => {
-  const [currentPage, setCurrentPage] = React.useState<string>("templates");
+  const [currentPage, setCurrentPage] = React.useState<string>("dashboard");
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(true);
 
   const navigationPanel: NavigationPanelProps = useMemo(() => {

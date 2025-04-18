@@ -2,7 +2,6 @@ import generateUniqueId from "../../../lib/generateUniqueId";
 import { TemplateSectionsPropsWithId } from "../../../types/responseTypes";
 import { ReqRule, RuleWithId } from "../../../types/rules";
 import rulesList from "../../configs/sampleRules";
-import rules from "../../configs/section-Rules";
 import { getTemplateSectionById } from "../section/getTemplaterSection";
 import { updateSection } from "../section/updateSection";
 
@@ -113,6 +112,11 @@ const MapRulesToSection = async (
       parentRuleId: ruleId,
       properties: [],
     };
+
+    const rules = JSON.parse(localStorage.getItem("rules") || "{}") as Record<
+      string,
+      RuleWithId
+    >;
 
     rules[id] = data;
 

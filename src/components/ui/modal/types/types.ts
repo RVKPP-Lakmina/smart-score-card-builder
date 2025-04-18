@@ -17,7 +17,17 @@ export type OpenModalProps = {
   size?: Size;
   closeOnOutsideClick?: boolean;
 };
-export type Size = "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+export type Size =
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "screen";
 
 export type ModalFooterKey = "sampleDelete" | "anotherAction"; // Add your keys here
 

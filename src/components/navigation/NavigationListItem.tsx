@@ -19,7 +19,7 @@ export default React.memo(
     onClick: () => void;
   }) {
     return (
-      <li>
+      <li className="text-left">
         <button
           onClick={onClick}
           className={cn(

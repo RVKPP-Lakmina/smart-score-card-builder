@@ -16,7 +16,7 @@ export default new Map([
     {
       component: React.lazy(() => import("../pages/templates/Page")),
       Icon: Home,
-      title: "Score Card Config",
+      title: "SMart Score Card Configuration",
     },
   ],
   [
@@ -25,14 +25,6 @@ export default new Map([
       component: React.lazy(() => import("../pages/settings/Page")),
       Icon: Settings,
       title: "Settings",
-    },
-  ],
-  [
-    "workFlow",
-    {
-      component: React.lazy(() => import("../pages/templates/workflow/Page")),
-      Icon: Settings,
-      title: "WorkFlow",
     },
   ],
 ]) as Routes;

@@ -1,5 +1,4 @@
 import { RuleWithId } from "../../../types/rules";
-import rules from "../../configs/section-Rules";
 import { getTemplateSectionById } from "../section/getTemplaterSection";
 
 export const getSectionRules = async (sectionId: string) => {
@@ -26,7 +25,7 @@ export const getSectionRules = async (sectionId: string) => {
 
     let response = res ? JSON.parse(res) : undefined;
 
-    response = response ? response : rules;
+    response = response ? response : {};
 
     if (!response) {
       throw new Error("Rules not found");
@@ -67,7 +66,10 @@ export const getSectionRules = async (sectionId: string) => {
 
 export const getSectionRuleById = async (ruleId: string) => {
   try {
-    const response = await rules;
+    const res: string | null = localStorage.getItem("rules");
+
+    const response = res ? JSON.parse(res) : ({} as Record<string, RuleWithId>);
+
     const rule = response[ruleId];
 
     if (!rule) {

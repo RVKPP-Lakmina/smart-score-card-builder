@@ -13,7 +13,17 @@ interface ModalProps {
   isHeaderVisible?: boolean;
   footer?: React.ReactNode | null;
   isFooterVisible?: boolean;
-  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+  size?:
+    | "sm"
+    | "md"
+    | "lg"
+    | "xl"
+    | "2xl"
+    | "3xl"
+    | "4xl"
+    | "5xl"
+    | "6xl"
+    | "screen";
   closeOnOutsideClick?: boolean;
 }
 
@@ -74,6 +84,9 @@ export function Modal({
     "2xl": "max-w-2xl",
     "3xl": "max-w-3xl",
     "4xl": "max-w-4xl",
+    "5xl": "max-w-5xl",
+    "6xl": "max-w-6xl",
+    screen: "max-w-svh min-h-svw",
   };
 
   return (
@@ -130,7 +143,7 @@ export function Modal({
           )}
         </div>
 
-        <div className="p-4 max-h-[70vh] overflow-y-auto">{children}</div>
+        <div className="p-4 max-h-[84vh] overflow-y-auto">{children}</div>
 
         {isFooterVisible && (
           <div

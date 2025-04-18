@@ -3,7 +3,6 @@ import {
   TemplateSections,
   TemplatesPropsWithId,
 } from "../../../types/responseTypes";
-import templateSections from "../../configs/template-sections";
 import { getTemplateById, updateTemplate } from "../templateApis";
 import { createSection } from "./createSection";
 import { getSectionById, getSections } from "./getSections";
@@ -114,8 +113,16 @@ const mapExistingSectionToTemplate = async ({
     rules: [],
   };
 
+  const response = localStorage.getItem("templateSections");
+
+  const templateSections: TemplateSections = response
+    ? (JSON.parse(response) as TemplateSections)
+    : {};
+
   templateSections[id] = newTemplateSection;
+
   localStorage.setItem("templateSections", JSON.stringify(templateSections));
+
   template.sectionIds = [...(template.sectionIds || []), id];
 
   const updateResponse = await updateTemplate(template);

@@ -60,14 +60,17 @@ type NewNodes = {
   hidden?: boolean;
 };
 
-export default function TemplateFlowPage() {
+export default function TemplateFlowPage({
+  templateId,
+}: {
+  templateId: string;
+}) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showMiniMap, setShowMiniMap] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [, setZoomLevel] = useState(1);
-  const templateId = "TEST";
 
   const preInitializer = useCallback(async () => {
     // Pre-initialization logic can be added here if needed
@@ -215,10 +218,10 @@ export default function TemplateFlowPage() {
   return (
     <div className="flex flex-col h-screen">
       <div className="bg-white dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+        <div className="flex items-center justify-end">
+          {/* <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
             Template Flow Visualization
-          </h1>
+          </h1> */}
           <div className="flex items-center space-x-2">
             <Search
               placeholder="Search nodes..."

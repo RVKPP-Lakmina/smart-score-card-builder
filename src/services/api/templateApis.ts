@@ -3,7 +3,6 @@ import {
   TemplatesProps,
   TemplatesPropsWithId,
 } from "../../types/responseTypes";
-import templates from "../configs/templates";
 
 const getCurrentTemplate = async (
   id: string
@@ -30,7 +29,7 @@ export const getAllTemplates = async () => {
     const savedTemplates: string | null = localStorage.getItem("templates");
     const response: Templates = savedTemplates
       ? JSON.parse(savedTemplates)
-      : templates;
+      : {};
 
     const res: Templates = response as Templates;
 
@@ -103,19 +102,17 @@ export const saveTemplate = async (template: TemplatesProps) => {
 
     template.createdAt = new Date().toISOString();
 
-    templates[id] = {
+    templatesList[id] = {
       id,
       ...template,
     };
 
-    
-
-    localStorage.setItem("templates", JSON.stringify(templates));
+    localStorage.setItem("templates", JSON.stringify(templatesList));
 
     return {
       status: 1,
       message: "Template created successfully",
-      data: templates[id],
+      data: templatesList[id],
     } as {
       status: number;
       message: string;
@@ -172,9 +169,17 @@ export const updateTemplate = async (template: TemplatesPropsWithId) => {
         : 1,
     };
 
-    templates[template.id] = updatedTemplate;
+    const templatesListResponse = await getAllTemplates();
 
-    localStorage.setItem("templates", JSON.stringify(templates));
+    if (templatesListResponse.status === -1) {
+      throw new Error(templatesListResponse.message);
+    }
+
+    const templatesList = templatesListResponse.data as Templates;
+
+    templatesList[template.id] = updatedTemplate;
+
+    localStorage.setItem("templates", JSON.stringify(templatesList));
     return {
       status: 1,
       message: "Template updated successfully",
@@ -209,9 +214,9 @@ export const deleteTemplate = async (id: string) => {
       throw new Error("Template not found");
     }
 
-    delete templates[id];
+    delete templatesList[id];
 
-    localStorage.setItem("templates", JSON.stringify(templates));
+    localStorage.setItem("templates", JSON.stringify(templatesList));
 
     return {
       status: 1,
@@ -248,13 +253,16 @@ export const cloneTemplate = async (
       cloneFromId
     );
 
+    if (!thisTemplate) {
+      throw new Error("Template not found");
+    }
+
     const { name: newItemName, description = "" } = newItem;
 
-    const id: string = newItemName.toUpperCase().replace(/\s+/g, "_");
+    delete (thisTemplate as Partial<TemplatesPropsWithId>).id;
 
     const newTemplate: TemplatesPropsWithId = {
       ...thisTemplate,
-      id,
       name: newItemName,
       description,
       createdAt: new Date().toISOString(),
@@ -264,14 +272,16 @@ export const cloneTemplate = async (
       createdBy: "user",
     };
 
-    templates[id] = newTemplate;
+    const response = await saveTemplate(newTemplate);
 
-    localStorage.setItem("templates", JSON.stringify(templates));
+    if (response.status === -1 || !("data" in response) || !response.data) {
+      throw new Error("Error while saving template");
+    }
 
     return {
       status: 1,
       message: "Template cloned successfully",
-      data: newTemplate,
+      data: response.data,
     } as {
       status: number;
       message: string;
