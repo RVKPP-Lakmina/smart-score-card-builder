@@ -9,6 +9,7 @@ export type Route = {
   title: string;
   // Uncomment the following line if you want to include the component in the type
   component: React.LazyExoticComponent<React.FC>;
+  description?: string;
 };
 
 export type Routes = Map<string, Route>;

@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Settings, X } from "lucide-react";
 import { cn } from "../../lib/util";
 import useNavigation from "../../hooks/useNavigation";
 import route from "../../routes/route";
@@ -11,6 +11,9 @@ const Navigations = () => {
     navigationPanel: { isNavOpen, toggleNav },
     navigateTo,
   } = useNavigation();
+
+  const useName = "John Doe";
+  const useEmail = "john@example.com";
 
   return (
     <div
@@ -47,6 +50,24 @@ const Navigations = () => {
           })}
         </ul>
       </nav>
+
+      <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white text-sm font-medium">
+            {useName
+              .split(" ")
+              .map((n) => n[0].toUpperCase())
+              .join("")}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">{useName}</p>
+            <p className="text-xs text-white/70 truncate">{useEmail}</p>
+          </div>
+          <button className="text-white/70 hover:text-white">
+            <Settings size={16} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

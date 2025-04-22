@@ -37,9 +37,17 @@ const Page = () => {
                 <Menu size={20} />
               </button>
             )}
-            <h2 className="text-xl font-semibold">
-              {route.get(currentPage)?.title || ""}
-            </h2>
+
+            <div className="mb-2">
+              <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
+                {route.get(currentPage)?.title || ""}
+              </h1>
+              {Boolean(route.get(currentPage)?.description) && (
+                <p className="text-gray-600 dark:text-gray-400">
+                  {route.get(currentPage)?.description}
+                </p>
+              )}
+            </div>
           </div>
           <button
             onClick={toggleDarkMode}
@@ -50,7 +58,13 @@ const Page = () => {
         </header>
 
         <main className="p-6">
-          <React.Suspense fallback={<div>Loading...</div>}>
+          <React.Suspense
+            fallback={
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              </div>
+            }
+          >
             {React.createElement(getComponent(currentPage))}
           </React.Suspense>
         </main>

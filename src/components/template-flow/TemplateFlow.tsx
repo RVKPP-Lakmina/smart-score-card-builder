@@ -212,7 +212,7 @@ export default function TemplateFlowPage({
 
   const handleDownload = () => {
     // In a real app, you would implement logic to export the diagram as an image
-    alert("Download functionality would be implemented here");
+    alert("Download functionality has to be Implemented");
   };
 
   return (

@@ -132,6 +132,9 @@ const SelectSection = (props: Props) => {
   const { useCreateNewSections, rawSections: sections } =
     props.useSectionStore();
   const { selectedVariables, onCheckedChange } = useCreateNewSections();
+
+  console.log("SelectSection", selectedVariables);
+
   return (
     <SelectableList
       items={sections}
