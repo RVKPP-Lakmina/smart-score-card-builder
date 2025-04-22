@@ -18,6 +18,10 @@ export interface NavigationContextProps {
   currentPage: string;
   navigateTo: (page: string) => void;
   navigationPanel: NavigationPanelProps;
+  userDetails: {
+    userName: string;
+    userEmail: string;
+  };
 }
 
 export interface NavigationProviderProps {

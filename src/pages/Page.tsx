@@ -5,12 +5,14 @@ import { Menu, Sun, Moon } from "lucide-react";
 import React from "react";
 import route from "../routes/route";
 import useTheme from "../hooks/useTheme";
+import { UserNavigation } from "../components/ui/UserNavigation";
 
 const Page = () => {
   const { isDarkMode, toggleTheme: toggleDarkMode } = useTheme();
   const {
     currentPage,
     navigationPanel: { isNavOpen, toggleNav },
+    userDetails: { userName, userEmail },
   } = useNavigation();
 
   return (
@@ -49,12 +51,16 @@ const Page = () => {
               )}
             </div>
           </div>
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+            >
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
+            <UserNavigation username={userName} userEmail={userEmail} />
+          </div>
         </header>
 
         <main className="p-6">

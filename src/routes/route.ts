@@ -27,6 +27,7 @@ export default new Map([
       component: React.lazy(() => import("../pages/products/Page")),
       Icon: FolderKanban,
       title: "Products",
+      description: "Create and manage products with template mappings",
     },
   ],
   [

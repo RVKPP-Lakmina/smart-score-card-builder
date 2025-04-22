@@ -15,6 +15,19 @@ const modalMap = new Map<string, React.LazyExoticComponent<React.FC<unknown>>>([
   ["selectRules", React.lazy(() => import("./childrens/VariableSelector"))],
   ["ruleEditor", React.lazy(() => import("./childrens/RuleEditorModal"))],
   ["templateFlow", React.lazy(() => import("../template-flow/TemplateFlow"))],
+  [
+    "createNewProduct",
+    React.lazy(() => import("./childrens/CreateNewProduct")),
+  ],
+  [
+    "mapTemplateToProduct",
+    React.lazy(() => import("./childrens/MapTemplateToProduct")),
+  ],
+
+  [
+    "addApiToProduct",
+    React.lazy(() => import("./childrens/IntergrateApiToProduct.tsx")),
+  ],
 ]);
 
 export default modalMap;

@@ -15,3 +15,11 @@ export function formatedDate(data: moment.MomentInput) {
   }
   return moment(data).fromNow();
 }
+
+export const arraysAreEqualAsSets = (a: string[], b: string[]) => {
+  return (
+    a.length === b.length &&
+    new Set(a).size === new Set(b).size &&
+    a.every((item) => b.includes(item))
+  );
+};
