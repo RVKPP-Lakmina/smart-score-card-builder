@@ -4,7 +4,7 @@ import NewTemplateCard from "../../../components/NewTemplateCard";
 import React, { useEffect } from "react";
 import SectionStoreProvider from "../../../providers/SectionStoreProvider";
 import useSectionStore from "../../../hooks/useSectionStore";
-import { Sections } from "../../../types/responseTypes";
+import { Sections, TemplateSections } from "../../../types/responseTypes";
 import { Search } from "../../../components/ui/SearchBox";
 import { EmptySearch } from "../../../components/ui/DataNotFound";
 
@@ -15,11 +15,11 @@ interface SectionsProps {
 
 const SectionsPage = () => {
   const { sections, createTemplte } = useSectionStore();
-  const [list, setList] = React.useState({} as Sections);
+  const [list, setList] = React.useState({} as TemplateSections);
   const sectionsLen = Object.keys(sections).length;
 
   useEffect(() => {
-    setList(sections);
+    setList(sections as TemplateSections);
   }, [sections]);
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,11 +37,11 @@ const SectionsPage = () => {
       filteredItems = { ...filteredSections };
     }
 
-    setList(filteredItems);
+    setList(filteredItems as TemplateSections);
   };
 
   const onClear = () => {
-    setList(sections);
+    setList(sections as TemplateSections);
   };
 
   return (
@@ -68,7 +68,12 @@ const SectionsPage = () => {
         style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
       >
         {Object.entries(list).map(([key, value]) => (
-          <SectionCard key={key} title={value.name} id={value.id} />
+          <SectionCard
+            key={key}
+            section={value}
+            title={value.name}
+            id={value.id}
+          />
         ))}
 
         {Boolean(sectionsLen) && (

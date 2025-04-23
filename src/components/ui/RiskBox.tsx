@@ -10,6 +10,8 @@ interface RiskBoxProps {
   className?: string;
   children?: React.ReactNode;
   saveButtonVisible?: boolean;
+  overallWeight?: number;
+  sectionWeight?: number;
 }
 
 export function RiskBox({
@@ -17,6 +19,8 @@ export function RiskBox({
   onAdd,
   children,
   saveButtonVisible,
+  overallWeight,
+  sectionWeight,
 }: RiskBoxProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
@@ -37,11 +41,17 @@ export function RiskBox({
         <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
           <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Section Weight:
-            <EditableText label={"0.00"} onValueChange={() => {}} />
+            <EditableText
+              label={sectionWeight?.toString() || "0.00"}
+              onValueChange={() => {}}
+            />
           </span>
           <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Overall Weight:
-            <EditableText label={"0.00"} onValueChange={() => {}} />
+            <EditableText
+              label={overallWeight?.toString() || "0.00"}
+              onValueChange={() => {}}
+            />
           </span>
         </div>
       </div>

@@ -5,8 +5,11 @@ import { useModal } from "../hooks/useModal";
 import useSectionStore from "../hooks/useSectionStore";
 import { NoRecords } from "./ui/DataNotFound";
 import { Button } from "./ui/Button";
+import { Properties } from "../types/rules";
+import { TemplateSectionProps } from "../types/responseTypes";
 
 interface SectionCardProps {
+  section: TemplateSectionProps;
   title: string;
   onChange?: (value: string) => void;
   value?: string;
@@ -16,6 +19,7 @@ interface SectionCardProps {
 const SectionCard: React.FC<SectionCardProps> = ({
   id,
   title,
+  section,
   value,
 }: SectionCardProps) => {
   const { sectionRules, rawRules, saveSectionBulkRules } = useSectionStore();
@@ -37,13 +41,18 @@ const SectionCard: React.FC<SectionCardProps> = ({
     });
   };
 
-  const addEditNewProperties = (lable: string) => {
+  const addEditNewProperties = (
+    lable: string,
+    exisitingProperties: Properties[]
+  ) => {
     openModal({
       title: lable,
       childrenkey: "ruleEditor",
       size: "lg",
       closeOnOutsideClick: true,
-      props: {},
+      props: {
+        initialItems: exisitingProperties,
+      },
       headerProps: {
         items: [],
         addItem: (index: number) => {
@@ -58,13 +67,15 @@ const SectionCard: React.FC<SectionCardProps> = ({
       title={title}
       value={Number(value || "0.00") as number}
       onAdd={addNewRule}
+      overallWeight={section.rules.length ? section.overallWeight : 0}
+      sectionWeight={section.rules.length ? section.sectionWeight : 0}
     >
       <ul>
         {(sectionRules?.[id] || []).length ? (
           <>
             {(sectionRules?.[id] || []).map((item) => (
               <li
-                onClick={() => addEditNewProperties(item.name)}
+                onClick={() => addEditNewProperties(item.name, item.properties)}
                 key={item.id}
                 className="p-2 cursor-pointer 
   m-2 border rounded-lg border-gray-200 
@@ -81,7 +92,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
                     }}
                     className="focus:outline-none"
                   >
-                    <EditableText label={"0.00"} onValueChange={() => {}} />
+                    <EditableText
+                      label={item.score || "0.00"}
+                      onValueChange={() => {}}
+                    />
                   </button>
 
                   <button

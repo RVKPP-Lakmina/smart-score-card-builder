@@ -4,16 +4,23 @@ export interface ReqRule {
   score: number;
 }
 
+export interface Properties {
+  name: string;
+  id: string;
+  score: number;
+}
+
 export interface Rule {
   name: string;
   lastEdited: string;
   createdAt: string;
+  score?: string;
   createdBy: string;
   lastEditedBy: string;
   parentSectionId: string;
   parentTemplateId: string;
   parentRuleId: string;
-  properties: [];
+  properties: Properties[];
 }
 
 export type RuleWithId = Rule & {

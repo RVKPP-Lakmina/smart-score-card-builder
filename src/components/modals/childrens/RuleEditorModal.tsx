@@ -3,38 +3,37 @@ import { PlusCircle, Save, X } from "lucide-react";
 import { useModal } from "../../../hooks/useModal";
 import { NoRecords } from "../../ui/DataNotFound";
 import { Button } from "../../ui/Button";
-
-interface ScoreCardItem {
-  id: string;
-  label: string;
-  score: number;
-}
+import { Properties } from "../../../types/rules";
 
 interface ScoreCardEditorModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  initialItems?: ScoreCardItem[];
-  onSave?: (items: ScoreCardItem[]) => void;
+  initialItems?: Properties[];
+  onSave?: (items: Properties[]) => void;
 }
 
 export default function ScoreCardEditorModal({
-  // initialItems = [],
+  initialItems = [],
   onSave,
 }: ScoreCardEditorModalProps) {
-  const [items, setItems] = React.useState<ScoreCardItem[]>([]);
+  const [items, setItems] = React.useState<Properties[]>([]);
   const [focusIndex, setFocusIndex] = React.useState<number | null>(null);
   const inputRefs = React.useRef<(HTMLInputElement | null)[]>([]);
   const { closeModal: onClose } = useModal();
+
+  React.useEffect(() => {
+    setItems(initialItems);
+  }, [initialItems]);
 
   const generateId = () => {
     return `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   };
 
   const addItem = (index: number) => {
-    const newItem: ScoreCardItem = {
+    const newItem: Properties = {
       id: generateId(),
-      label: "",
+      name: "",
       score: 0,
     };
 
@@ -56,7 +55,7 @@ export default function ScoreCardEditorModal({
 
   const updateItem = (
     index: number,
-    field: keyof ScoreCardItem,
+    field: keyof Properties,
     value: string | number
   ) => {
     const newItems = [...items];
@@ -91,8 +90,8 @@ export default function ScoreCardEditorModal({
                     inputRefs.current[index] = el;
                   }}
                   type="text"
-                  value={item.label}
-                  onChange={(e) => updateItem(index, "label", e.target.value)}
+                  value={item.name}
+                  onChange={(e) => updateItem(index, "name", e.target.value)}
                   onKeyDown={(e) => handleKeyPress(e, index)}
                   className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter criteria"

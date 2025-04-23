@@ -60,7 +60,7 @@ export default React.memo(function Page() {
       </div>
       <div className="bg-gradient-to-r from-blue-500 to-green-400 dark:from-blue-700 dark:to-green-600 p-6 rounded-xl shadow-lg">
         <h3 className="text-xl font-bold text-white mb-2">
-          Welcome to SMart Score Card
+          Welcome to Smart Score Card
         </h3>
         <p className="text-white/90">
           Create, edit, and manage your score card templates with ease.

@@ -107,10 +107,11 @@ const MapRulesToSection = async (
       createdAt: new Date().toISOString(),
       createdBy: "system",
       lastEditedBy: "",
+      score: Math.random().toFixed(2),
       parentSectionId: section.id,
       parentTemplateId: section.parentTemplateId,
       parentRuleId: ruleId,
-      properties: [],
+      properties: rule.properties,
     };
 
     const rules = JSON.parse(localStorage.getItem("rules") || "{}") as Record<

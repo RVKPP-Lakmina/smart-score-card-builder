@@ -10,6 +10,7 @@ import ReactFlow, {
   MarkerType,
   Edge,
   Connection,
+  Position,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
@@ -44,6 +45,8 @@ type NewEdges = {
   target: string;
   animated: boolean;
   style: { stroke: string };
+  sourceHandle: "right" | "left";
+  targetHandle: "left" | "right";
   markerEnd: {
     type: MarkerType;
     width: number;
@@ -56,6 +59,8 @@ type NewNodes = {
   id: string;
   type: string;
   position: { x: number; y: number };
+  sourcePosition: Position;
+  targetPosition: Position;
   data: TemplateSectionsPropsWithId | RuleWithId | ExportLine[string];
   hidden?: boolean;
 };
@@ -101,7 +106,11 @@ export default function TemplateFlowPage({
         id: section.id,
         type: "sectionNode",
         position: { x: 300, y: -400 + (index + 1) * 200 },
-        data: { ...section },
+        sourcePosition: Position.Right,
+        targetPosition: Position.Left,
+        data: {
+          ...section,
+        },
       });
 
       newEdges.push({
@@ -110,6 +119,8 @@ export default function TemplateFlowPage({
         target: section.id,
         animated: true,
         style: { stroke: "#3b82f6" },
+        sourceHandle: "right",
+        targetHandle: "left",
         markerEnd: {
           type: MarkerType.ArrowClosed,
           width: 20,
@@ -123,6 +134,8 @@ export default function TemplateFlowPage({
           id: rule.id,
           type: "ruleNode",
           position: { x: 450 + (i + 1) * 300, y: -400 + (index + 1) * 200 },
+          sourcePosition: Position.Right,
+          targetPosition: Position.Left,
           data: { ...rule },
         });
 
@@ -132,6 +145,8 @@ export default function TemplateFlowPage({
           target: rule.id,
           animated: true,
           style: { stroke: "#22c55e" },
+          sourceHandle: "right",
+          targetHandle: "left",
           markerEnd: {
             type: MarkerType.ArrowClosed,
             width: 20,
@@ -146,12 +161,14 @@ export default function TemplateFlowPage({
       id: templateId,
       type: "templateNode",
       position: { x: -100, y: newNodes[0].position.y },
-      data: { ...template },
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      data: { ...template, score: Number(Math.random().toFixed(2)) },
     });
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [setEdges, setNodes]);
+  }, [setEdges, setNodes, templateId]);
 
   useEffect(() => {
     preInitializer();

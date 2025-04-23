@@ -105,6 +105,7 @@ export const saveTemplate = async (template: TemplatesProps) => {
     templatesList[id] = {
       id,
       ...template,
+      score: Number((Math.random() * 10).toFixed(2)),
     };
 
     localStorage.setItem("templates", JSON.stringify(templatesList));
