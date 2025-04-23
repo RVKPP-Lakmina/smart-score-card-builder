@@ -7,9 +7,19 @@ import { templates } from "./lib/templates";
 
 const App = () => {
   useEffect(() => {
-    localStorage.setItem("templates", JSON.stringify(templates));
-    localStorage.setItem("templateSections", JSON.stringify(templateSections));
-    localStorage.setItem("rules", JSON.stringify(rules));
+    if (!localStorage.getItem("templates")) {
+      localStorage.setItem("templates", JSON.stringify(templates));
+    }
+
+    if (!localStorage.getItem("templateSections")) {
+      localStorage.setItem(
+        "templateSections",
+        JSON.stringify(templateSections)
+      );
+    }
+    if (!localStorage.getItem("rules")) {
+      localStorage.setItem("rules", JSON.stringify(rules));
+    }
   }, []);
 
   return (
