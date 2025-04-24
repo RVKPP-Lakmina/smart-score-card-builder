@@ -178,13 +178,32 @@ const rulesList = {
     ],
   },
 
+  percentageLoanInstallIncome: {
+    id: "percentageLoanInstallIncome",
+    name: "Percentage of loan installment income",
+    description: "Percentage of loan installment income of the applicant",
+    type: "number",
+    min: 0,
+    max: 100,
+    seleted: false,
+    score: 0.09,
+    required: true,
+    properties: [
+      { name: "<=10", id: "percentageLoanInstallIncome_10", score: 20 },
+      { name: ">10 and <=20", id: "percentageLoanInstallIncome_20", score: 40 },
+      { name: ">20 and <=30", id: "percentageLoanInstallIncome_30", score: 60 },
+      { name: ">30 and <=40", id: "percentageLoanInstallIncome_40", score: 80 },
+      { name: ">40", id: "percentageLoanInstallIncome_40", score: 100 },
+    ],
+  },
+
   DEBT_HANDLING_CAPACITY: {
     id: "DEBT_HANDLING_CAPACITY",
     name: "Debt handling capacity",
     description: "Debt handling capacity of the applicant",
     type: "number",
     min: 0,
-    score: 0,
+    score: 0.12,
     max: 100,
     seleted: false,
     required: true,
