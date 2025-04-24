@@ -28,4 +28,19 @@ export const templates = {
     lastEdited: "2025-04-24T04:16:37.225Z",
     countOfEdits: 1,
   },
+  MICRO_SCORE_CARD: {
+    id: "MICRO_SCORE_CARD",
+    name: "Micro Score Card",
+    description: "Micro Score Card Template",
+    createdAt: "2025-04-24T04:35:04.936Z",
+    score: 0.94,
+    sectionIds: [
+      "m9uup4kpmcslt41tlj",
+      "m9uup4kpc92hfpb36ae",
+      "m9uup4kpsyz1dvlxrr",
+    ],
+    lastEdited: "",
+    countOfEdits: 0,
+    createdBy: "user",
+  },
 };
