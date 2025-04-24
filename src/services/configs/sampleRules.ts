@@ -6,7 +6,7 @@ const rulesList = {
     type: "number",
     min: 18,
     max: 100,
-    score: 0,
+    score: 0.05,
     seleted: false,
     required: true,
     properties: [
@@ -25,7 +25,7 @@ const rulesList = {
     description: "Education level of the applicant",
     type: "string",
     seleted: false,
-    score: 0,
+    score: 0.07,
     required: true,
     properties: [
       {
@@ -55,7 +55,7 @@ const rulesList = {
     type: "string",
     seleted: false,
     required: true,
-    score: 0,
+    score: 0.05,
     properties: [
       { name: "Own (Not Mortgaged)", id: "OWN", score: 100 },
       { name: "Own (Mortgaged)", id: "RENT", score: 80 },
@@ -71,7 +71,7 @@ const rulesList = {
     type: "string",
     seleted: false,
     required: true,
-    score: 0,
+    score: 0.09,
     properties: [
       { name: "Employed", id: "EMPLOYED", score: 100 },
       { name: "Self Employed", id: "SELF_EMPLOYED", score: 80 },
@@ -88,7 +88,7 @@ const rulesList = {
     type: "number",
     min: 0,
     max: 100,
-    score: 0,
+    score: 0.12,
     seleted: false,
     required: true,
     properties: [
@@ -213,6 +213,54 @@ const rulesList = {
       { name: ">3 and <=5", id: "LOAN_CYCLES_5", score: 60 },
       { name: ">5 and <=10", id: "LOAN_CYCLES_10", score: 80 },
       { name: ">10", id: "LOAN_CYCLES_10", score: 100 },
+    ],
+  },
+
+  CRIB_RECORD: {
+    id: "CRIB_RECORD",
+    name: "CRIB record",
+    description: "CRIB record of the applicant",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "No CRIB Record", id: "NO_CRIB_RECORD", score: 100 },
+      { name: "Good CRIB Record", id: "GOOD_CRIB_RECORD", score: 80 },
+      { name: "Bad CRIB Record", id: "BAD_CRIB_RECORD", score: 60 },
+      { name: "Very Bad CRIB Record", id: "VERY_BAD_CRIB_RECORD", score: 40 },
+    ],
+  },
+  BANK_RELATIONS: {
+    id: "BANK_RELATIONS",
+    name: "Bank relations",
+    description: "Bank relations of the applicant",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "No Bank Relations", id: "NO_BANK_RELATIONS", score: 20 },
+      { name: "Good Bank Relations", id: "GOOD_BANK_RELATIONS", score: 60 },
+      { name: "Bad Bank Relations", id: "BAD_BANK_RELATIONS", score: 40 },
+      {
+        name: "Very Bad Bank Relations",
+        id: "VERY_BAD_BANK_RELATIONS",
+        score: 20,
+      },
+    ],
+  },
+  presenceOfRegulatedFinancialSystem: {
+    id: "presenceOfRegulatedFinancialSystem",
+    name: "Presence of regulated financial system",
+    description: "Presence of regulated financial system of the applicant",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "No", id: "NO", score: 20 },
+      { name: "Yes", id: "YES", score: 60 },
     ],
   },
 };
