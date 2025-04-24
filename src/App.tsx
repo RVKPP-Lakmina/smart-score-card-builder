@@ -22,6 +22,8 @@ const App = () => {
     }
   }, []);
 
+  // useEffect(() => {
+
   return (
     <NavigationProvider>
       <AppLayout />
