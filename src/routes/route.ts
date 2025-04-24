@@ -7,7 +7,7 @@ import {
   FolderKanban,
   HelpCircle,
   Home,
-  MapPinHouse,
+  // MapPinHouse,
   Settings,
   Sparkles,
 } from "lucide-react";
@@ -43,7 +43,7 @@ export default new Map([
     {
       component: React.lazy(() => import("../pages/ask-ai/Page")),
       Icon: Sparkles,
-      title: "Ask Kai",
+      title: "AI Assistant",
       description:
         "Create products and templates using natural language prompts",
     },
@@ -57,14 +57,14 @@ export default new Map([
     },
   ],
 
-  [
-    "roadmap",
-    {
-      component: React.lazy(() => import("../pages/road-map/Page")),
-      Icon: MapPinHouse,
-      title: "Road Map",
-    },
-  ],
+  // [
+  //   "roadmap",
+  //   {
+  //     component: React.lazy(() => import("../pages/road-map/Page")),
+  //     Icon: MapPinHouse,
+  //     title: "Road Map",
+  //   },
+  // ],
 
   [
     "settings",

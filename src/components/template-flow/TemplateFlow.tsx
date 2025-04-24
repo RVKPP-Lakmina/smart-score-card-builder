@@ -59,8 +59,8 @@ type NewNodes = {
   id: string;
   type: string;
   position: { x: number; y: number };
-  sourcePosition: Position;
-  targetPosition: Position;
+  sourcePosition?: Position;
+  targetPosition?: Position;
   data: TemplateSectionsPropsWithId | RuleWithId | ExportLine[string];
   hidden?: boolean;
 };
@@ -133,9 +133,8 @@ export default function TemplateFlowPage({
         newNodes.push({
           id: rule.id,
           type: "ruleNode",
-          position: { x: 450 + (i + 1) * 300, y: -400 + (index + 1) * 200 },
-          sourcePosition: Position.Right,
-          targetPosition: Position.Left,
+          position: { x: 450 + (i + 1) * 350, y: -400 + index * 300 },
+
           data: { ...rule },
         });
 
