@@ -1,8 +1,8 @@
 export const templates = {
   MORTGAGE_RISK_ASSESSMENT: {
     id: "MORTGAGE_RISK_ASSESSMENT",
-    name: "Mortgage Risk Assessment",
-    description: "Mortgage Risk Assessment Score Card Template",
+    name: "Retail Score Card (Main)",
+    description: "Retail Score Card Template",
     createdAt: "2025-04-23T22:46:10.435Z",
     score: 1.87,
     sectionIds: [
