@@ -676,7 +676,7 @@ const rulesList = {
 
   salaryAssignment_JA: {
     id: "salaryAssignment_JA",
-    name: "Salary Assignment",
+    name: "Salary Assignment - JA",
     description: "Salary Assignment",
     type: "string",
     seleted: false,
@@ -718,7 +718,7 @@ const rulesList = {
   },
   ltvRatioForVehicleHousingLoans_JA: {
     id: "ltvRatioForVehicleHousingLoans_JA",
-    name: "LTV Ratio (For Vehicle & Housing Loans)",
+    name: "LTV Ratio (For Vehicle & Housing Loans) - JA",
     description: "LTV Ratio (For Vehicle & Housing Loans)",
     type: "string",
     seleted: false,
