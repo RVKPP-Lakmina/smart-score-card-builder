@@ -282,6 +282,91 @@ const rulesList = {
       { name: "Yes", id: "YES", score: 60 },
     ],
   },
+  monthlyIncomeNoFamilyMembers: {
+    id: "monthlyIncomeNoFamilyMembers",
+    name: "Monthly income to No of family members",
+    description: "Monthly income to No of family members of the applicant",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "More than LKR 35000", id: "MORE_THAN_LKR_35000", score: 100 },
+      {
+        name: "More than LKR 25000 and up to LKR 35000",
+        id: "MORE_THAN_LKR_25000_AND_UP_TO_LKR_35000",
+        score: 80,
+      },
+      {
+        name: "More than LKR 20000 and up to LKR 25000",
+        id: "MORE_THAN_LKR_20000_AND_UP_TO_LKR_25000",
+        score: 60,
+      },
+      {
+        name: "More than LKR 15000 and up to LKR 20000",
+        id: "MORE_THAN_LKR_15000_AND_UP_TO_LKR_20000",
+        score: 40,
+      },
+      { name: "Less than LKR 15000", id: "LESS_THAN_LKR_15000", score: 20 },
+    ],
+  },
+  ofLoanInstallmentOutstandingLoansProposedLoansToMonthlyIncome: {
+    id: "ofLoanInstallmentOutstandingLoansProposedLoansToMonthlyIncome",
+    name: "% of loan installment (outstanding loans + proposed loans) to monthly income",
+    description:
+      "% of loan installment (outstanding loans + proposed loans) to monthly income",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "<=20%", id: "LESS_THAN_EQUEL_20", score: 100 },
+      { name: ">20% and <=30%", id: "BETWEEN_20_AND_30", score: 50 },
+      { name: ">30% and <=40%", id: "BETWEEN_30_AND_40", score: 25 },
+      { name: ">40%", id: "MORE_THAN_40", score: 0 },
+    ],
+  },
+  salaryAssignment: {
+    id: "salaryAssignment",
+    name: "Salary Assignment",
+    description: "Salary Assignment",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      {
+        name: "Mo-Re 238 agreement in place",
+        id: "MORE_238_AGREEMENT_IN_PLACE",
+        score: 100,
+      },
+      {
+        name: "Salary assigned to RDB",
+        id: "SALARY_ASSIGNED_TO_RDB",
+        score: 50,
+      },
+      {
+        name: "Salary not assigned to RDB",
+        id: "SALARY_NOT_ASSIGNED_TO_RDB",
+        score: 0,
+      },
+    ],
+  },
+  ltvRatioForVehicleHousingLoans: {
+    id: "ltvRatioForVehicleHousingLoans",
+    name: "LTV Ratio (For Vehicle & Housing Loans)",
+    description: "LTV Ratio (For Vehicle & Housing Loans)",
+    type: "string",
+    seleted: false,
+    score: 0.07,
+    required: true,
+    properties: [
+      { name: "<=30%", id: "LESS_THAN_EQUEL_30", score: 100 },
+      { name: ">30% and <=45", id: "BETWEEN_30_AND_45", score: 75 },
+      { name: ">45% and <=60", id: "BETWEEN_45_AND_60", score: 50 },
+      { name: ">60%", id: "MORE_THAN_60", score: 0 },
+    ],
+  },
 };
 
 export default rulesList as {
