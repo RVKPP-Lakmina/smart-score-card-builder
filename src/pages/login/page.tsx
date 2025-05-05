@@ -2,33 +2,57 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import { api } from "../../lib/util";
-const AuthForm = ({ setIsLoading }: any) => {
-  const [screenType, setScreenType] = useState("login");
-  const [formData, setFormData] = useState({ name: "", password: "" });
-  const [showPassword, setShowPassword] = useState({
+import { AuthFormProps, ShowPassword, FormData } from "../../types/auth";
+
+type ScreenType = "login" | "signup";
+
+const initialFormData: FormData = {
+  name: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const AuthForm: React.FC<AuthFormProps> = ({ setIsLoading }) => {
+  const [screenType, setScreenType] = useState<ScreenType>("login");
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [showPassword, setShowPassword] = useState<ShowPassword>({
     password: false,
     confirmPassword: false,
   });
+
   const { login } = useAuth();
 
-  const handleChange = (e: any) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (): Promise<void> => {
     const endpoint = screenType === "login" ? "/auth/login" : "/auth/register";
     setIsLoading(true);
+
     try {
-      const response = await api.post(endpoint, formData as any);
+      const payload =
+        screenType === "signup"
+          ? {
+              name: formData.name,
+              password: formData.password,
+              confirmPassword: formData.confirmPassword,
+            }
+          : {
+              name: formData.name,
+              password: formData.password,
+            };
+
+      const response = await api.post(endpoint, payload);
 
       if (response?.data?.status === 1 && "data" in response && response.data) {
-        setFormData({ name: "", password: "" });
         if (screenType === "login") {
           login(response.data.accessToken);
         } else {
           setScreenType("login");
         }
-        return response.data;
+        setFormData(initialFormData);
       }
     } catch (error) {
       alert("Invalid Credentials");
@@ -46,7 +70,7 @@ const AuthForm = ({ setIsLoading }: any) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          handleSubmit(formData);
+          handleSubmit();
         }}
         className="space-y-4"
       >
@@ -56,6 +80,7 @@ const AuthForm = ({ setIsLoading }: any) => {
             type="text"
             name="name"
             required
+            value={formData.name}
             className="w-full p-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
             onChange={handleChange}
           />
@@ -68,6 +93,7 @@ const AuthForm = ({ setIsLoading }: any) => {
               type={showPassword.password ? "text" : "password"}
               name="password"
               required
+              value={formData.password}
               className="w-full p-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
               onChange={handleChange}
             />
@@ -87,7 +113,7 @@ const AuthForm = ({ setIsLoading }: any) => {
         </div>
 
         {screenType === "signup" && (
-          <div className="mt-4">
+          <div>
             <label className="block text-sm font-medium mb-1">
               Confirm Password
             </label>
@@ -96,6 +122,7 @@ const AuthForm = ({ setIsLoading }: any) => {
                 type={showPassword.confirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 required
+                value={formData.confirmPassword}
                 className="w-full p-2 rounded border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
                 onChange={handleChange}
               />
@@ -134,7 +161,7 @@ const AuthForm = ({ setIsLoading }: any) => {
             <span
               onClick={() => {
                 setScreenType("signup");
-                setFormData({ name: "", password: "" });
+                setFormData(initialFormData);
               }}
               className="text-blue-500 hover:underline cursor-pointer"
             >
@@ -147,7 +174,7 @@ const AuthForm = ({ setIsLoading }: any) => {
             <span
               onClick={() => {
                 setScreenType("login");
-                setFormData({ name: "", password: "" });
+                setFormData(initialFormData);
               }}
               className="text-blue-500 hover:underline cursor-pointer"
             >
