@@ -1,3 +1,4 @@
+import axios from "axios";
 import { clsx, type ClassValue } from "clsx";
 import moment from "moment";
 import { twMerge } from "tailwind-merge";
@@ -23,3 +24,11 @@ export const arraysAreEqualAsSets = (a: string[], b: string[]) => {
     a.every((item) => b.includes(item))
   );
 };
+
+export const api = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
