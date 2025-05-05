@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App.tsx";
 import ThemeProvider from "./providers/ThemeProvider.tsx";
 import DialogModalProvider from "./components/ui/modal/providers/Provider.tsx";
+import AuthProvider from "./providers/AuthProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <DialogModalProvider>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </DialogModalProvider>
     </ThemeProvider>
   </StrictMode>
