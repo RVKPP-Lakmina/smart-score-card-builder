@@ -1,11 +1,11 @@
-import { useEffect, lazy, Suspense, useState } from "react";
-import NavigationProvider from "./providers/NavigationProvider";
+import { lazy, useEffect, useState } from "react";
 import AppLayout from "./AppLayout";
+import Spinner from "./components/ui/Loader";
+import useAuth from "./hooks/useAuth";
 import { rules } from "./lib/rules";
 import { templateSections } from "./lib/templateSections";
 import { templates } from "./lib/templates";
-import Spinner from "./components/ui/Loader";
-import useAuth from "./hooks/useAuth";
+import NavigationProvider from "./providers/NavigationProvider";
 
 const LoginPage = lazy(() => import("./pages/login/page"));
 

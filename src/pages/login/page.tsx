@@ -1,7 +1,7 @@
-import { useContext, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { api } from "../../lib/util";
+import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import { api } from "../../lib/util";
 const AuthForm = ({ setIsLoading }: any) => {
   const [screenType, setScreenType] = useState("login");
   const [formData, setFormData] = useState({ name: "", password: "" });

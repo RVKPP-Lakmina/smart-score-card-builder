@@ -1,4 +1,4 @@
-import axios from "axios";
+import { api } from "../lib/util";
 import { ItemsDD } from "../types/anyTypes";
 import { templateParams } from "../types/requests";
 import {
@@ -18,12 +18,8 @@ import { createTemplateSection } from "./api/section/createTemplateSection";
 import { getSections } from "./api/section/getSections";
 import { getTemplateSections } from "./api/section/getTemplaterSection";
 import {
-  cloneTemplate,
-  deleteTemplate,
-  getAllTemplates,
-  saveTemplate,
+  cloneTemplate
 } from "./api/templateApis";
-import { api } from "../lib/util";
 
 export const fetchTemplates = async () => {
   try {
