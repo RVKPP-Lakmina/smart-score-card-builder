@@ -20,8 +20,8 @@ export function RiskBox({
   children,
   saveButtonVisible,
   overallWeight,
-  sectionWeight,
-}: RiskBoxProps) {
+}: // sectionWeight,
+RiskBoxProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
       <div className="h-2 bg-gradient-to-r from-blue-500 to-green-400"></div>
@@ -39,13 +39,13 @@ export function RiskBox({
 
       <div className="px-4 py-[1px] flex justify-end items-center border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-          <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
+          {/* <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Section Weight:
             <EditableText
               label={sectionWeight?.toString() || "0.00"}
               onValueChange={() => {}}
             />
-          </span>
+          </span> */}
           <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Overall Weight:
             <EditableText

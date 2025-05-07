@@ -10,7 +10,6 @@ import ReactFlow, {
   MarkerType,
   Edge,
   Connection,
-  Position,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import {
@@ -32,11 +31,13 @@ import {
   TemplateSectionsPropsWithId,
 } from "../../types/responseTypes";
 import { RuleWithId } from "../../types/rules";
+import { ProductWithId } from "../../types/product.type";
 
 const nodeTypes = {
   templateNode: TemplateNode,
   sectionNode: SectionNode,
   ruleNode: RuleNode,
+  productNode: TemplateNode,
 };
 
 type NewEdges = {
@@ -45,8 +46,6 @@ type NewEdges = {
   target: string;
   animated: boolean;
   style: { stroke: string };
-  sourceHandle: "right" | "left";
-  targetHandle: "left" | "right";
   markerEnd: {
     type: MarkerType;
     width: number;
@@ -59,16 +58,18 @@ type NewNodes = {
   id: string;
   type: string;
   position: { x: number; y: number };
-  sourcePosition?: Position;
-  targetPosition?: Position;
-  data: TemplateSectionsPropsWithId | RuleWithId | ExportLine[string];
+  data:
+    | TemplateSectionsPropsWithId
+    | RuleWithId
+    | ExportLine[string]
+    | ProductWithId;
   hidden?: boolean;
 };
 
 export default function TemplateFlowPage({
-  templateId,
+  product: productWithId,
 }: {
-  templateId: string;
+  product: ProductWithId;
 }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -78,96 +79,118 @@ export default function TemplateFlowPage({
   const [, setZoomLevel] = useState(1);
 
   const preInitializer = useCallback(async () => {
-    // Pre-initialization logic can be added here if needed
-    const response: ExportLine | undefined = await exportLine(templateId);
+    const templateIds = Object.keys(productWithId.templateIds);
 
-    if (!response) {
-      alert("Error fetching template data");
+    if (templateIds.length === 0) {
       return;
     }
+
+    const responses = await Promise.all(
+      templateIds.map((templateId) => exportLine(templateId))
+    );
+
+    const templates = responses.reduce(
+      (acc: Record<string, ExportLine[string]>, response) => {
+        if (response) {
+          const template = response[Object.keys(response)[0]];
+          if (template && typeof template.sections !== "string") {
+            acc[template.id] = template;
+          }
+        }
+        return acc;
+      },
+      {} as Record<string, ExportLine[string]>
+    );
+
     const newNodes: NewNodes[] = [];
     const newEdges: NewEdges[] = [];
 
-    const template = { ...response[templateId] };
-
-    if (typeof template.sections == "string") {
-      return;
-    }
-
-    const sections = {
-      ...(response[templateId].sections as Record<
-        string,
-        TemplateSectionsPropsWithId & { ruleEntries: RuleWithId[] }
-      >),
-    };
-
-    Object.values(sections).forEach((section, index) => {
-      newNodes.push({
-        id: section.id,
-        type: "sectionNode",
-        position: { x: 300, y: -400 + (index + 1) * 200 },
-        sourcePosition: Position.Right,
-        targetPosition: Position.Left,
-        data: {
-          ...section,
-        },
-      });
-
-      newEdges.push({
-        id: `e-${templateId}-${section.id}`,
-        source: templateId,
-        target: section.id,
-        animated: true,
-        style: { stroke: "#3b82f6" },
-        sourceHandle: "right",
-        targetHandle: "left",
-        markerEnd: {
-          type: MarkerType.ArrowClosed,
-          width: 20,
-          height: 20,
-          color: "#3b82f6",
-        },
-      });
-
-      section.ruleEntries.forEach((rule, i) => {
+    Object.entries(templates as Record<string, ExportLine[string]>).forEach(
+      ([templateId, template]) => {
         newNodes.push({
-          id: rule.id,
-          type: "ruleNode",
-          position: { x: 450 + (i + 1) * 350, y: -400 + index * 300 },
-
-          data: { ...rule },
+          id: templateId,
+          type: "templateNode",
+          position: { x: 0, y: -400 },
+          data: { ...template },
         });
 
         newEdges.push({
-          id: `e-${section.id}-${rule.id}`,
-          source: section.id,
-          target: rule.id,
+          id: `e-${templateId}`,
+          source: productWithId.id,
+          target: templateId,
           animated: true,
-          style: { stroke: "#22c55e" },
-          sourceHandle: "right",
-          targetHandle: "left",
+          style: { stroke: "#3b82f6" },
           markerEnd: {
             type: MarkerType.ArrowClosed,
             width: 20,
             height: 20,
-            color: "#22c55e",
+            color: "#3b82f6",
           },
         });
-      });
-    });
+
+        const sections = template.sections as Record<
+          string,
+          TemplateSectionsPropsWithId & { ruleEntries: RuleWithId[] }
+        >;
+
+        Object.values(sections).forEach((section, index) => {
+          newNodes.push({
+            id: section.id,
+            type: "sectionNode",
+            position: { x: 300, y: -400 + (index + 1) * 200 },
+            data: { ...section },
+          });
+
+          newEdges.push({
+            id: `e-${templateId}-${section.id}`,
+            source: templateId,
+            target: section.id,
+            animated: true,
+            style: { stroke: "#3b82f6" },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              width: 20,
+              height: 20,
+              color: "#3b82f6",
+            },
+          });
+
+          section.ruleEntries.forEach((rule, i) => {
+            newNodes.push({
+              id: rule.id,
+              type: "ruleNode",
+              position: { x: 450 + (i + 1) * 350, y: -400 + index * 300 },
+              data: { ...rule },
+            });
+
+            newEdges.push({
+              id: `e-${section.id}-${rule.id}`,
+              source: section.id,
+              target: rule.id,
+              animated: true,
+              style: { stroke: "#22c55e" },
+              markerEnd: {
+                type: MarkerType.ArrowClosed,
+                width: 20,
+                height: 20,
+                color: "#22c55e",
+              },
+            });
+          });
+        });
+      }
+    );
 
     newNodes.unshift({
-      id: templateId,
-      type: "templateNode",
-      position: { x: -100, y: newNodes[0].position.y },
-      sourcePosition: Position.Right,
-      targetPosition: Position.Left,
-      data: { ...template, score: Number(Math.random().toFixed(2)) },
+      id: productWithId.id,
+      type: "productNode",
+      position: { x: 0, y: -400 },
+      data: { ...productWithId },
     });
 
     setNodes(newNodes);
     setEdges(newEdges);
-  }, [setEdges, setNodes, templateId]);
+  }, [productWithId, setEdges, setNodes]);
 
   useEffect(() => {
     preInitializer();

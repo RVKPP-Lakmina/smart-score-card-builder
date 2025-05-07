@@ -1,0 +1,51 @@
+export const products = {
+  "PERSONAL-FINANCE": {
+    id: "PERSONAL-FINANCE",
+    name: "Personal Finance",
+    description: "Personal Finance Model",
+    createdAt: "2025-05-05T02:53:15.197Z",
+    lastEdited: "2025-05-06T02:48:14.154Z",
+    lastEditedBy: "user",
+    createdBy: "user",
+    countOfEdits: 1,
+    apis: {},
+    templateIds: {
+      PERSONAL_FINANCE_TEMPLATE: {
+        id: "PERSONAL_FINANCE_TEMPLATE",
+        name: "Personal Finance Template",
+      },
+    },
+    status: "active",
+  },
+  "PERSONAL-FINANCE-MODEL---JOINT-BORROWERS": {
+    id: "PERSONAL-FINANCE-MODEL---JOINT-BORROWERS",
+    name: "Personal Finance Model - Joint Borrowers",
+    description: "Personal Finance Model - Joint Borrowers",
+    createdAt: "2025-05-05T02:53:35.724Z",
+    lastEdited: "2025-05-06T02:48:19.194Z",
+    lastEditedBy: "user",
+    createdBy: "user",
+    countOfEdits: 1,
+    apis: {},
+    templateIds: {
+      "PERSONAL_FINANCE_MODEL_-_JOINT_BORROWERS": {
+        id: "PERSONAL_FINANCE_MODEL_-_JOINT_BORROWERS",
+        name: "Personal Finance Model - Joint Borrowers",
+      },
+    },
+    status: "active",
+  },
+  LEASING: {
+    id: "LEASING",
+    name: "Leasing",
+    description: "Leasing - Business Model",
+    createdAt: "2025-05-05T03:04:28.772Z",
+    lastEdited: "2025-05-05T03:04:28.772Z",
+    lastEditedBy: "user",
+    createdBy: "user",
+    countOfEdits: 0,
+    apis: {},
+    templateIds: [],
+    status: "active",
+  },
+};

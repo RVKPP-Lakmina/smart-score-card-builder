@@ -68,7 +68,6 @@ const SectionCard: React.FC<SectionCardProps> = ({
       value={Number(value || "0.00") as number}
       onAdd={addNewRule}
       overallWeight={section.rules.length ? section.overallWeight : 0}
-      sectionWeight={section.rules.length ? section.sectionWeight : 0}
     >
       <ul>
         {(sectionRules?.[id] || []).length ? (
@@ -92,6 +91,10 @@ const SectionCard: React.FC<SectionCardProps> = ({
                     }}
                     className="focus:outline-none"
                   >
+                    <EditableText
+                      label={item.score || "0.00"}
+                      onValueChange={() => {}}
+                    />
                     <EditableText
                       label={item.score || "0.00"}
                       onValueChange={() => {}}
