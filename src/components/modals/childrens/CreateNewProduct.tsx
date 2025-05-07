@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useModal } from "../../../hooks/useModal";
 import { Button } from "../../ui/Button";
+import TextField from "../../ui/TextField";
+import TextArea from "../../ui/TextArea";
 
 interface CreateNewProductProps {
   handleCreateProduct: (params: {
@@ -19,46 +21,33 @@ const CreateNewProduct: React.FC<CreateNewProductProps> = ({
   const { closeModal } = useModal();
 
   const handleSaveProduct = async () => {
+    if (!newProduct.name || !newProduct.description) {
+      return alert("Please fill in all fields.");
+    }
+
     await handleCreateProduct(newProduct);
     closeModal();
   };
 
   return (
     <div className="space-y-4">
-      <div>
-        <label htmlFor="productName" className="block text-sm font-medium mb-1">
-          Product Name
-        </label>
-        <input
-          id="productName"
-          type="text"
-          value={newProduct.name}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, name: e.target.value })
-          }
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
-          placeholder="Enter product name"
-        />
-      </div>
-      <div>
-        <label
-          htmlFor="productDescription"
-          className="block text-sm font-medium mb-1"
-        >
-          Description
-        </label>
-        <textarea
-          id="productDescription"
-          value={newProduct.description}
-          onChange={(e) =>
-            setNewProduct({ ...newProduct, description: e.target.value })
-          }
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700"
-          rows={3}
-          placeholder="Enter product description"
-        />
-      </div>
-
+      <TextField
+        label="Product Name"
+        required={true}
+        value={newProduct.name as string}
+        onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+        placeholder="Enter product name"
+      />
+      <TextArea
+        label="Product Description"
+        required={true}
+        value={newProduct.description as string}
+        onChange={(e) =>
+          setNewProduct({ ...newProduct, description: e.target.value })
+        }
+        rows={3}
+        placeholder="Enter product description"
+      />
       <div className="flex justify-end space-x-2">
         <Button variant="outline" onClick={closeModal}>
           Cancel

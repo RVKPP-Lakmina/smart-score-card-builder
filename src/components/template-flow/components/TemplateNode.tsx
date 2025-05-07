@@ -17,6 +17,7 @@ interface TemplateNodeProps {
 
 export const TemplateNode = memo(
   ({ data, isConnectable }: TemplateNodeProps) => {
+    console.log("TemplateNode rendered", data);
     return (
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-blue-500 p-4 w-64">
         <Handle

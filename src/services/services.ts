@@ -1,9 +1,8 @@
-import { api } from "../lib/util";
 import { ItemsDD } from "../types/anyTypes";
 import { templateParams } from "../types/requests";
 import {
   ExportLine,
-  Sections,
+  Section,
   Templates,
   TemplateSections,
   TemplatesProps,
@@ -15,11 +14,106 @@ import { createRules } from "./api/rules/createRules";
 import { getRules } from "./api/rules/getRules";
 import { getSectionRules } from "./api/rules/getSectionRules";
 import { createTemplateSection } from "./api/section/createTemplateSection";
-import { getSections } from "./api/section/getSections";
 import { getTemplateSections } from "./api/section/getTemplaterSection";
+import { cloneTemplate } from "./api/templateApis";
 import {
-  cloneTemplate
-} from "./api/templateApis";
+  CreateNewProduct,
+  Products,
+  ProductWithId,
+} from "../types/product.type";
+import { api } from "../lib/util";
+
+export const getAllProducts = async () => {
+  try {
+    // const response = await api.get("/products");
+    const res = localStorage.getItem("products");
+
+    const response = {
+      status: 1,
+      data: res ? JSON.parse(res) : {},
+    };
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as Products;
+    } else {
+      alert("Error fetching all products:");
+    }
+  } catch (error) {
+    alert("Error getting all products:" + (error as Error).message);
+  }
+};
+
+export const updateProduct = async (id: string, product: CreateNewProduct) => {
+  try {
+    // const response = await api.put(`/products/${id}`, product);
+
+    const res: string | null = localStorage.getItem("products");
+    const products: Products = res ? JSON.parse(res) : {};
+
+    if (products[id]) {
+      products[id] = {
+        ...products[id],
+        ...product,
+        lastEdited: new Date().toISOString(),
+        lastEditedBy: "user",
+        countOfEdits: products[id].countOfEdits + 1,
+      };
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+
+    const response = {
+      status: 1,
+      data: products[id],
+    };
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as ProductWithId;
+    } else {
+      alert("Error updating product:");
+    }
+  } catch (error) {
+    alert("Error updating product:" + (error as Error).message);
+  }
+};
+
+export const createProduct = async (product: CreateNewProduct) => {
+  try {
+    // const response = await api.post("/products", product);
+
+    const data: ProductWithId = {
+      id: product.name.replace(/\s+/g, "-").toUpperCase(),
+      name: product.name,
+      description: product.description,
+      createdAt: new Date().toISOString(),
+      lastEdited: new Date().toISOString(),
+      lastEditedBy: "user",
+      createdBy: "user",
+      countOfEdits: 0,
+      apis: {},
+      templateIds: [],
+      status: "active",
+    };
+
+    const res: string | null = localStorage.getItem("products");
+    const products: Products = res ? JSON.parse(res) : {};
+    products[data.id] = data;
+
+    localStorage.setItem("products", JSON.stringify(products));
+
+    const response = {
+      status: 1,
+      data: data,
+    };
+
+    if (response.status === 1 && "data" in response && response.data) {
+      return response.data as ProductWithId;
+    } else {
+      alert("Error creating product:");
+    }
+  } catch (error) {
+    alert("Error creating product:" + (error as Error).message);
+  }
+};
 
 export const fetchTemplates = async () => {
   try {
@@ -42,7 +136,10 @@ export const createTemplate = async (template: {
 }) => {
   try {
     // const response = await saveTemplate(template as TemplatesProps);
-    const response = await api.post('/template-builder', template as TemplatesProps);
+    const response = await api.post(
+      "/template-builder",
+      template as TemplatesProps
+    );
 
     if (response?.data?.status === 1 && "data" in response && response.data) {
       alert("Template created successfully:");
@@ -122,10 +219,12 @@ export const getSelectedSections = async (sectionIds: string[]) => {
 
 export const getAllSections = async () => {
   try {
-    const response = await getSections();
+    const response = await api.get("/sections");
 
-    if (response.status === 1 && "data" in response && response.data) {
-      return response.data as Sections;
+    console.log("Response:", response);
+
+    if (response.status === 200 && "data" in response && response.data) {
+      return response.data as Section[];
     } else {
       alert("Error fetching all sections:");
     }
@@ -139,7 +238,9 @@ export const addNewTemplateSection = async (
   sectionIds: string[]
 ) => {
   try {
-    const response = await createTemplateSection(templateId, {}, sectionIds);
+    const response = await api.post(`/templates-sections/${templateId}`, {
+      sectionIds,
+    });
 
     if (response.status === 1 && "data" in response && response.data) {
       alert("Template section added successfully:");

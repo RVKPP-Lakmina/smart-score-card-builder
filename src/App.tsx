@@ -5,12 +5,14 @@ import useAuth from "./hooks/useAuth";
 import { rules } from "./lib/rules";
 import { templateSections } from "./lib/templateSections";
 import { templates } from "./lib/templates";
+import { sectionRules } from "./lib/sectionRules";
+import { products } from "./lib/products";
 import NavigationProvider from "./providers/NavigationProvider";
 
 const LoginPage = lazy(() => import("./pages/login/page"));
 
 const App = () => {
-  const [isLoading, setIsLoading]: any = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { accessToken } = useAuth();
   useEffect(() => {
     if (!localStorage.getItem("templates")) {
@@ -26,6 +28,13 @@ const App = () => {
 
     if (!localStorage.getItem("rules")) {
       localStorage.setItem("rules", JSON.stringify(rules));
+    }
+    if (!localStorage.getItem("sectionsRules")) {
+      localStorage.setItem("sectionsRules", JSON.stringify(sectionRules));
+    }
+
+    if (!localStorage.getItem("products")) {
+      localStorage.setItem("products", JSON.stringify(products));
     }
   }, []);
 

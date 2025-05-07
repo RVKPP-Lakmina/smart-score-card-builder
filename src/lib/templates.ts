@@ -43,4 +43,32 @@ export const templates = {
     countOfEdits: 0,
     createdBy: "user",
   },
+  PERSONAL_FINANCE_TEMPLATE: {
+    id: "PERSONAL_FINANCE_TEMPLATE",
+    name: "Personal Finance Template",
+    description: "Personal Finance Model Template",
+    createdAt: "2025-05-05T03:07:49.572Z",
+    score: 9.57,
+    sectionIds: [
+      "maamuphcxog0872supj",
+      "maamuphdge9kpmizzia",
+      "maamuphdnvzhch5rsz",
+    ],
+    lastEdited: "2025-05-05T05:21:19.489Z",
+    countOfEdits: 1,
+  },
+  "PERSONAL_FINANCE_MODEL_-_JOINT_BORROWERS": {
+    id: "PERSONAL_FINANCE_MODEL_-_JOINT_BORROWERS",
+    name: "Personal Finance Model - Joint Borrowers",
+    description: "Personal Finance Model - Joint Borrowers",
+    createdAt: "2025-05-05T07:35:52.908Z",
+    score: 0.95,
+    sectionIds: [
+      "maasobzg1r1i8s16mbm",
+      "maasobzgcs5n8z7zr8m",
+      "maasobzglmgv9ibhpw8",
+    ],
+    lastEdited: "2025-05-05T08:04:19.756Z",
+    countOfEdits: 1,
+  },
 };

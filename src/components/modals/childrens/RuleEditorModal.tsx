@@ -93,7 +93,7 @@ export default function ScoreCardEditorModal({
                   value={item.name}
                   onChange={(e) => updateItem(index, "name", e.target.value)}
                   onKeyDown={(e) => handleKeyPress(e, index)}
-                  className="flex-1 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-3 py-2  border border-gray-600 rounded-md  focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter criteria"
                   autoFocus={focusIndex === index}
                 />
@@ -104,7 +104,7 @@ export default function ScoreCardEditorModal({
                     updateItem(index, "score", Number(e.target.value))
                   }
                   onKeyDown={(e) => handleKeyPress(e, index)}
-                  className="w-20 px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-20 px-3 py-2  border border-gray-600 rounded-md  text-right focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Score"
                 />
 

@@ -56,7 +56,7 @@ function TemplatePage({
   );
 }
 
-export default React.memo(() => {
+const TemplatePageWrapper = React.memo(() => {
   const [currPage, setCurrPage] = React.useState<string | undefined>(undefined);
   const paramRef = React.useRef<Record<string, unknown>>({});
 
@@ -75,6 +75,8 @@ export default React.memo(() => {
     </TemplateStoreProvider>
   );
 });
+
+export default TemplatePageWrapper;
 
 const Build = (page: string) => {
   switch (page) {

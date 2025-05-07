@@ -1,5 +1,14 @@
 import { RuleWithId } from "./rules";
 
+export type Section = {
+  id: string;
+  name: string;
+  createdAt?: string;
+  lastEdited?: string;
+  lastEditedBy?: string;
+  createdBy?: string;
+};
+
 export type Sections = {
   [key: string]: {
     id: string;
