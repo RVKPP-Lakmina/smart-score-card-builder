@@ -59,6 +59,7 @@ export interface TemplatesProps {
 
 export interface TemplatesPropsWithId extends TemplatesProps {
   id: string;
+  _id?: string;
 }
 
 export interface Templates {

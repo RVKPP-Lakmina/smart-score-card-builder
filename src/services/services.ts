@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ItemsDD } from "../types/anyTypes";
 import { templateParams } from "../types/requests";
 import {
@@ -16,25 +15,13 @@ import { getRules } from "./api/rules/getRules";
 import { getSectionRules } from "./api/rules/getSectionRules";
 import { createTemplateSection } from "./api/section/createTemplateSection";
 import { getTemplateSections } from "./api/section/getTemplaterSection";
-import {
-  cloneTemplate,
-  deleteTemplate,
-  getAllTemplates,
-  saveTemplate,
-} from "./api/templateApis";
+import { cloneTemplate } from "./api/templateApis";
 import {
   CreateNewProduct,
   Products,
   ProductWithId,
 } from "../types/product.type";
-
-const api = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL,
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
-  },
-});
+import { api } from "../lib/util";
 
 export const getAllProducts = async () => {
   try {
@@ -130,10 +117,11 @@ export const createProduct = async (product: CreateNewProduct) => {
 
 export const fetchTemplates = async () => {
   try {
-    const response = await getAllTemplates();
+    // const response = await getAllTemplates();
+    const response = await api.get("/template-builder");
 
-    if (response.status === 1 && "data" in response && response.data) {
-      return response.data as Templates;
+    if (response?.data?.status === 1 && "data" in response && response.data) {
+      return response.data?.data as Templates;
     } else {
       alert("Error fetching templates:");
     }
@@ -147,9 +135,13 @@ export const createTemplate = async (template: {
   description?: string;
 }) => {
   try {
-    const response = await saveTemplate(template as TemplatesProps);
+    // const response = await saveTemplate(template as TemplatesProps);
+    const response = await api.post(
+      "/template-builder",
+      template as TemplatesProps
+    );
 
-    if (response?.status === 1 && "data" in response && response.data) {
+    if (response?.data?.status === 1 && "data" in response && response.data) {
       alert("Template created successfully:");
       return response.data;
     } else {
@@ -162,12 +154,29 @@ export const createTemplate = async (template: {
 
 export const removeTemplate = async (id: string) => {
   try {
-    const response = await deleteTemplate(id);
+    // const response = await deleteTemplate(id);
+    const response = await api.delete(`/template-builder?id=${id}`);
 
-    if (response.status === 1) {
+    if (response?.data?.status === 1) {
       alert("Template deleted successfully:");
     } else {
       alert("Error deleting template:");
+    }
+    return response.status;
+  } catch (error) {
+    alert("Error deleting template:" + (error as Error).message);
+    return -1;
+  }
+};
+export const updateTemplate = async (id: string) => {
+  try {
+    // const response = await deleteTemplate(id);
+    const response = await api.patch(`/template-builder?id=${id}`);
+
+    if (response?.data?.status === 1) {
+      alert("Template updated successfully:");
+    } else {
+      alert("Error updating template:");
     }
     return response.status;
   } catch (error) {

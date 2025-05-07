@@ -48,7 +48,10 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
         <div className="flex flex-col space-y-3 opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-200 ease-in-out justify-between">
           <button
             onClick={async () => {
-              console.log("Exported template:", await exportLine(template.id));
+              console.log(
+                "Exported template:",
+                await exportLine(template?._id ?? template?.id)
+              );
             }}
             className="p-2 text-blue-500 hover:bg-blue-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md"
           >
@@ -61,7 +64,7 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
             <Copy size={18} />
           </button>
           <button
-            onClick={() => handleDelete(template.id)}
+            onClick={() => handleDelete(template?._id ?? template?.id)}
             className=" p-2 text-red-500 hover:bg-green-50 hover:scale-110 dark:hover:bg-gray-700 rounded-md"
           >
             <Trash2 size={18} />

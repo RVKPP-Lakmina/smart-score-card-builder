@@ -2,6 +2,7 @@ import { useState } from "react";
 import { User, LogOut, Settings, ChevronDown } from "lucide-react";
 import { cn } from "../../lib/util";
 import useNavigation from "../../hooks/useNavigation";
+import useAuth from "../../hooks/useAuth";
 
 interface UserNavigationProps {
   username?: string;
@@ -16,13 +17,14 @@ export function UserNavigation({
 }: UserNavigationProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { navigateTo } = useNavigation();
+  const { logout } = useAuth();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
+    logout();
     setIsOpen(false);
   };
 
