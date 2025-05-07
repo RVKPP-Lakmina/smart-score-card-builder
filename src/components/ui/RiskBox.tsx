@@ -1,4 +1,3 @@
-import type React from "react";
 import { Plus } from "lucide-react";
 import EditableText from "./EditableText";
 
@@ -8,7 +7,6 @@ interface RiskBoxProps {
   count?: number;
   onAdd?: () => void;
   className?: string;
-  children?: React.ReactNode;
   saveButtonVisible?: boolean;
   overallWeight?: number;
   sectionWeight?: number;
@@ -17,7 +15,6 @@ interface RiskBoxProps {
 export function RiskBox({
   title,
   onAdd,
-  children,
   saveButtonVisible,
   overallWeight,
   sectionWeight,
@@ -37,45 +34,21 @@ export function RiskBox({
         </div>
       </div>
 
-      <div className="px-4 py-[1px] flex justify-end items-center border-b border-gray-200 dark:border-gray-700">
+      <div className="px-4 py-[1px] flex justify-end items-center">
         <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-          <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-            Section Weight:
+          <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400 p-1">
+            Overall Weight:
             <EditableText
               label={sectionWeight?.toString() || "0.00"}
               onValueChange={() => {}}
             />
           </span>
-          <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-            Overall Weight:
-            <EditableText
-              label={overallWeight?.toString() || "0.00"}
-              onValueChange={() => {}}
-            />
-          </span>
         </div>
       </div>
-
-      <div className="border flex justify-between border-gray-200 dark:border-gray-700"></div>
-
-      <div
-        className="p-3"
-        style={{
-          overflowY: "auto",
-          maxHeight: "calc(100vh - 355px)",
-          minHeight: "calc(100vh - 355px)",
-        }}
-      >
-        {children}
-      </div>
-
       {saveButtonVisible && (
         <div className="flex justify-end space-x-2 p-3">
-          <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all">
-            Cancel
-          </button>
           <button className="px-4 py-2 bg-gradient-to-r from-blue-500 to-green-400 hover:from-blue-600 hover:to-green-500 text-white rounded-md shadow-md transition-all">
-            Save
+            View Rules
           </button>
         </div>
       )}

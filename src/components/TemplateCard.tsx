@@ -1,10 +1,9 @@
-import { Edit, Copy, Trash2, Eye } from "lucide-react";
-import React, { useCallback } from "react";
+import { Edit, Copy, Trash2 } from "lucide-react";
+import React from "react";
 import { formatedDate } from "../lib/util";
 import { TemplatesPropsWithId } from "../types/responseTypes";
 import useTemplateStore from "../hooks/useTemplateStore";
 import { exportLine } from "../services/services";
-import { useModal } from "../hooks/useModal";
 
 interface TemplateCardProps {
   onClickLable: () => void;
@@ -13,21 +12,6 @@ interface TemplateCardProps {
 
 function TemplateCard({ template, onClickLable }: TemplateCardProps) {
   const { handleDelete, cloneTemplate } = useTemplateStore();
-  const { openModal } = useModal();
-
-  const openFlowModal = useCallback(
-    (templateId: string) => {
-      openModal({
-        title: "Template Flow Visualization - " + template.name,
-        size: "screen",
-        childrenkey: "templateFlow",
-        props: {
-          templateId,
-        },
-      });
-    },
-    [openModal, template.name]
-  );
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
@@ -41,23 +25,6 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
             >
               {template.name}
             </h4>
-            {/* <Info
-              className="ml-2 opacity-0 text-green-500 dark:text-green-400
-              cursor-pointer
-              group-hover:opacity-100 group-hover:scale-110 transition-all duration-200 ease-in-out
-            "
-              size={16}
-            /> */}
-
-            <button
-              onClick={() => openFlowModal(template.id)}
-              className="ml-2 opacity-0 text-green-500 dark:text-green-400
-              cursor-pointer
-              group-hover:opacity-100 group-hover:scale-110 transition-all duration-200 ease-in-out
-            "
-            >
-              <Eye size={18} />
-            </button>
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             {template.description || ""}

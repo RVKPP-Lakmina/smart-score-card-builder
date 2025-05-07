@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { rules } from "./lib/rules";
 import { templateSections } from "./lib/templateSections";
 import { templates } from "./lib/templates";
+import { sectionRules } from "./lib/sectionRules";
+import { products } from "./lib/products";
 
 const App = () => {
   useEffect(() => {
@@ -20,9 +22,14 @@ const App = () => {
     if (!localStorage.getItem("rules")) {
       localStorage.setItem("rules", JSON.stringify(rules));
     }
-  }, []);
+    if (!localStorage.getItem("sectionsRules")) {
+      localStorage.setItem("sectionsRules", JSON.stringify(sectionRules));
+    }
 
-  // useEffect(() => {
+    if (!localStorage.getItem("products")) {
+      localStorage.setItem("products", JSON.stringify(products));
+    }
+  }, []);
 
   return (
     <NavigationProvider>
