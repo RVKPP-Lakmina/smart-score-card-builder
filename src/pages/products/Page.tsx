@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Plus,
   SearchIcon,
@@ -6,36 +6,21 @@ import {
   ExternalLink,
   Check,
   X,
+  Eye,
 } from "lucide-react";
 import { Search } from "../../components/ui/SearchBox";
 import { Button } from "../../components/ui/Button";
 import { arraysAreEqualAsSets, formatedDate } from "../../lib/util";
 import { useModal } from "../../hooks/useModal";
 import moment from "moment";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  templateId: string | null;
-  templateName: string | null;
-  apis: API[];
-  createdAt: string;
-  status: "active" | "inactive" | "draft";
-}
-
-interface Template {
-  id: string;
-  name: string;
-  description: string;
-}
-
-interface API {
-  id: string;
-  name: string;
-  type: string;
-  status: "connected" | "failed" | "pending";
-}
+import {
+  createProduct,
+  fetchTemplates,
+  getAllProducts,
+  updateProduct,
+} from "../../services/services";
+import { API, CreateNewProduct, ProductWithId } from "../../types/product.type";
+import { Templates, TemplatesPropsWithId } from "../../types/responseTypes";
 
 const getStatusBadgeClass = (status: string) => {
   switch (status) {
@@ -57,130 +42,54 @@ const getStatusBadgeClass = (status: string) => {
 };
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState<Product[]>([
-    {
-      id: "prod-1",
-      name: "Personal Loan",
-      description: "Standard personal loan product with risk assessment",
-      templateId: "temp-1",
-      templateName: "Credit Risk Assessment",
-      apis: [
-        {
-          id: "api-1",
-          name: "Credit Bureau API",
-          type: "REST",
-          status: "connected",
-        },
-        {
-          id: "api-2",
-          name: "Fraud Detection",
-          type: "GraphQL",
-          status: "connected",
-        },
-      ],
-      createdAt: "2023-10-15",
-      status: "active",
-    },
-    {
-      id: "prod-2",
-      name: "Business Loan",
-      description: "Small business loan with comprehensive risk evaluation",
-      templateId: null,
-      templateName: null,
-      apis: [],
-      createdAt: "2023-10-18",
-      status: "draft",
-    },
-    {
-      id: "prod-3",
-      name: "Mortgage Loan",
-      description: "Home mortgage loan with property valuation",
-      templateId: "temp-2",
-      templateName: "Mortgage Risk Assessment",
-      apis: [
-        {
-          id: "api-3",
-          name: "Property Valuation API",
-          type: "REST",
-          status: "connected",
-        },
-      ],
-      createdAt: "2023-10-20",
-      status: "active",
-    },
-  ]);
+  const [products, setProducts] = useState<ProductWithId[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { closeModal, openModal } = useModal();
 
-  const [templates] = useState<Template[]>([
-    {
-      id: "temp-1",
-      name: "Credit Risk Assessment",
-      description: "Comprehensive credit risk evaluation",
-    },
-    {
-      id: "temp-2",
-      name: "Mortgage Risk Assessment",
-      description: "Property and borrower risk assessment",
-    },
-    {
-      id: "temp-3",
-      name: "SME Loan Assessment",
-      description: "Small business risk evaluation",
-    },
-    {
-      id: "temp-4",
-      name: "Auto Loan Assessment",
-      description: "Vehicle financing risk assessment",
-    },
-  ]);
+  const [templates, setTemplates] = useState<TemplatesPropsWithId[]>([]);
 
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
     null
   );
 
-  const [availableApis] = useState<API[]>([
-    {
-      id: "api-1",
-      name: "Credit Bureau API",
-      type: "REST",
-      status: "connected",
-    },
-    {
-      id: "api-2",
-      name: "Fraud Detection",
-      type: "GraphQL",
-      status: "connected",
-    },
-    {
-      id: "api-3",
-      name: "Property Valuation API",
-      type: "REST",
-      status: "connected",
-    },
-    {
-      id: "api-4",
-      name: "Income Verification",
-      type: "REST",
-      status: "pending",
-    },
-    {
-      id: "api-5",
-      name: "Business Credit Score",
-      type: "SOAP",
-      status: "connected",
-    },
-  ]);
+  const [availableApis] = useState<API[]>([]);
 
   const [selectedApiIds, setSelectedApiIds] = useState<string[]>([]);
 
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (product.templateName &&
-        product.templateName.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  const getSavedProducts = useCallback(async () => {
+    const res = await getAllProducts();
+
+    if (!res) return;
+
+    const data = Object.values(res) as ProductWithId[];
+    setProducts(data);
+  }, []);
+
+  const getTemplates = useCallback(async () => {
+    const res: Templates | undefined = await fetchTemplates();
+
+    if (!res) return;
+
+    const data = Object.values(res) as Templates[string][];
+
+    setTemplates(data);
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      await Promise.all([getSavedProducts(), getTemplates()]);
+    };
+
+    fetchProducts();
+  }, [getSavedProducts, getTemplates]);
+
+  const filteredProducts = useMemo(() => {
+    return products.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [products, searchTerm]);
 
   const handleOpenCreateProductModal = () => {
     openModal({
@@ -195,29 +104,46 @@ export default function ProductsPage() {
   };
 
   const handleCreateProduct = useCallback(
-    (newProduct: { name: string; description: string }) => {
-      if (!newProduct.name.trim()) return;
+    async (newProduct: { name: string; description: string }) => {
+      try {
+        if (!newProduct.name.trim()) {
+          throw new Error("Product name is required");
+        }
 
-      const newProductObj: Product = {
-        id: `prod-${products.length + 1}`,
-        name: newProduct.name,
-        description: newProduct.description,
-        templateId: null,
-        templateName: null,
-        apis: [],
-        createdAt: new Date().toISOString(),
-        status: "draft",
-      };
+        const newProductObj = await createProduct(newProduct);
 
-      setProducts([...products, newProductObj]);
-      closeModal();
+        if (!newProductObj) {
+          throw new Error("Failed to create product");
+        }
+
+        setProducts([...products, newProductObj]);
+        closeModal();
+      } catch {
+        // Handle error (e.g., show a notification or alert)
+        console.error("Error creating product:");
+      }
     },
     [products, closeModal]
   );
 
-  // Handle map template
+  const openFlowModal = useCallback(
+    (templateId: string, product: ProductWithId) => {
+      console.log("openFlowModal", templateId, product);
+
+      openModal({
+        title: "Product Flow Visualization - " + product.name,
+        size: "screen",
+        childrenkey: "templateFlow",
+        props: {
+          product: product as ProductWithId,
+        },
+      });
+    },
+    [openModal]
+  );
+
   const handleMapTemplate = useCallback(
-    (selectedTemplateId: string, selectedProduct: Product) => {
+    async (selectedTemplateId: string, selectedProduct: ProductWithId) => {
       if (!selectedProduct || !selectedTemplateId) return;
 
       const selectedTemplate = templates.find(
@@ -225,27 +151,42 @@ export default function ProductsPage() {
       );
       if (!selectedTemplate) return;
 
-      const updatedProducts = products.map((p) => {
-        if (p.id === selectedProduct.id) {
-          return {
-            ...p,
-            templateId: selectedTemplateId,
-            templateName: selectedTemplate.name,
-          };
-        }
-        return p;
-      });
+      const template = templates.find((t) => t.id === selectedTemplateId);
 
-      setProducts(updatedProducts);
+      if (!template) return;
+
+      selectedProduct.templateIds = {
+        ...(selectedProduct?.templateIds || {}),
+        [selectedTemplateId]: {
+          id: selectedTemplateId,
+          name: template.name,
+        },
+      };
+
+      const res = await updateProduct(selectedProduct.id, selectedProduct);
+
+      if (!res) return;
+
+      setProducts((prev) => {
+        const updatedProducts = prev.map((p) => {
+          if (p.id === selectedProduct.id) {
+            return {
+              ...p,
+              ...selectedProduct,
+            };
+          }
+          return p;
+        });
+        return updatedProducts;
+      });
       setSelectedTemplateId(null);
       closeModal();
     },
-    [closeModal, products, templates]
+    [closeModal, templates]
   );
 
-  // Handle add APIs
   const handleAddApis = useCallback(
-    (selectedApiIds: string[], selectedProduct: Product) => {
+    (selectedApiIds: string[], selectedProduct: ProductWithId) => {
       if (!selectedProduct || selectedApiIds.length === 0) return;
 
       const selectedApis = availableApis.filter((api) =>
@@ -254,13 +195,25 @@ export default function ProductsPage() {
 
       const updatedProducts = products.map((p) => {
         if (p.id === selectedProduct.id) {
-          const newApis = selectedApis.filter(
-            (api) => !p.apis.some((existingApi) => existingApi.id === api.id)
-          );
+          const apis = selectedApis.reduce((acc, api) => {
+            acc[api.id] = {
+              id: api.id,
+              name: api.name,
+              type: api.type,
+              status: api.status,
+              curl: "",
+              associatedTemplateId: selectedTemplateId || "",
+              associateSectionId: selectedProduct.id,
+            };
+            return acc;
+          }, {} as Record<string, API>);
 
           return {
             ...p,
-            apis: [...p.apis, ...newApis],
+            apis: {
+              ...(p?.apis || {}),
+              ...apis,
+            },
           };
         }
         return p;
@@ -279,11 +232,11 @@ export default function ProductsPage() {
         setSelectedApiIds([]);
       }
     },
-    [availableApis, products]
+    [availableApis, products, selectedTemplateId]
   );
 
   const openMapTemplateModal = useCallback(
-    (product: Product) => {
+    (product: ProductWithId) => {
       openModal({
         title: "Map Template to Product",
         childrenkey: "mapTemplateToProduct",
@@ -302,7 +255,7 @@ export default function ProductsPage() {
     [handleMapTemplate, openModal, selectedTemplateId, templates]
   );
 
-  const openAddApiModal = (product: Product) => {
+  const openAddApiModal = (product: ProductWithId) => {
     openModal({
       title: "Add APIs to Product",
       childrenkey: "addApiToProduct",
@@ -373,11 +326,14 @@ export default function ProductsPage() {
                         </h3>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${getStatusBadgeClass(
-                            product.status
+                            Object.keys(product.templateIds).length > 0
+                              ? "active"
+                              : "draft"
                           )}`}
                         >
-                          {product.status.charAt(0).toUpperCase() +
-                            product.status.slice(1)}
+                          {Object.keys(product.templateIds).length > 0
+                            ? "Active"
+                            : "Draft"}
                         </span>
                       </div>
                       <p className="text-gray-600 dark:text-gray-400 mb-2">
@@ -391,13 +347,24 @@ export default function ProductsPage() {
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={() =>
+                          openFlowModal("MORTGAGE_RISK_ASSESSMENT", product)
+                        }
+                        className="flex items-center"
+                      >
+                        <Eye size={14} className="mr-1" />
+                        View Product
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => openMapTemplateModal(product)}
                         className="flex items-center"
                       >
                         <LinkIcon size={14} className="mr-1" />
-                        {product.templateId
-                          ? "Change Template"
-                          : "Map Template"}
+                        {product.templateIds.length > 0
+                          ? "Change Templates"
+                          : "Map Templates"}
                       </Button>
                       <Button
                         variant="outline"
@@ -406,7 +373,7 @@ export default function ProductsPage() {
                         className="flex items-center"
                       >
                         <Plus size={14} className="mr-1" />
-                        Add API
+                        Config API
                       </Button>
                     </div>
                   </div>
@@ -416,10 +383,22 @@ export default function ProductsPage() {
                         <LinkIcon size={16} className="mr-2 text-blue-500" />
                         Mapped Template
                       </h4>
-                      {product.templateName ? (
+                      {Object.keys(product.templateIds).length > 0 ? (
                         <div className="flex items-center">
-                          <span className="text-gray-900 dark:text-gray-100">
-                            {product.templateName}
+                          <span className="text-gray-500 dark:text-gray-400">
+                            {Object.entries(product.templateIds).map(
+                              ([key, template]) => (
+                                <span
+                                  key={`${product.id}-template-id-${key}`}
+                                  className="mr-2"
+                                >
+                                  {
+                                    (template as unknown as CreateNewProduct)
+                                      .name
+                                  }
+                                </span>
+                              )
+                            )}
                           </span>
                           <Check size={16} className="ml-2 text-green-500" />
                         </div>
@@ -440,19 +419,21 @@ export default function ProductsPage() {
                         />
                         API Integrations
                       </h4>
-                      {product.apis.length > 0 ? (
+                      {Object.hasOwn(product, "apis") &&
+                      Object.keys(product?.apis ?? {}).length > 0 ? (
                         <div className="flex flex-wrap gap-2">
-                          {product.apis.map((api) => (
-                            <span
-                              key={api.id}
-                              className={`text-xs px-2 py-1 rounded-full flex items-center ${getStatusBadgeClass(
-                                api.status
-                              )}`}
-                            >
-                              {api.name}
-                              <span className="ml-1 text-xs">({api.type})</span>
-                            </span>
-                          ))}
+                          {Object.entries(product?.apis || {}).map(
+                            ([key, api]) => (
+                              <span
+                                key={key}
+                                className={`text-xs px-2 py-1 rounded-full flex items-center ${getStatusBadgeClass(
+                                  api.status
+                                )}`}
+                              >
+                                {api.name}
+                              </span>
+                            )
+                          )}
                         </div>
                       ) : (
                         <span className="text-gray-500 dark:text-gray-400">

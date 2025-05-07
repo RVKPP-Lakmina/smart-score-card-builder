@@ -13,6 +13,7 @@ interface SectionsProps {
   paramRef: React.RefObject<Record<string, unknown>>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 const SectionsPage = () => {
   const { sections, createTemplte } = useSectionStore();
   const [list, setList] = React.useState({} as TemplateSections);
@@ -45,7 +46,7 @@ const SectionsPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+    <div className="flex flex-col gap-4 p-4 bg-white dark:bg-gray-800 ">
       <div className="flex justify-between items-center">
         <h3 className="text-xl font-bold">Sections Configuration</h3>
         {Boolean(sectionsLen) && (
@@ -64,7 +65,7 @@ const SectionsPage = () => {
         )}
       </div>
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6 min-h-52 py-5 pr-5"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-52 py-5 pr-5"
         style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
       >
         {Object.entries(list).map(([key, value]) => (
@@ -93,6 +94,7 @@ const SectionsPage = () => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default React.memo(
   (props: SectionsProps) => {
     return (

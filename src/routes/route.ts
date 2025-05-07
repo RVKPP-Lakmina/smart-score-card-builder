@@ -26,8 +26,8 @@ export default new Map([
     {
       component: React.lazy(() => import("../pages/products/Page")),
       Icon: FolderKanban,
-      title: "Products",
-      description: "Create and manage products with template mappings",
+      title: "ScoreCard",
+      description: "Create and manage ScoreCard with template mappings",
     },
   ],
   [
@@ -35,7 +35,7 @@ export default new Map([
     {
       component: React.lazy(() => import("../pages/templates/Page")),
       Icon: Home,
-      title: "Configuration",
+      title: "Template Configuration",
     },
   ],
   [
