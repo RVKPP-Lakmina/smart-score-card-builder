@@ -50,13 +50,14 @@ const AuthForm: React.FC<AuthFormProps> = ({ setIsLoading }) => {
         if (screenType === "login") {
           login(
             response.data?.accessToken,
-            JSON.stringify(response.data?.user)
+            JSON.stringify(response.data?.user || {})
           );
         } else {
           setScreenType("login");
         }
         setFormData(initialFormData);
       }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       alert("Invalid Credentials");
     } finally {
