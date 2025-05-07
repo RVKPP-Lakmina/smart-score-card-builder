@@ -10,7 +10,10 @@ const Navigations = () => {
     currentPage,
     navigationPanel: { isNavOpen, toggleNav },
     navigateTo,
-    userDetails: { userName, userEmail },
+    userDetails: {
+      userName,
+      // , userEmail
+    },
   } = useNavigation();
 
   return (
@@ -61,7 +64,7 @@ const Navigations = () => {
             <p className="text-sm font-medium text-white truncate">
               {userName}
             </p>
-            <p className="text-xs text-white/70 truncate">{userEmail}</p>
+            {/* <p className="text-xs text-white/70 truncate">{userEmail}</p> */}
           </div>
           <button className="text-white/70 hover:text-white">
             <Settings size={16} />
