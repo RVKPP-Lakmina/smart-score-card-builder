@@ -14,7 +14,7 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
     ? JSON.parse(sessionStorage.getItem("user") ?? "{}")
     : {};
 
-  const userName = user.name ? user.name : "User";
+  const userName = user ? user : "User";
   // const userEmail = user.email ? user.email : "user@xgengroup.com.au";
 
   const navigationPanel: NavigationPanelProps = useMemo(() => {
