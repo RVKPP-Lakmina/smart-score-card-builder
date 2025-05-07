@@ -20,8 +20,8 @@ export function RiskBox({
   children,
   saveButtonVisible,
   overallWeight,
-  sectionWeight,
-}: RiskBoxProps) {
+}: // sectionWeight,
+RiskBoxProps) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
       <div className="h-2 bg-gradient-to-r from-blue-500 to-green-400"></div>
