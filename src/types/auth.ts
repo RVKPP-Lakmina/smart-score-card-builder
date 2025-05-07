@@ -1,6 +1,6 @@
 export interface AuthContextProps {
   accessToken: string | null;
-  login: (token: string) => void;
+  login: (token: string, user: string) => void;
   logout: () => void;
 }
 

@@ -20,7 +20,7 @@ export interface NavigationContextProps {
   navigationPanel: NavigationPanelProps;
   userDetails: {
     userName: string;
-    userEmail: string;
+    // userEmail: string;
   };
 }
 

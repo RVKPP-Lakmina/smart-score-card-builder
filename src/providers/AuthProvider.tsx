@@ -7,13 +7,15 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     sessionStorage.getItem("accessToken")
   );
 
-  const login = (token: string) => {
+  const login = (token: string, user: string) => {
     sessionStorage.setItem("accessToken", token);
+    sessionStorage.setItem("user", user);
     setAccessToken(token);
   };
 
   const logout = () => {
     sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("user");
     setAccessToken(null);
   };
 
