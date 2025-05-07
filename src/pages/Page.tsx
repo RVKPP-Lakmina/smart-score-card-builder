@@ -12,7 +12,10 @@ const Page = () => {
   const {
     currentPage,
     navigationPanel: { isNavOpen, toggleNav },
-    userDetails: { userName, userEmail },
+    userDetails: {
+      userName,
+      // , userEmail
+    },
   } = useNavigation();
 
   return (
@@ -59,7 +62,10 @@ const Page = () => {
               {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
 
-            <UserNavigation username={userName} userEmail={userEmail} />
+            <UserNavigation
+              username={userName}
+              //  userEmail={userEmail}
+            />
           </div>
         </header>
 

@@ -10,8 +10,12 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
 }: NavigationProviderProps) => {
   const [currentPage, setCurrentPage] = React.useState<string>("dashboard");
   const [isNavOpen, setIsNavOpen] = React.useState<boolean>(true);
-  const userName = "xgen admin";
-  const userEmail = "xgenAdminSample@xgengroup.com.au";
+  const user = sessionStorage.getItem("user")
+    ? JSON.parse(sessionStorage.getItem("user") ?? "{}")
+    : {};
+
+  const userName = user.name ? user.name : "User";
+  // const userEmail = user.email ? user.email : "user@xgengroup.com.au";
 
   const navigationPanel: NavigationPanelProps = useMemo(() => {
     return {
@@ -33,7 +37,7 @@ const NavigationProvider: React.FC<NavigationProviderProps> = ({
         currentPage,
         navigateTo,
         navigationPanel,
-        userDetails: { userName, userEmail },
+        userDetails: { userName },
       }}
     >
       <div>{children}</div>

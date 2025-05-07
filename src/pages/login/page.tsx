@@ -48,7 +48,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ setIsLoading }) => {
 
       if (response?.data?.status === 1 && "data" in response && response.data) {
         if (screenType === "login") {
-          login(response.data.accessToken);
+          login(
+            response.data?.accessToken,
+            JSON.stringify(response.data?.user)
+          );
         } else {
           setScreenType("login");
         }
