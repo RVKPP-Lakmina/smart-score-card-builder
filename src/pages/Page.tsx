@@ -14,6 +14,7 @@ const Page = () => {
     navigationPanel: { isNavOpen, toggleNav },
     userDetails: {
       userName,
+
       // , userEmail
     },
   } = useNavigation();

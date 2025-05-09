@@ -1,11 +1,11 @@
-"use client";
-
-import { memo } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { Handle, Position } from "reactflow";
-import { FileText, Calendar, Eye } from "lucide-react";
+import { FileText, Calendar } from "lucide-react";
 import { formatedDate } from "../../../lib/util";
 import moment from "moment";
 import { RuleWithId } from "../../../types/rules";
+import EditableText from "../../ui/EditableText";
+import { updateRulesScore } from "../../../services/services";
 
 interface RuleNodeProps {
   data: RuleWithId;
@@ -13,6 +13,39 @@ interface RuleNodeProps {
 }
 
 export const RuleNode = memo(({ data, isConnectable }: RuleNodeProps) => {
+  const [scores, setScores] = useState({
+    sectionWeight: data.sectionWeight,
+    modelWeight: data.modelWeight,
+  });
+
+  useEffect(() => {
+    setScores({
+      sectionWeight: data.sectionWeight,
+      modelWeight: data.modelWeight,
+    });
+  }, [data.modelWeight, data.sectionWeight]);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        updateRulesScore({
+          ruleId: data.id,
+          sectionWeight: Number(scores.sectionWeight),
+          modelWeight: Number(scores.modelWeight),
+        });
+      }
+    },
+    [data.id, scores.modelWeight, scores.sectionWeight]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-purple-500 p-3 w-72">
       <Handle
@@ -23,17 +56,40 @@ export const RuleNode = memo(({ data, isConnectable }: RuleNodeProps) => {
       />
 
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1 justify-between w-full">
+        <div className="flex items-center gap-1 w-full">
           <FileText className="text-purple-500 mr-2" size={16} />
           <h3 className="font-medium text-gray-900 dark:text-white">
             {data.name}
           </h3>
-          <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 text-xs font-medium px-2 py-1 rounded">
-            Score: {data?.score || "0.00"}
-          </span>
-          <button className="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400 transition-colors">
-            <Eye size={14} />
-          </button>
+        </div>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
+            <label className="text-gray-600 text-xs">Section Weight</label>
+            <EditableText
+              label={scores.sectionWeight?.toString() || "0.00"}
+              onValueChange={(value) => {
+                setScores((prev) => ({
+                  ...prev,
+                  sectionWeight: Number(value),
+                }));
+              }}
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <label className="text-gray-600 text-sm">Model Weight</label>
+            <EditableText
+              label={scores?.modelWeight?.toString() || "0.00"}
+              onValueChange={(value) => {
+                setScores((prev) => ({
+                  ...prev,
+                  modelWeight: Number(value),
+                }));
+              }}
+            />
+          </div>
         </div>
       </div>
 

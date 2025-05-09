@@ -20,7 +20,7 @@ import {
   cloneTemplate,
   deleteTemplate,
   getAllTemplates,
-  saveTemplate
+  saveTemplate,
 } from "./api/templateApis";
 import {
   CreateNewProduct,
@@ -352,5 +352,108 @@ export const exportLine = async (templateId: string) => {
     }
   } catch (error) {
     alert("Error exporting full line:" + (error as Error).message);
+  }
+};
+
+export const updateRulesScore = async ({
+  ruleId,
+  sectionWeight,
+  modelWeight,
+}: {
+  ruleId: string;
+  sectionWeight: number;
+  modelWeight: number;
+}) => {
+  try {
+    const rules = localStorage.getItem("rules");
+
+    const parsedRules = rules ? JSON.parse(rules) : {};
+
+    const rule = parsedRules[ruleId];
+
+    if (rule) {
+      rule.sectionWeight = sectionWeight;
+      rule.modelWeight = modelWeight;
+      parsedRules[ruleId] = rule;
+
+      localStorage.setItem("rules", JSON.stringify(parsedRules));
+    }
+  } catch (error) {
+    alert("Error updating rules score:" + (error as Error).message);
+  }
+};
+
+export const deleteRule = async (ruleId: string, templateSectionId: string) => {
+  try {
+    const rules = localStorage.getItem("rules");
+
+    const templateSections = localStorage.getItem("templateSections");
+
+    const parsedTemplateSection = templateSections
+      ? JSON.parse(templateSections)
+      : {};
+
+    const templateSection: TemplateSections[string] =
+      parsedTemplateSection[templateSectionId];
+
+    if (templateSection) {
+      const updatedTemplateSection = templateSection.rules.filter(
+        (id: string) => id !== ruleId
+      );
+      parsedTemplateSection[templateSectionId] = {
+        ...templateSection,
+        rules: updatedTemplateSection,
+      };
+      localStorage.setItem(
+        "templateSections",
+        JSON.stringify(parsedTemplateSection)
+      );
+    }
+
+    const parsedRules = rules ? JSON.parse(rules) : {};
+
+    if (parsedRules[ruleId]) {
+      delete parsedRules[ruleId];
+      localStorage.setItem("rules", JSON.stringify(parsedRules));
+    }
+
+    return {
+      data: {
+        rule: parsedRules[ruleId],
+        templateSection: parsedTemplateSection[templateSectionId],
+      },
+    };
+  } catch (error) {
+    alert("Error deleting rule:" + (error as Error).message);
+  }
+};
+
+export const updateOverallWeight = async (
+  templateSectionId: string,
+  weight: string
+) => {
+  try {
+    const templateSections = localStorage.getItem("templateSections");
+
+    const parsedTemplateSection = templateSections
+      ? JSON.parse(templateSections)
+      : {};
+
+    const templateSection: TemplateSections[string] =
+      parsedTemplateSection[templateSectionId];
+
+    if (templateSection) {
+      const updatedTemplateSection = {
+        ...templateSection,
+        overallWeight: weight,
+      };
+      parsedTemplateSection[templateSectionId] = updatedTemplateSection;
+      localStorage.setItem(
+        "templateSections",
+        JSON.stringify(parsedTemplateSection)
+      );
+    }
+  } catch (error) {
+    alert("Error updating overall weight:" + (error as Error).message);
   }
 };

@@ -44,7 +44,7 @@ const EditableText: React.FC<EditableTextProps> = ({
     }
 
     // Convert to decimal: input 5 becomes 0.5
-    const number = Number(`0.${input.replace(".", "")}`);
+    const number = Number(input);
 
     if (isNaN(number)) {
       setText("");
@@ -52,7 +52,7 @@ const EditableText: React.FC<EditableTextProps> = ({
       return;
     }
 
-    const formattedValue = number.toFixed(3);
+    const formattedValue = number.toString();
 
     setText(formattedValue);
     onValueChange(formattedValue);
@@ -83,7 +83,7 @@ const EditableText: React.FC<EditableTextProps> = ({
 
       {!isEditing && (
         <span className={cn("text-gray-400")} onDoubleClick={handleDoubleClick}>
-          {text}
+          {text}%
         </span>
       )}
     </div>
