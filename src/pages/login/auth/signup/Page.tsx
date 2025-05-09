@@ -92,18 +92,17 @@ export default React.memo(
           confirmPassword: formData.confirmPassword,
         };
 
-        const response = await authSignUp(payload);
+        await authSignUp(payload);
 
-        if ("data" in response && response.data) {
-          // onPageChange("login");
-          setFormData({
-            name: "",
-            email: "",
-            username: "",
-            password: "",
-            confirmPassword: "",
-          });
-        }
+        onPageChange("login");
+
+        setFormData({
+          name: "",
+          email: "",
+          username: "",
+          password: "",
+          confirmPassword: "",
+        });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         alert("Something went wrong. Please try again.");
