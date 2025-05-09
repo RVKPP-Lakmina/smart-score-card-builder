@@ -77,15 +77,9 @@ export const SectionNode = memo(({ data, isConnectable }: SectionNodeProps) => {
         <div className="grid grid-cols-2 gap-2 mb-3">
           <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded">
             <p className="text-xs text-gray-500 dark:text-gray-400">
-              Section Weight
-            </p>
-            <p className="font-medium">{data.sectionWeight || 0}</p>
-          </div>
-          <div className="bg-gray-100 dark:bg-gray-700 p-2 rounded">
-            <p className="text-xs text-gray-500 dark:text-gray-400">
               Overall Weight
             </p>
-            <p className="font-medium">{data.overallWeight || 0}</p>
+            <p className="font-medium">{data.overallWeight || 0}%</p>
           </div>
         </div>
       )}
