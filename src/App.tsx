@@ -9,7 +9,7 @@ import { sectionRules } from "./lib/sectionRules";
 import { products } from "./lib/products";
 import NavigationProvider from "./providers/NavigationProvider";
 
-const LoginPage = lazy(() => import("./pages/login/page"));
+const Layout = lazy(() => import("./pages/login/auth/Layout"));
 
 const App = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,20 +45,7 @@ const App = () => {
   return (
     <>
       {!accessToken ? (
-        <div className="min-h-screen flex flex-col md:flex-row">
-          <div className="w-full md:w-1/2 flex items-center justify-center p-6">
-            <div className="w-full max-w-md text-center md:text-left">
-              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-500 to-green-400 bg-clip-text text-transparent">
-                Smart Score Card
-              </h1>
-            </div>
-          </div>
-          <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100 p-6">
-            <div className="w-full max-w-md">
-              <LoginPage setIsLoading={setIsLoading} />
-            </div>
-          </div>
-        </div>
+        <Layout setIsLoading={setIsLoading} />
       ) : (
         <NavigationProvider>
           <AppLayout />

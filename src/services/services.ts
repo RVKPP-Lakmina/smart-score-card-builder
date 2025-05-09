@@ -29,6 +29,53 @@ import {
 } from "../types/product.type";
 import { api } from "../lib/util";
 
+export const authLogin = async (
+  username: string,
+  password: string
+): Promise<{
+  accessToken: string;
+  refreshToken: string;
+  user: string;
+} | null> => {
+  try {
+    const payload = {
+      name: username,
+      password: password,
+    };
+
+    const response = await api.post("/auth/login", payload);
+    if (response?.data?.status === 1 && "data" in response && response.data) {
+      return {
+        accessToken: response.data.accessToken,
+        refreshToken: response.data?.refreshToken || "",
+        user: JSON.stringify(response?.data?.user || {}),
+      };
+    }
+  } catch (error) {
+    alert("Error logging in:" + (error as Error).message);
+  }
+  return null;
+};
+
+export const authSignUp = async (payload: {
+  name: string;
+  confirmPassword: string;
+  password: string;
+}) => {
+  try {
+    const res = await api.post("/auth/register", payload);
+
+    if (res?.data?.status === 1 && "data" in res && res.data) {
+      return res.data;
+    } else {
+      alert("Error signing up:");
+    }
+  } catch (error) {
+    alert("Error signing up:" + (error as Error).message);
+  }
+  return null;
+};
+
 export const getAllProducts = async () => {
   try {
     // const response = await api.get("/products");
