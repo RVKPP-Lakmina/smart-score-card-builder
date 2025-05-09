@@ -4,6 +4,7 @@ import { Templates, TemplateSections } from "../types/responseTypes";
 import {
   addNewTemplateSection,
   createSectionRules,
+  deleteRule,
   getAllSections,
   getRawRules,
   getSelectedSections,
@@ -195,6 +196,37 @@ const SectionStoreProvider = ({
     };
   };
 
+  const handleDeleteRuleItem = useCallback(async (rule: RuleWithId) => {
+    const res = await deleteRule(rule.id, rule.parentSectionId);
+
+    if (res) {
+      const { data } = res;
+
+      setSectionRules((prevRules: Record<string, RuleWithId[]>) => {
+        const updatedRules = { ...prevRules };
+        const sectionId = rule.parentSectionId;
+        const ruleIndex = updatedRules[sectionId]?.findIndex(
+          (item) => item.id === rule.id
+        );
+
+        if (ruleIndex !== undefined && ruleIndex >= 0) {
+          updatedRules[sectionId].splice(ruleIndex, 1);
+        }
+        return updatedRules;
+      });
+
+      setSections((prevSections: TemplateSections) => {
+        if (prevSections[rule.parentSectionId]) {
+          return {
+            ...prevSections,
+            [rule.parentSectionId]: data.templateSection,
+          };
+        }
+        return prevSections;
+      });
+    }
+  }, []);
+
   return (
     <SectionStoreContext.Provider
       value={{
@@ -205,6 +237,7 @@ const SectionStoreProvider = ({
         sectionRules,
         rawRules,
         saveSectionBulkRules,
+        handleDeleteRuleItem,
       }}
     >
       {children}

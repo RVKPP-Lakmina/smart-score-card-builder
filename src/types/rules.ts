@@ -15,6 +15,8 @@ export interface Rule {
   lastEdited: string;
   createdAt: string;
   score?: string;
+  sectionWeight?: number;
+  modelWeight?: number;
   createdBy: string;
   lastEditedBy: string;
   parentSectionId: string;

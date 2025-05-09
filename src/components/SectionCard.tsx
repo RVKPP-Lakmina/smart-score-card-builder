@@ -1,13 +1,12 @@
-import { PlusCircle, Trash2 } from "lucide-react";
-import EditableText from "./ui/EditableText";
+import { PlusCircle } from "lucide-react";
 import { RiskBox } from "./ui/RiskBox";
 import { useModal } from "../hooks/useModal";
 import useSectionStore from "../hooks/useSectionStore";
 import { NoRecords } from "./ui/DataNotFound";
 import { Button } from "./ui/Button";
-import { Properties } from "../types/rules";
 import { TemplateSectionProps } from "../types/responseTypes";
-
+import RuleItem from "./RuleItem";
+import { RuleWithId } from "../types/rules";
 interface SectionCardProps {
   section: TemplateSectionProps;
   title: string;
@@ -22,7 +21,8 @@ const SectionCard: React.FC<SectionCardProps> = ({
   section,
   value,
 }: SectionCardProps) => {
-  const { sectionRules, rawRules, saveSectionBulkRules } = useSectionStore();
+  const { sectionRules, rawRules, saveSectionBulkRules, handleDeleteRuleItem } =
+    useSectionStore();
   const { openModal } = useModal();
 
   const addNewRule = () => {
@@ -41,77 +41,29 @@ const SectionCard: React.FC<SectionCardProps> = ({
     });
   };
 
-  const addEditNewProperties = (
-    lable: string,
-    exisitingProperties: Properties[]
-  ) => {
-    openModal({
-      title: lable,
-      childrenkey: "ruleEditor",
-      size: "lg",
-      closeOnOutsideClick: true,
-      props: {
-        initialItems: exisitingProperties,
-      },
-      headerProps: {
-        items: [],
-        addItem: (index: number) => {
-          console.log("Add item at index:", index);
-        },
-      },
-    });
+  const handleDeleteRule = async (rule: RuleWithId) => {
+    await handleDeleteRuleItem(rule);
   };
 
   return (
     <RiskBox
+      id={id}
       title={title}
       value={Number(value || "0.00") as number}
       onAdd={addNewRule}
-      overallWeight={section.rules.length ? section.overallWeight : 0}
+      overallWeight={section?.rules?.length ? section.overallWeight : 0}
     >
       <ul>
         {(sectionRules?.[id] || []).length ? (
           <>
             {(sectionRules?.[id] || []).map((item) => (
-              <li
-                onClick={() => addEditNewProperties(item.name, item.properties)}
-                key={item.id}
-                className="p-2 cursor-pointer 
-  m-2 border rounded-lg border-gray-200 
-  flex items-center justify-between hover:bg-gray-200 
-  dark:hover:bg-gray-700 transition duration-200 delay-100 ease-in-out"
-              >
-                <h5 className=" flex-2 font-semibold w-32">{item.name}</h5>
-
-                <div className="flex space-x-2 items-center">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="focus:outline-none"
-                  >
-                    <EditableText
-                      label={item.score || "0.00"}
-                      onValueChange={() => {}}
-                    />
-                    <EditableText
-                      label={item.score || "0.00"}
-                      onValueChange={() => {}}
-                    />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    className="text-gray-400 hover:text-red-500 cursor-pointer transition-all duration-300 ease-in-out p-0 bg-transparent border-none focus:outline-none"
-                  >
-                    <Trash2 size={20} />
-                  </button>
-                </div>
-              </li>
+              <RuleItem
+                key={`SectionCard-RiskBox-ul-RuleItem-${item.id}`}
+                item={item}
+                onDelete={async () => {
+                  handleDeleteRule(item);
+                }}
+              />
             ))}
           </>
         ) : (

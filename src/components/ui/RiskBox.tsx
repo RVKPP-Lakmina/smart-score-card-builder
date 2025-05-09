@@ -1,8 +1,10 @@
-import type React from "react";
+import React, { useEffect } from "react";
 import { Plus } from "lucide-react";
 import EditableText from "./EditableText";
+import { updateOverallWeight } from "../../services/services";
 
 interface RiskBoxProps {
+  id: string;
   title: string;
   value: number;
   count?: number;
@@ -15,6 +17,7 @@ interface RiskBoxProps {
 }
 
 export function RiskBox({
+  id,
   title,
   onAdd,
   children,
@@ -22,6 +25,39 @@ export function RiskBox({
   overallWeight,
 }: // sectionWeight,
 RiskBoxProps) {
+  const [sectionWeight, setSectionWeight] = React.useState<number>(
+    Number(overallWeight) || 0
+  );
+
+  const onValueChange = (value: string) => {
+    const number = Number(value);
+    if (isNaN(number)) {
+      setSectionWeight(0);
+      return;
+    }
+    setSectionWeight(number);
+  };
+
+  React.useEffect(() => {
+    if (overallWeight) {
+      setSectionWeight(overallWeight);
+    }
+  }, [overallWeight]);
+
+  useEffect(() => {
+    const handleKeyDown = async (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        await updateOverallWeight(id, sectionWeight.toString());
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [id, sectionWeight]);
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
       <div className="h-2 bg-gradient-to-r from-blue-500 to-green-400"></div>
@@ -49,8 +85,8 @@ RiskBoxProps) {
           <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Overall Weight:
             <EditableText
-              label={overallWeight?.toString() || "0.00"}
-              onValueChange={() => {}}
+              label={sectionWeight?.toString() || "0.00"}
+              onValueChange={onValueChange}
             />
           </span>
         </div>

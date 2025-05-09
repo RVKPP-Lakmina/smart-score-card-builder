@@ -18,4 +18,5 @@ export interface SectionStoreContextType {
   sectionRules: Record<string, RuleWithId[]>;
   rawRules: ItemsDD[];
   saveSectionBulkRules: (sectionId: string, ruleIds: string[]) => Promise<void>;
+  handleDeleteRuleItem: (rule: RuleWithId) => Promise<void>;
 }
