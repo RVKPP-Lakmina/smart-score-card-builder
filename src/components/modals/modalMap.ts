@@ -28,6 +28,8 @@ const modalMap = new Map<string, React.LazyExoticComponent<React.FC<unknown>>>([
     "addApiToProduct",
     React.lazy(() => import("./childrens/IntergrateApiToProduct.tsx")),
   ],
+
+  ["reportDetail", React.lazy(() => import("./childrens/ReportDetail.tsx"))],
 ]);
 
 export default modalMap;

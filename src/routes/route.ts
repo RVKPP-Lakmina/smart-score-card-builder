@@ -51,9 +51,10 @@ export default new Map([
   [
     "report",
     {
-      component: React.lazy(() => import("../pages/report/Page")),
+      component: React.lazy(() => import("../pages/report/Layout")),
       Icon: ClipboardPlus,
       title: "Reports",
+      description: "View and manage your generated score reports",
     },
   ],
 
