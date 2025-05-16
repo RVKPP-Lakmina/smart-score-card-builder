@@ -25,7 +25,7 @@ const Navigations = () => {
       )}
     >
       <div className="flex items-center justify-between p-4 border-b border-white/10">
-        <h1 className="text-xl font-bold text-white">Smart Score Card</h1>
+        <h1 className="text-xl font-bold text-white">Smart Scorecard</h1>
         <button
           onClick={toggleNav}
           className="p-1 text-white hover:bg-white/10 rounded-md"

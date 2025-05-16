@@ -151,7 +151,7 @@ export default React.memo(
                 </svg>
               </div>
               <motion.h1 className="text-4xl font-bold text-white mb-2">
-                Smart score card
+                Smart Scorecard
               </motion.h1>
               <motion.p className="text-white/80 text-lg">
                 Create and manage ScoreCard with template mappings

@@ -7,6 +7,7 @@ import {
   FolderKanban,
   HelpCircle,
   Home,
+  MapPinHouse,
   // MapPinHouse,
   Settings,
   Sparkles,
@@ -22,11 +23,11 @@ export default new Map([
     },
   ],
   [
-    "products",
+    "scorecard",
     {
       component: React.lazy(() => import("../pages/products/Page")),
       Icon: FolderKanban,
-      title: "ScoreCard",
+      title: "Scorecard",
       description: "Create and manage ScoreCard with template mappings",
     },
   ],
@@ -58,19 +59,21 @@ export default new Map([
     },
   ],
 
-  // [
-  //   "roadmap",
-  //   {
-  //     component: React.lazy(() => import("../pages/road-map/Page")),
-  //     Icon: MapPinHouse,
-  //     title: "Road Map",
-  //   },
-  // ],
+  [
+    "section-rule-table",
+    {
+      component: React.lazy(() => import("../pages/section-rule-table/Page")),
+      Icon: MapPinHouse,
+      title: "Section Rule Table",
+    },
+  ],
 
   [
     "settings",
     {
-      component: React.lazy(() => import("../pages/settings/Page")),
+      component: React.lazy(
+        () => import("../pages/settings/user-registration/Page")
+      ),
       Icon: Settings,
       title: "Settings",
     },
