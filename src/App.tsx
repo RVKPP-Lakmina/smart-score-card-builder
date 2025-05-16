@@ -12,7 +12,7 @@ import NavigationProvider from "./providers/NavigationProvider";
 const Layout = lazy(() => import("./pages/login/auth/Layout"));
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading] = useState<boolean>(false);
   const { accessToken } = useAuth();
   useEffect(() => {
     if (!localStorage.getItem("templates")) {
@@ -45,7 +45,7 @@ const App = () => {
   return (
     <>
       {!accessToken ? (
-        <Layout setIsLoading={setIsLoading} />
+        <Layout />
       ) : (
         <NavigationProvider>
           <AppLayout />
