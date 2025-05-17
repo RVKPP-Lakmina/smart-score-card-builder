@@ -1,6 +1,6 @@
 {
   "name": "smart-score-card",
-  "description": "A smart score card Builder For Banks",
+  "description": "A smart Scorecard Builder For Banks",
   "private": true,
   "version": "0.0.0",
   "type": "module",

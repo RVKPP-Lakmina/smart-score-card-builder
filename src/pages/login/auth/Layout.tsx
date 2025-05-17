@@ -4,11 +4,7 @@ import Spinner from "../../../components/ui/Loader";
 
 type NewPage = "login" | "signup";
 
-const Layout = ({
-  setIsLoading,
-}: {
-  setIsLoading: (pram: boolean) => void;
-}) => {
+const Layout = () => {
   const [page, setPage] = useState<NewPage>("login");
 
   const handlePageChange = useCallback((newPage: NewPage) => {
@@ -20,7 +16,6 @@ const Layout = ({
       <Suspense fallback={<Spinner />}>
         {React.createElement(currentPage()[page], {
           onPageChange: handlePageChange,
-          setIsLoading,
         })}
       </Suspense>
     </div>

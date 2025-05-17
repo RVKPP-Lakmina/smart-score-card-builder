@@ -18,7 +18,6 @@ export default function HistoryPage() {
     "all" | "template" | "section" | "rule"
   >("all");
 
-  // Sample history data - in a real app, this would come from your API
   const historyItems: HistoryItem[] = [
     {
       id: "hist-1",
@@ -85,7 +84,6 @@ export default function HistoryPage() {
     },
   ];
 
-  // Filter history items based on search term and filter type
   const filteredItems = historyItems.filter((item) => {
     const matchesSearch =
       item.entityName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -100,7 +98,6 @@ export default function HistoryPage() {
     return matchesSearch && matchesFilter;
   });
 
-  // Group history items by date
   const groupedItems: { [key: string]: HistoryItem[] } = {};
   filteredItems.forEach((item) => {
     const date = item.timestamp.split(" ")[0];
@@ -110,7 +107,6 @@ export default function HistoryPage() {
     groupedItems[date].push(item);
   });
 
-  // Get entity icon based on type
   const getEntityIcon = (type: string) => {
     switch (type) {
       case "template":
@@ -124,7 +120,6 @@ export default function HistoryPage() {
     }
   };
 
-  // Get action color based on action type
   const getActionColor = (action: string) => {
     switch (action) {
       case "Created":

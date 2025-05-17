@@ -11,8 +11,8 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Smart Score Card Builder",
-        short_name: "Smart Score Card",
+        name: "Smart Scorecard Builder",
+        short_name: "Smart Scorecard",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",
