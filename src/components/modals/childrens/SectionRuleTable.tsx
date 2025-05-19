@@ -78,7 +78,6 @@ function SectionRuleTable({ sections, className }: SectionRuleTableProps) {
   );
 }
 
-// Example usage component with mock data
 export default function SectionRulesPreview({ data }: { data: ExportLine }) {
   const template = Object.values(data)[0] as ExportLine[string];
 
