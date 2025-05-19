@@ -7,25 +7,20 @@
   /* --primary-foreground: 0, 7%, 45%; */
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0ea5e9, #22c55e);
-  border-radius: 10px;
-}
-
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #e6f2ff;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #0ea5e9, #22c55e);
+  background: linear-gradient(180deg, #007bff, #3ac262);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #0ea5e9, #22c55e);
+  background: linear-gradient(180deg, #0066cc, #2da450);
 }

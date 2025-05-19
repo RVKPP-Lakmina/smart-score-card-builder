@@ -30,6 +30,10 @@ const modalMap = new Map<string, React.LazyExoticComponent<React.FC<unknown>>>([
   ],
 
   ["reportDetail", React.lazy(() => import("./childrens/ReportDetail.tsx"))],
+  [
+    "sectionRulesPreview",
+    React.lazy(() => import("./childrens/SectionRuleTable")),
+  ],
 ]);
 
 export default modalMap;

@@ -14,6 +14,7 @@ interface RiskBoxProps {
   saveButtonVisible?: boolean;
   overallWeight?: number;
   sectionWeight?: number;
+  onPageChange?: () => void;
 }
 
 export function RiskBox({
@@ -23,6 +24,7 @@ export function RiskBox({
   children,
   saveButtonVisible,
   overallWeight,
+  onPageChange,
 }: // sectionWeight,
 RiskBoxProps) {
   const [sectionWeight, setSectionWeight] = React.useState<number>(
@@ -62,7 +64,12 @@ RiskBoxProps) {
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
       <div className="h-2 bg-gradient-to-r from-blue-500 to-green-400"></div>
       <div className="p-4 flex justify-between items-center">
-        <h3 className="text-lg font-medium">{title}</h3>
+        <span
+          className="cursor-pointer hover:text-blue-500 dark:hover:text-white hover:underline"
+          onClick={onPageChange}
+        >
+          <h3 className="text-lg font-medium">{title}</h3>
+        </span>
         <div className="flex items-center gap-2">
           <button
             onClick={onAdd}
@@ -98,8 +105,8 @@ RiskBoxProps) {
         className="p-3"
         style={{
           overflowY: "auto",
-          maxHeight: "calc(100vh - 355px)",
-          minHeight: "calc(100vh - 355px)",
+          maxHeight: "calc(100vh - 400px)",
+          minHeight: "calc(100vh - 400px)",
         }}
       >
         {children}

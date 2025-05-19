@@ -4,6 +4,7 @@ import { formatedDate } from "../lib/util";
 import { TemplatesPropsWithId } from "../types/responseTypes";
 import useTemplateStore from "../hooks/useTemplateStore";
 import { exportLine } from "../services/services";
+import InfoComponents from "./InfoComponents";
 
 interface TemplateCardProps {
   onClickLable: () => void;
@@ -25,6 +26,7 @@ function TemplateCard({ template, onClickLable }: TemplateCardProps) {
             >
               {template.name}
             </h4>
+            <InfoComponents templateId={template.id as string} />
           </div>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             {template.description || ""}

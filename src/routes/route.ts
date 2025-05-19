@@ -7,7 +7,6 @@ import {
   FolderKanban,
   HelpCircle,
   Home,
-  MapPinHouse,
   // MapPinHouse,
   Settings,
   Sparkles,
@@ -56,15 +55,6 @@ export default new Map([
       Icon: ClipboardPlus,
       title: "Reports",
       description: "View and manage your generated score reports",
-    },
-  ],
-
-  [
-    "section-rule-table",
-    {
-      component: React.lazy(() => import("../pages/section-rule-table/Page")),
-      Icon: MapPinHouse,
-      title: "Section Rule Table",
     },
   ],
 

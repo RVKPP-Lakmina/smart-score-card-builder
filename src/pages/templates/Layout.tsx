@@ -30,7 +30,7 @@ export default React.memo(function Layout({
 
   const handleSelect = (index: number, item: string) => {
     handlePageChange(item);
-    const newAddressList = addressList.slice(0, index + 1);
+    const newAddressList = addressList.slice(0, index);
     setAddressList(newAddressList);
   };
 

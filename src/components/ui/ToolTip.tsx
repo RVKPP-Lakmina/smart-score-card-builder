@@ -133,7 +133,7 @@ export function Tooltip({
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleResize);
     };
-  }, [isVisible]);
+  }, [calculatePosition, isVisible]);
 
   useEffect(() => {
     return () => {
