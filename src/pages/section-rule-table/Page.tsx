@@ -1,4 +1,4 @@
-import { SectionRulesPreview } from "../../components/SectionRuleTable";
+import { SectionRulesPreview } from "../../components/modals/childrens/SectionRuleTable";
 
 export default function SectionRuleTableExamplePage() {
   return (

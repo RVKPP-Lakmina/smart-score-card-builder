@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import Sections from "./sections/Page";
 import TemplateStoreProvider from "../../providers/TemplateStoreProvider";
 import useTemplateStore from "../../hooks/useTemplateStore";
+import RulePageWrapper from "./sections/rules/Page";
 
 function TemplatePage({
   handlePageChange,
@@ -69,7 +70,7 @@ const TemplatePageWrapper = React.memo(() => {
       <Layout currPage={currPage} handlePageChange={handlePageChange}>
         {React.createElement(Build(currPage as string), {
           handlePageChange,
-          paramRef,
+          paramRef: paramRef as React.RefObject<Record<string, unknown>>,
         })}
       </Layout>
     </TemplateStoreProvider>
@@ -84,6 +85,8 @@ const Build = (page: string) => {
       return Sections;
     case "templates":
       return TemplatePage;
+    case "characteristics":
+      return RulePageWrapper;
     default:
       return TemplatePage;
   }

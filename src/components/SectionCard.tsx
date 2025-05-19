@@ -13,12 +13,14 @@ interface SectionCardProps {
   onChange?: (value: string) => void;
   value?: string;
   id: string;
+  onPageChange?: () => void;
 }
 
 const SectionCard: React.FC<SectionCardProps> = ({
   id,
   title,
   section,
+  onPageChange,
   value,
 }: SectionCardProps) => {
   const { sectionRules, rawRules, saveSectionBulkRules, handleDeleteRuleItem } =
@@ -48,6 +50,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   return (
     <RiskBox
       id={id}
+      onPageChange={onPageChange}
       title={title}
       value={Number(value || "0.00") as number}
       onAdd={addNewRule}

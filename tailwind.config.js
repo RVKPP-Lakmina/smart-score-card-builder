@@ -46,29 +46,30 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
         blue: {
-          50: "#f0f9ff",
-          100: "#e0f2fe",
-          200: "#bae6fd",
-          300: "#7dd3fc",
-          400: "#38bdf8",
-          500: "#0ea5e9",
-          600: "#0284c7",
-          700: "#0369a1",
-          800: "#075985",
-          900: "#0c4a6e",
+          50: "#e6f2ff", // lightest edge
+          100: "#cce5ff",
+          200: "#99ccff",
+          300: "#66b2ff",
+          400: "#3399ff",
+          500: "#007bff", // core blue
+          600: "#0066cc",
+          700: "#004c99",
+          800: "#003366", // deep tech blue
+          900: "#002244", // very dark blue
         },
         green: {
-          50: "#f0fdf4",
-          100: "#dcfce7",
-          200: "#bbf7d0",
-          300: "#86efac",
-          400: "#4ade80",
-          500: "#22c55e",
-          600: "#16a34a",
-          700: "#15803d",
-          800: "#166534",
-          900: "#14532d",
+          50: "#f1fdf3",
+          100: "#d7f8df",
+          200: "#b4efc2",
+          300: "#8be69f",
+          400: "#5fd97a",
+          500: "#3ac262", // logo green
+          600: "#2da450",
+          700: "#248443", // olive deep
+          800: "#1c6336",
+          900: "#144d2a",
         },
       },
       borderRadius: {

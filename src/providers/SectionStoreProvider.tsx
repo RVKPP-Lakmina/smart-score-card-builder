@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import SectionStoreContext from "../context/SectionStoreContext";
-import { Templates, TemplateSections } from "../types/responseTypes";
+import {
+  Templates,
+  TemplateSections,
+  TemplatesPropsWithId,
+} from "../types/responseTypes";
 import {
   addNewTemplateSection,
   createSectionRules,
@@ -24,9 +28,13 @@ type CreateNewSectionProps = {
 const SectionStoreProvider = ({
   children,
   templateId,
+  handlePageChange,
+  paramRef,
 }: {
   children: React.ReactNode;
   templateId: string;
+  handlePageChange?: (page: string) => void;
+  paramRef: React.RefObject<Record<string, unknown>>;
 }) => {
   const [sections, setSections] = React.useState<TemplateSections>(
     {} as TemplateSections
@@ -227,6 +235,18 @@ const SectionStoreProvider = ({
     }
   }, []);
 
+  const changePageToRules = useCallback(
+    (section: TemplatesPropsWithId) => {
+      handlePageChange?.("characteristics");
+      paramRef.current = {
+        ...paramRef.current,
+        section: section,
+      };
+      setChangeDetect((prev) => prev + 1);
+    },
+    [handlePageChange, paramRef]
+  );
+
   return (
     <SectionStoreContext.Provider
       value={{
@@ -238,6 +258,8 @@ const SectionStoreProvider = ({
         rawRules,
         saveSectionBulkRules,
         handleDeleteRuleItem,
+        templateId,
+        changePageToRules,
       }}
     >
       {children}

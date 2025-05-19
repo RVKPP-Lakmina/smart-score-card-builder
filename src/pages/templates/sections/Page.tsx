@@ -4,9 +4,15 @@ import NewTemplateCard from "../../../components/NewTemplateCard";
 import React, { useEffect } from "react";
 import SectionStoreProvider from "../../../providers/SectionStoreProvider";
 import useSectionStore from "../../../hooks/useSectionStore";
-import { Sections, TemplateSections } from "../../../types/responseTypes";
+import {
+  Sections,
+  TemplateSections,
+  TemplatesPropsWithId,
+} from "../../../types/responseTypes";
 import { Search } from "../../../components/ui/SearchBox";
 import { EmptySearch } from "../../../components/ui/DataNotFound";
+import { CustomizableGridLayout } from "../../../components/ui/CustomizableGridLayout";
+import InfoComponents from "../../../components/InfoComponents";
 
 interface SectionsProps {
   handlePageChange?: (page: string) => void;
@@ -15,7 +21,8 @@ interface SectionsProps {
 
 // eslint-disable-next-line react-refresh/only-export-components
 const SectionsPage = () => {
-  const { sections, createTemplte } = useSectionStore();
+  const { sections, templateId, createTemplte, changePageToRules } =
+    useSectionStore();
   const [list, setList] = React.useState({} as TemplateSections);
   const sectionsLen = Object.keys(sections).length;
 
@@ -48,7 +55,10 @@ const SectionsPage = () => {
   return (
     <div className="flex flex-col gap-4 p-4 bg-white dark:bg-gray-800 ">
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-bold">Sections Configuration</h3>
+        <div className="flex gap-2">
+          <h3 className="text-xl font-bold">Sections Configuration</h3>
+          <InfoComponents templateId={templateId} />
+        </div>
         {Boolean(sectionsLen) && (
           <div className="flex items-center gap-2">
             <div className="flex-2 flex items-center justify-end">
@@ -64,9 +74,11 @@ const SectionsPage = () => {
           </div>
         )}
       </div>
-      <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-52 py-5 pr-5"
-        style={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
+      <CustomizableGridLayout
+        defaultCols={3}
+        minCols={1}
+        maxCols={4}
+        saveLayoutKey="section-layout-prefs"
       >
         {Object.entries(list).map(([key, value]) => (
           <SectionCard
@@ -74,6 +86,9 @@ const SectionsPage = () => {
             section={value}
             title={value.name}
             id={value.id}
+            onPageChange={() =>
+              changePageToRules(value as unknown as TemplatesPropsWithId)
+            }
           />
         ))}
 
@@ -89,7 +104,7 @@ const SectionsPage = () => {
             onClick={createTemplte}
           />
         )}
-      </div>
+      </CustomizableGridLayout>
     </div>
   );
 };
@@ -100,6 +115,8 @@ export default React.memo(
     return (
       <SectionStoreProvider
         templateId={props.paramRef.current?.templateId as string}
+        handlePageChange={props.handlePageChange}
+        paramRef={props.paramRef}
       >
         <SectionsPage />
       </SectionStoreProvider>
