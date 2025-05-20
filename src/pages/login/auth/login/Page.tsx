@@ -53,14 +53,14 @@ export default React.memo(function LoginPage() {
         >
           <div className="flex justify-center mb-6">
             <img
-              src="/placeholder.svg?height=60&width=300"
+              src="https://los.xgencredit.com/images/xgen-logo.png"
               alt="Smart Scorecard Logo"
               className="h-12"
             />
           </div>
 
           <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-            Sign In to Smart Collect
+            Sign In to Smart Scorecard
           </h2>
 
           <form
