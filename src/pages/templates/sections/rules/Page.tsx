@@ -8,6 +8,7 @@ import React from "react";
 import { TemplateSections } from "../../../../types/responseTypes";
 import RuleStoreProvider from "../../../../providers/RuleStoreProvider";
 import { useRuleStore } from "../../../../hooks/useRuleStore";
+import RuleCard from "../../../../components/Rules/RuleCard";
 
 interface SectionsProps {
   handlePageChange: (page: string) => void;
@@ -68,14 +69,9 @@ const SectionOverviewPage = () => {
         maxCols={4}
         saveLayoutKey="section-layout-prefs"
       >
-        {/* {Object.entries(list).map(([key, value]) => (
-          <SectionCard
-            key={key}
-            section={value}
-            title={value.name}
-            id={value.id}
-          />
-        ))} */}
+        {Object.entries(list).map(([key, value]) => (
+          <RuleCard key={key} rule={value} id={value.id} title={value.name} />
+        ))}
 
         {Boolean(list.length) && (
           <div className="flex justify-center items-center">

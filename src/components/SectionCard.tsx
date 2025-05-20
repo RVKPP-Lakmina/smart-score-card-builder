@@ -5,7 +5,7 @@ import useSectionStore from "../hooks/useSectionStore";
 import { NoRecords } from "./ui/DataNotFound";
 import { Button } from "./ui/Button";
 import { TemplateSectionProps } from "../types/responseTypes";
-import RuleItem from "./RuleItem";
+import RuleItem from "./Rules/RuleItem";
 import { RuleWithId } from "../types/rules";
 interface SectionCardProps {
   section: TemplateSectionProps;
