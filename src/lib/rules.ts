@@ -1,5 +1,5 @@
-export const rules = [
-  {
+export const rules = {
+  m9uix1xn3ewzavvi88: {
     id: "m9uix1xn3ewzavvi88",
     name: "Residence type",
     lastEdited: "",
@@ -18,7 +18,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  m9uix1xnkjtapmvfi8l: {
     id: "m9uix1xnkjtapmvfi8l",
     name: "Employment status",
     lastEdited: "",
@@ -38,7 +38,7 @@ export const rules = [
       { name: "Student", id: "STUDENT", score: 20 },
     ],
   },
-  {
+  m9uix9bftk68lh62gbr: {
     id: "m9uix9bftk68lh62gbr",
     name: "No of loan cycles",
     lastEdited: "",
@@ -58,7 +58,7 @@ export const rules = [
       { name: ">10", id: "LOAN_CYCLES_10", score: 100 },
     ],
   },
-  {
+  m9uix9bfyk8l63iywg9: {
     id: "m9uix9bfyk8l63iywg9",
     name: "No of experience in employment",
     lastEdited: "",
@@ -78,7 +78,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  m9uixekjcad25pms26r: {
     id: "m9uixekjcad25pms26r",
     name: "Residence type",
     lastEdited: "",
@@ -97,7 +97,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  m9uixekj9l97hanzd0l: {
     id: "m9uixekj9l97hanzd0l",
     name: "No of experience in employment",
     lastEdited: "",
@@ -117,7 +117,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  m9uixyiry3qufr19hfg: {
     id: "m9uixyiry3qufr19hfg",
     name: "Residence type",
     lastEdited: "",
@@ -136,7 +136,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  m9uixyirvedh0g9ux4d: {
     id: "m9uixyirvedh0g9ux4d",
     name: "No of experience in employment",
     lastEdited: "",
@@ -156,7 +156,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  m9uixyirmhwbptv0am: {
     id: "m9uixyirmhwbptv0am",
     name: "Loan installment income percentage",
     lastEdited: "",
@@ -188,7 +188,7 @@ export const rules = [
       { name: ">40", id: "LOAN_INSTALLMENT_INCOME_PERCENTAGE_40", score: 20 },
     ],
   },
-  {
+  m9uixyirh6h3ax7a6h: {
     id: "m9uixyirh6h3ax7a6h",
     name: "Debt handling capacity",
     lastEdited: "",
@@ -208,7 +208,7 @@ export const rules = [
       { name: ">40", id: "DEBT_HANDLING_CAPACITY_40", score: 100 },
     ],
   },
-  {
+  m9uusebbqob7pzl8mui: {
     id: "m9uusebbqob7pzl8mui",
     name: "Age",
     lastEdited: "",
@@ -229,7 +229,7 @@ export const rules = [
       { name: ">60", id: "AGE_45_AND_55", score: 40 },
     ],
   },
-  {
+  m9uusebb6nf8ei8pnou: {
     id: "m9uusebb6nf8ei8pnou",
     name: "Education level",
     lastEdited: "",
@@ -261,7 +261,7 @@ export const rules = [
       },
     ],
   },
-  {
+  m9uusebcvcnu764jvkh: {
     id: "m9uusebcvcnu764jvkh",
     name: "Residence type",
     lastEdited: "",
@@ -280,7 +280,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  m9uusebc3ofowxjf2qw: {
     id: "m9uusebc3ofowxjf2qw",
     name: "Employment status",
     lastEdited: "",
@@ -300,7 +300,7 @@ export const rules = [
       { name: "Student", id: "STUDENT", score: 20 },
     ],
   },
-  {
+  m9uusebdvt65d21zf88: {
     id: "m9uusebdvt65d21zf88",
     name: "No of experience in employment",
     lastEdited: "",
@@ -320,7 +320,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  m9uusebdak9s3veyfj9: {
     id: "m9uusebdak9s3veyfj9",
     name: "Employment Type",
     lastEdited: "",
@@ -351,7 +351,7 @@ export const rules = [
       { name: "Self-Employed / Own Business", id: "INTERNSHIP", score: 40 },
     ],
   },
-  {
+  maamw56g27p28esi3l2: {
     id: "maamw56g27p28esi3l2",
     name: "Age",
     lastEdited: "",
@@ -372,7 +372,7 @@ export const rules = [
       { name: ">60", id: "AGE_45_AND_55", score: 40 },
     ],
   },
-  {
+  maamw56h96mc0x4idiq: {
     id: "maamw56h96mc0x4idiq",
     name: "Education level",
     lastEdited: "",
@@ -404,7 +404,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maamw56h77b7gu5xa6v: {
     id: "maamw56h77b7gu5xa6v",
     name: "Residence type",
     lastEdited: "",
@@ -423,7 +423,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  maamw56h3hy70n6qnfi: {
     id: "maamw56h3hy70n6qnfi",
     name: "Employment status",
     lastEdited: "",
@@ -443,7 +443,7 @@ export const rules = [
       { name: "Student", id: "STUDENT", score: 20 },
     ],
   },
-  {
+  maamw56h685cvoghbnh: {
     id: "maamw56h685cvoghbnh",
     name: "No of experience in employment",
     lastEdited: "",
@@ -463,7 +463,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  maamw56h8gdcm98zbtr: {
     id: "maamw56h8gdcm98zbtr",
     name: "Employment Type",
     lastEdited: "",
@@ -494,7 +494,7 @@ export const rules = [
       { name: "Self-Employed / Own Business", id: "INTERNSHIP", score: 40 },
     ],
   },
-  {
+  maamyz20ey9cseuvbdo: {
     id: "maamyz20ey9cseuvbdo",
     name: "Debt handling capacity",
     lastEdited: "",
@@ -514,7 +514,7 @@ export const rules = [
       { name: ">40", id: "DEBT_HANDLING_CAPACITY_40", score: 100 },
     ],
   },
-  {
+  maarhzg4j0pwd31uafj: {
     id: "maarhzg4j0pwd31uafj",
     name: "Presence of regulated financial system",
     lastEdited: "",
@@ -531,7 +531,7 @@ export const rules = [
       { name: "Yes", id: "YES", score: 60 },
     ],
   },
-  {
+  maarhzg5e7gq8iv016w: {
     id: "maarhzg5e7gq8iv016w",
     name: "CRIB record",
     lastEdited: "",
@@ -550,7 +550,7 @@ export const rules = [
       { name: "Very Bad CRIB Record", id: "VERY_BAD_CRIB_RECORD", score: 40 },
     ],
   },
-  {
+  maarhzg5d1qec9enbyl: {
     id: "maarhzg5d1qec9enbyl",
     name: "LTV Ratio (For Vehicle & Housing Loans)",
     lastEdited: "",
@@ -569,7 +569,7 @@ export const rules = [
       { name: ">60%", id: "MORE_THAN_60", score: 0 },
     ],
   },
-  {
+  maarii3pi78ptq0ogxh: {
     id: "maarii3pi78ptq0ogxh",
     name: "Salary Assignment",
     lastEdited: "",
@@ -599,7 +599,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maarivgtbkw9hkah588: {
     id: "maarivgtbkw9hkah588",
     name: "Monthly income to No of family members",
     lastEdited: "",
@@ -631,7 +631,7 @@ export const rules = [
       { name: "Less than LKR 15000", id: "LESS_THAN_LKR_15000", score: 20 },
     ],
   },
-  {
+  maarivgtx7dgcmai0y: {
     id: "maarivgtx7dgcmai0y",
     name: "% of loan installment (outstanding loans + proposed loans) to monthly income",
     lastEdited: "",
@@ -651,7 +651,7 @@ export const rules = [
       { name: ">40%", id: "MORE_THAN_40", score: 0 },
     ],
   },
-  {
+  maasp45wsrey5375ab: {
     id: "maasp45wsrey5375ab",
     name: "Age",
     lastEdited: "",
@@ -672,7 +672,7 @@ export const rules = [
       { name: ">60", id: "AGE_45_AND_55", score: 40 },
     ],
   },
-  {
+  maasp45wh4smuoclyq7: {
     id: "maasp45wh4smuoclyq7",
     name: "Age-JA",
     lastEdited: "",
@@ -693,7 +693,7 @@ export const rules = [
       { name: ">60", id: "AGE_45_AND_55", score: 40 },
     ],
   },
-  {
+  maasp45w4sqjqytifjw: {
     id: "maasp45w4sqjqytifjw",
     name: "Education level",
     lastEdited: "",
@@ -725,7 +725,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maasp45x083ff66t7aui: {
     id: "maasp45x083ff66t7aui",
     name: "Education level-JA",
     lastEdited: "",
@@ -757,7 +757,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maasp45x2yxv6f2nxk4: {
     id: "maasp45x2yxv6f2nxk4",
     name: "Residence type",
     lastEdited: "",
@@ -776,7 +776,7 @@ export const rules = [
       { name: "Leased/ Rented", id: "OTHER", score: 40 },
     ],
   },
-  {
+  maasp45xysp9rug96c: {
     id: "maasp45xysp9rug96c",
     name: "Employment status",
     lastEdited: "",
@@ -796,7 +796,7 @@ export const rules = [
       { name: "Student", id: "STUDENT", score: 20 },
     ],
   },
-  {
+  maasp45y36xwcl4nwui: {
     id: "maasp45y36xwcl4nwui",
     name: "Employment status-JA",
     lastEdited: "",
@@ -816,7 +816,7 @@ export const rules = [
       { name: "Student", id: "STUDENT", score: 20 },
     ],
   },
-  {
+  maasp45yogobsfmooe: {
     id: "maasp45yogobsfmooe",
     name: "No of experience in employment",
     lastEdited: "",
@@ -836,7 +836,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  maasp45ye3t0714h9ar: {
     id: "maasp45ye3t0714h9ar",
     name: "No of experience in employment - JA",
     lastEdited: "",
@@ -856,7 +856,7 @@ export const rules = [
       { name: ">10", id: "EXPERIENCE_10", score: 100 },
     ],
   },
-  {
+  maasp45zrjkzlo2u4z: {
     id: "maasp45zrjkzlo2u4z",
     name: "Employment Type",
     lastEdited: "",
@@ -887,7 +887,7 @@ export const rules = [
       { name: "Self-Employed / Own Business", id: "INTERNSHIP", score: 40 },
     ],
   },
-  {
+  maasv8p7bnsg8v5p8an: {
     id: "maasv8p7bnsg8v5p8an",
     name: "Monthly income to No of family members",
     lastEdited: "",
@@ -919,7 +919,7 @@ export const rules = [
       { name: "Less than LKR 15000", id: "LESS_THAN_LKR_15000", score: 20 },
     ],
   },
-  {
+  maasv8p8bs5rffu0qqr: {
     id: "maasv8p8bs5rffu0qqr",
     name: "Monthly income to No of family members - JA",
     lastEdited: "",
@@ -951,7 +951,7 @@ export const rules = [
       { name: "Less than LKR 15000", id: "LESS_THAN_LKR_15000", score: 20 },
     ],
   },
-  {
+  maasv8p8hecg25jivxi: {
     id: "maasv8p8hecg25jivxi",
     name: "% of loan installment (outstanding loans + proposed loans) to monthly income",
     lastEdited: "",
@@ -971,7 +971,7 @@ export const rules = [
       { name: ">40%", id: "MORE_THAN_40", score: 0 },
     ],
   },
-  {
+  maasv8p9c828weefgfg: {
     id: "maasv8p9c828weefgfg",
     name: "% of loan installment (outstanding loans + proposed loans) to monthly income -JA",
     lastEdited: "",
@@ -991,7 +991,7 @@ export const rules = [
       { name: ">40%", id: "MORE_THAN_40", score: 0 },
     ],
   },
-  {
+  maasv8p9v3m1lyqsf5i: {
     id: "maasv8p9v3m1lyqsf5i",
     name: "Debt handling capacity",
     lastEdited: "",
@@ -1011,7 +1011,7 @@ export const rules = [
       { name: ">40", id: "DEBT_HANDLING_CAPACITY_40", score: 100 },
     ],
   },
-  {
+  maasv8pa2lmx7sy69gq: {
     id: "maasv8pa2lmx7sy69gq",
     name: "Debt handling capacity - JA",
     lastEdited: "",
@@ -1031,7 +1031,7 @@ export const rules = [
       { name: ">40", id: "DEBT_HANDLING_CAPACITY_40", score: 100 },
     ],
   },
-  {
+  maat1erf5uxnd0hh91c: {
     id: "maat1erf5uxnd0hh91c",
     name: "Salary Assignment",
     lastEdited: "",
@@ -1061,7 +1061,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maat1ergngcafh7h3z: {
     id: "maat1ergngcafh7h3z",
     name: "Salary Assignment - JA",
     lastEdited: "",
@@ -1091,7 +1091,7 @@ export const rules = [
       },
     ],
   },
-  {
+  maat1erhwei9aqhzjxh: {
     id: "maat1erhwei9aqhzjxh",
     name: "LTV Ratio (For Vehicle & Housing Loans)",
     lastEdited: "",
@@ -1110,7 +1110,7 @@ export const rules = [
       { name: ">60%", id: "MORE_THAN_60", score: 0 },
     ],
   },
-  {
+  maat1erh8zyebq6wy96: {
     id: "maat1erh8zyebq6wy96",
     name: "CRIB record",
     lastEdited: "",
@@ -1129,7 +1129,7 @@ export const rules = [
       { name: "Very Bad CRIB Record", id: "VERY_BAD_CRIB_RECORD", score: 40 },
     ],
   },
-  {
+  maat1eriop7vt3a3ehr: {
     id: "maat1eriop7vt3a3ehr",
     name: "CRIB record - JA",
     lastEdited: "",
@@ -1148,7 +1148,7 @@ export const rules = [
       { name: "Very Bad CRIB Record", id: "VERY_BAD_CRIB_RECORD", score: 40 },
     ],
   },
-  {
+  maat1erj3gcsvyosrc2: {
     id: "maat1erj3gcsvyosrc2",
     name: "Bank relations",
     lastEdited: "",
@@ -1172,7 +1172,7 @@ export const rules = [
     sectionWeight: 10,
     modelWeight: 3.5,
   },
-  {
+  maat1erjizl00dm2i2a: {
     id: "maat1erjizl00dm2i2a",
     name: "Bank relations - JA",
     lastEdited: "",
@@ -1196,7 +1196,7 @@ export const rules = [
     sectionWeight: 10,
     modelWeight: 3.5,
   },
-  {
+  maat1erkixf3pzf8wb: {
     id: "maat1erkixf3pzf8wb",
     name: "Presence of regulated financial system",
     lastEdited: "",
@@ -1213,7 +1213,7 @@ export const rules = [
       { name: "Yes", id: "YES", score: 60 },
     ],
   },
-  {
+  maat1erkvkbbu1g8uhd: {
     id: "maat1erkvkbbu1g8uhd",
     name: "Presence of regulated financial system - JA",
     lastEdited: "",
@@ -1231,7 +1231,7 @@ export const rules = [
     sectionWeight: 10,
     modelWeight: 3.5,
   },
-  {
+  maggfcaod3qu54n37: {
     id: "maggfcaod3qu54n37",
     name: "Age",
     lastEdited: "",
@@ -1253,7 +1253,7 @@ export const rules = [
     sectionWeight: 15,
     modelWeight: 5,
   },
-  {
+  maggfcao3kyx2qms3iq: {
     id: "maggfcao3kyx2qms3iq",
     name: "Age-JA",
     lastEdited: "",
@@ -1275,7 +1275,7 @@ export const rules = [
     sectionWeight: 15,
     modelWeight: 5,
   },
-  {
+  maggmepa718cmohsvso: {
     id: "maggmepa718cmohsvso",
     name: "Employment Type-JA",
     lastEdited: "",
@@ -1307,4 +1307,4 @@ export const rules = [
     sectionWeight: 7.5,
     modelWeight: 2.6,
   },
-];
+};
