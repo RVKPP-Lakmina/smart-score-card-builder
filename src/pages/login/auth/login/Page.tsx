@@ -63,7 +63,13 @@ export default React.memo(function LoginPage() {
             Sign In to Smart Collect
           </h2>
 
-          <form onSubmit={signIn} className="space-y-6">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              signIn();
+            }}
+            className="space-y-6"
+          >
             <div>
               <input
                 type="text"

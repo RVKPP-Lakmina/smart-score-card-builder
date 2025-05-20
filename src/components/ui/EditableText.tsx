@@ -4,17 +4,29 @@ import { cn } from "../../lib/util";
 interface EditableTextProps {
   label: string;
   onValueChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const EditableText: React.FC<EditableTextProps> = ({
   label,
   onValueChange,
+  disabled = false,
 }: EditableTextProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(label);
 
+  useEffect(() => {
+    if (label.toString() !== text.toString()) {
+      setText(label);
+    }
+  }, [label, text]);
+
   const handleDoubleClick = () => {
-    setIsEditing(true);
+    if (disabled) {
+      return;
+    }
+
+    setIsEditing((prev) => !prev);
   };
 
   useEffect(() => {
@@ -37,25 +49,24 @@ const EditableText: React.FC<EditableTextProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = event.target.value;
 
-    if (!input) {
+    if (input === "") {
       setText("");
       onValueChange("");
       return;
     }
 
-    // Convert to decimal: input 5 becomes 0.5
+    if (!/^\d{0,3}$/.test(input)) {
+      return;
+    }
+
     const number = Number(input);
 
-    if (isNaN(number)) {
-      setText("");
-      onValueChange("");
+    if (number < 0 || number > 100) {
       return;
     }
 
-    const formattedValue = number.toString();
-
-    setText(formattedValue);
-    onValueChange(formattedValue);
+    setText(input);
+    onValueChange(input);
   };
 
   const handleBlur = () => {
@@ -64,21 +75,33 @@ const EditableText: React.FC<EditableTextProps> = ({
   };
 
   return (
-    <div className="text-btn">
+    <div
+      className={cn(
+        "text-btn",
+        disabled ? "cursor-not-allowed" : "cursor-pointer"
+      )}
+    >
       {isEditing && (
-        <input
-          type="number"
-          onChange={handleChange}
-          min={0}
-          max={1}
-          step={0.001}
-          onBlur={handleBlur}
+        <div
           className={cn(
+            "flex items-center space-x-1",
             "w-16 p-1 rounded-md dark:bg-gray-800 dark:text-white text-right",
             "border border-sky-500 dark:border-sky-500",
             "focus:border-sky-500 focus:outline focus:outline-sky-500"
           )}
-        />
+        >
+          <input
+            value={text}
+            onChange={handleChange}
+            min={0}
+            max={100}
+            step={1}
+            disabled={disabled}
+            onBlur={handleBlur}
+            className="w-full bg-transparent text-right focus:outline-none"
+          />
+          <span className="text-gray-700 dark:text-white">%</span>
+        </div>
       )}
 
       {!isEditing && (

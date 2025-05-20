@@ -1,8 +1,8 @@
 import { Trash2 } from "lucide-react";
-import { updateRulesScore } from "../services/services";
-import EditableText from "./ui/EditableText";
-import { useModal } from "../hooks/useModal";
-import { Properties, RuleWithId } from "../types/rules";
+import { updateRulesScore } from "../../services/services";
+import EditableText from "../ui/EditableText";
+import { useModal } from "../../hooks/useModal";
+import { Properties, RuleWithId } from "../../types/rules";
 import { useCallback, useEffect, useState } from "react";
 
 const RuleItem = ({
