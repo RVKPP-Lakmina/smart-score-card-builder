@@ -12,11 +12,7 @@ const Page = () => {
   const {
     currentPage,
     navigationPanel: { isNavOpen, toggleNav },
-    userDetails: {
-      userName,
-
-      // , userEmail
-    },
+    userDetails: { userName },
   } = useNavigation();
 
   return (

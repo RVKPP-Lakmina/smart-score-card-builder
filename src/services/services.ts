@@ -19,7 +19,6 @@ import { getTemplateSections } from "./api/section/getTemplaterSection";
 import {
   cloneTemplate,
   deleteTemplate,
-  getAllTemplates,
   saveTemplate,
 } from "./api/templateApis";
 import {
@@ -168,30 +167,23 @@ export const createProduct = async (product: CreateNewProduct) => {
   }
 };
 
-// export const fetchTemplates = async () => {
-//   try {
-//     // const response = await getAllTemplates();
-//     const response = await api.get("/template-builder");
-
-//     if (response?.data?.status === 1 && "data" in response && response.data) {
-//       return response.data?.data as Templates;
-//     } else {
-//       alert("Error fetching templates:");
-//     }
-//   } catch (error) {
-//     alert("Error fetching templates:" + (error as Error).message);
-//   }
-// };
-
 export const fetchTemplates = async () => {
   try {
-    const response = await getAllTemplates();
-    // const response = await api.get("/template-builder");
-
-    // if (response?.status === 1 && "data" in response && response.data) {
+    const { data: response } = await api.get("/template-builder");
 
     if (response?.status === 1 && "data" in response && response.data) {
-      return response?.data as Templates;
+      const result = {} as Templates;
+
+      Object.values(response.data as Templates).forEach(
+        (template: TemplatesPropsWithId) => {
+          result[template.id] = {
+            ...template,
+            sectionIds: template.sectionIds || [],
+          };
+        }
+      );
+
+      return result;
     } else {
       alert("Error fetching templates:");
     }

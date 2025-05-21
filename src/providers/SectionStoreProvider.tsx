@@ -3,7 +3,7 @@ import SectionStoreContext from "../context/SectionStoreContext";
 import {
   Templates,
   TemplateSections,
-  TemplatesPropsWithId,
+  TemplateSectionsPropsWithId,
 } from "../types/responseTypes";
 import {
   addNewTemplateSection,
@@ -12,6 +12,7 @@ import {
   getAllSections,
   getRawRules,
   getSelectedSections,
+  updateOverallWeight,
 } from "../services/services";
 import useTemplateStore from "../hooks/useTemplateStore";
 import { useModal } from "../hooks/useModal";
@@ -143,6 +144,25 @@ const SectionStoreProvider = ({
     closeModal();
   }, [closeModal, templateId]);
 
+  const onSaveOverallWeight = useCallback(
+    async (section: TemplateSectionsPropsWithId, overallWeight: number) => {
+      await updateOverallWeight(section.id, overallWeight.toString());
+      setSections((prevSections: TemplateSections) => {
+        if (prevSections[section.id]) {
+          return {
+            ...prevSections,
+            [section.id]: {
+              ...prevSections[section.id],
+              overallWeight: overallWeight,
+            },
+          };
+        }
+        return prevSections;
+      });
+    },
+    []
+  );
+
   const saveSectionBulkRules = useCallback(
     async (sectionId: string, ruleIds: string[]) => {
       const response: RuleWithId[] | undefined = await createSectionRules(
@@ -236,7 +256,7 @@ const SectionStoreProvider = ({
   }, []);
 
   const changePageToRules = useCallback(
-    (section: TemplatesPropsWithId) => {
+    (section: TemplateSectionsPropsWithId) => {
       handlePageChange?.("characteristics");
       paramRef.current = {
         ...paramRef.current,
@@ -251,7 +271,7 @@ const SectionStoreProvider = ({
     <SectionStoreContext.Provider
       value={{
         sections,
-        createTemplte,
+        createTemplate: createTemplte,
         rawSections,
         useCreateNewSections,
         sectionRules,
@@ -260,6 +280,7 @@ const SectionStoreProvider = ({
         handleDeleteRuleItem,
         templateId,
         changePageToRules,
+        onSaveOverallWeight,
       }}
     >
       {children}

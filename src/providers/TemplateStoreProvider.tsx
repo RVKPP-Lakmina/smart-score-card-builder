@@ -9,10 +9,12 @@ import {
   removeTemplate,
 } from "../services/services";
 import { templateParams } from "../types/requests";
+import Spinner from "../components/ui/Loader";
 
 const TemplateStoreProvider = ({ children }: { children: React.ReactNode }) => {
   const [templates, setTemplates] = useState<Templates>({} as Templates);
   const { openModal } = useModal();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getTemplates = useCallback(async () => {
     const response = await fetchTemplates();
@@ -20,6 +22,7 @@ const TemplateStoreProvider = ({ children }: { children: React.ReactNode }) => {
     if (response) {
       setTemplates(response);
     }
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -104,6 +107,10 @@ const TemplateStoreProvider = ({ children }: { children: React.ReactNode }) => {
     },
     [openModal, handleCloneTemplate, templates]
   );
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <TemplaterStoreContext.Provider
