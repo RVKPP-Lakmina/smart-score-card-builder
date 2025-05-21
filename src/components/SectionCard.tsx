@@ -14,6 +14,7 @@ interface SectionCardProps {
   value?: string;
   id: string;
   onPageChange?: () => void;
+  onOverallWeightChange?: (value: string) => void;
 }
 
 const SectionCard: React.FC<SectionCardProps> = ({
@@ -22,6 +23,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
   section,
   onPageChange,
   value,
+  onOverallWeightChange,
 }: SectionCardProps) => {
   const { sectionRules, rawRules, saveSectionBulkRules, handleDeleteRuleItem } =
     useSectionStore();
@@ -55,6 +57,7 @@ const SectionCard: React.FC<SectionCardProps> = ({
       value={Number(value || "0.00") as number}
       onAdd={addNewRule}
       overallWeight={section?.rules?.length ? section.overallWeight : 0}
+      onChange={onOverallWeightChange}
     >
       <ul>
         {(sectionRules?.[id] || []).length ? (

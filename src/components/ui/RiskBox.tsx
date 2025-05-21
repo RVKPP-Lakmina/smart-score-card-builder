@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Plus } from "lucide-react";
 import EditableText from "./EditableText";
-import { updateOverallWeight } from "../../services/services";
 
 interface RiskBoxProps {
   id: string;
@@ -15,18 +14,18 @@ interface RiskBoxProps {
   overallWeight?: number;
   sectionWeight?: number;
   onPageChange?: () => void;
+  onChange?: (value: string) => void;
 }
 
 export function RiskBox({
-  id,
   title,
   onAdd,
   children,
   saveButtonVisible,
   overallWeight,
   onPageChange,
-}: // sectionWeight,
-RiskBoxProps) {
+  onChange,
+}: RiskBoxProps) {
   const [sectionWeight, setSectionWeight] = React.useState<number>(
     Number(overallWeight) || 0
   );
@@ -38,6 +37,7 @@ RiskBoxProps) {
       return;
     }
     setSectionWeight(number);
+    onChange?.(value);
   };
 
   React.useEffect(() => {
@@ -45,20 +45,6 @@ RiskBoxProps) {
       setSectionWeight(overallWeight);
     }
   }, [overallWeight]);
-
-  useEffect(() => {
-    const handleKeyDown = async (event: KeyboardEvent) => {
-      if (event.key === "Enter") {
-        await updateOverallWeight(id, sectionWeight.toString());
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [id, sectionWeight]);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 group hover:shadow-lg transition-shadow">
@@ -82,13 +68,6 @@ RiskBoxProps) {
 
       <div className="px-4 py-[1px] flex justify-end items-center border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-          {/* <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-            Section Weight:
-            <EditableText
-              label={sectionWeight?.toString() || "0.00"}
-              onValueChange={() => {}}
-            />
-          </span> */}
           <span className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
             Overall Weight:
             <EditableText
@@ -100,7 +79,6 @@ RiskBoxProps) {
       </div>
 
       <div className="border flex justify-between border-gray-200 dark:border-gray-700"></div>
-
       <div
         className="p-3"
         style={{

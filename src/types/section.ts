@@ -1,5 +1,5 @@
 import { ItemsDD } from "./anyTypes";
-import { Sections, TemplatesPropsWithId } from "./responseTypes";
+import { TemplateSections, TemplateSectionsPropsWithId } from "./responseTypes";
 import { RuleWithId } from "./rules";
 
 export interface UseCreateNewSectionsProps {
@@ -11,7 +11,7 @@ export interface UseCreateNewSectionsProps {
   };
 }
 export interface SectionStoreContextType {
-  sections: Sections;
+  sections: TemplateSections;
   createTemplte: () => void;
   rawSections: ItemsDD[];
   useCreateNewSections: () => UseCreateNewSectionsProps;
@@ -20,5 +20,9 @@ export interface SectionStoreContextType {
   templateId: string;
   saveSectionBulkRules: (sectionId: string, ruleIds: string[]) => Promise<void>;
   handleDeleteRuleItem: (rule: RuleWithId) => Promise<void>;
-  changePageToRules: (section: TemplatesPropsWithId) => void;
+  changePageToRules: (section: TemplateSectionsPropsWithId) => void;
+  onSaveOverallWeight: (
+    section: TemplateSectionsPropsWithId,
+    overallWeight: number
+  ) => Promise<void>;
 }
