@@ -12,7 +12,7 @@ export interface UseCreateNewSectionsProps {
 }
 export interface SectionStoreContextType {
   sections: TemplateSections;
-  createTemplte: () => void;
+  createTemplate: () => void;
   rawSections: ItemsDD[];
   useCreateNewSections: () => UseCreateNewSectionsProps;
   sectionRules: Record<string, RuleWithId[]>;

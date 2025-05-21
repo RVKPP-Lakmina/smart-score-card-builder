@@ -271,7 +271,7 @@ const SectionStoreProvider = ({
     <SectionStoreContext.Provider
       value={{
         sections,
-        createTemplte,
+        createTemplate: createTemplte,
         rawSections,
         useCreateNewSections,
         sectionRules,

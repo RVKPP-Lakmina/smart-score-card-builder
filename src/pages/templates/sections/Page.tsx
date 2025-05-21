@@ -25,7 +25,7 @@ const SectionsPage = () => {
   const {
     sections,
     templateId,
-    createTemplte,
+    createTemplate: createTemplte,
     changePageToRules,
     onSaveOverallWeight,
   } = useSectionStore();
