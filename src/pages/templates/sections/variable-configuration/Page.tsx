@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { AttributeConfiguration } from "../../../../components/variable-definition/AttributeConfiguration";
 import { VariableDefinitionForm } from "../../../../components/variable-definition/VariableDefinitionForm";
 import {
-  PropertiesMap,
+  // PropertiesMap,
   RuleEnhanced,
   RuleEnhancedWithId,
 } from "../../../../types/rules";
@@ -10,7 +10,7 @@ import AttributeConfigurationMasterData from "../../../../components/variable-de
 
 export default function VariableConfigurationPage() {
   const [variables, setVariables] = useState([] as RuleEnhancedWithId[]);
-  const [attributes, setAttributes] = useState({} as PropertiesMap);
+  // const [attributes, setAttributes] = useState({} as PropertiesMap);
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedVariable, setSelectedVariable] = useState<
     RuleEnhancedWithId | RuleEnhanced | null
