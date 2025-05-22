@@ -16,7 +16,7 @@ const Page = () => {
   } = useNavigation();
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-auto">
       <Navigations />
       <div
         className={cn(
@@ -66,7 +66,7 @@ const Page = () => {
           </div>
         </header>
 
-        <main className="p-6">
+        <div className="p-6">
           <React.Suspense
             fallback={
               <div className="flex justify-center items-center py-12">
@@ -76,7 +76,7 @@ const Page = () => {
           >
             {React.createElement(getComponent(currentPage))}
           </React.Suspense>
-        </main>
+        </div>
       </div>
     </div>
   );

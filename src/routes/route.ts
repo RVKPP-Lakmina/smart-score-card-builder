@@ -87,4 +87,17 @@ export default new Map([
         "Learn how to use the ScoreCard system with our comprehensive guides and roadmap",
     },
   ],
+
+  [
+    "variable-configuration",
+    {
+      component: React.lazy(
+        () => import("../pages/templates/sections/variable-configuration/Page")
+      ),
+      Icon: HelpCircle,
+      title: "Variable Configuration",
+      description:
+        "Configure variables and their attributes for your scorecard templates",
+    },
+  ],
 ]) as Routes;
