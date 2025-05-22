@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useState } from "react";
 import { AttributeConfiguration } from "../../../../components/variable-definition/AttributeConfiguration";
 import { VariableDefinitionForm } from "../../../../components/variable-definition/VariableDefinitionForm";
@@ -49,18 +48,18 @@ export default function VariableConfigurationPage() {
     setCurrentStep(1);
   }, []);
 
-  const handleSaveAttributes = useCallback(
-    (variable: RuleEnhancedWithId, newAttributes: any[]) => {
-      setAttributes({
-        ...attributes,
-        [variable.id]: newAttributes,
-      });
+  // const handleSaveAttributes = useCallback(
+  //   (variable: RuleEnhancedWithId, newAttributes: any[]) => {
+  //     setAttributes({
+  //       ...attributes,
+  //       [variable.id]: newAttributes,
+  //     });
 
-      setCurrentStep(1);
-      setSelectedVariable(null);
-    },
-    [attributes]
-  );
+  //     setCurrentStep(1);
+  //     setSelectedVariable(null);
+  //   },
+  //   [attributes]
+  // );
 
   return (
     <div className="container mx-auto py-2 px-4">
