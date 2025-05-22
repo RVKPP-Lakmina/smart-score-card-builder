@@ -563,7 +563,7 @@ const ExistingVariables: React.FC<ExistingVariablesProps> = React.memo(
               </thead>
             </table>
 
-            <div className="overflow-y-auto max-h-[calc(100%-300px)]">
+            <div className="overflow-y-auto max-h-[calc(100% - 300px)]">
               <table className="w-full border-collapse">
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                   {existingVariables.map((variable) => (
