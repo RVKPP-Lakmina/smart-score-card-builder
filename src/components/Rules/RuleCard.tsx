@@ -67,9 +67,9 @@ const RuleCard = ({
     }
   };
 
-  const handleSave = () => {
-    onSave?.(items);
-  };
+  // const handleSave = () => {
+  //   onSave?.(items);
+  // };
 
   return (
     <RuleBoxWrapper
