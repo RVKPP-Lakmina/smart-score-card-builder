@@ -9,8 +9,8 @@ const RuleCard = ({
   rule,
   id,
   title,
-  onSave,
-}: {
+}: // onSave,
+{
   rule: RuleWithId;
   id: string;
   title: string;
