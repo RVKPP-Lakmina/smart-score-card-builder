@@ -6,8 +6,8 @@ import { Button } from "../../ui/Button";
 import { Properties } from "../../../types/rules";
 
 interface ScoreCardEditorModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
   title: string;
   initialItems?: Properties[];
   onSave?: (items: Properties[]) => void;
@@ -85,6 +85,7 @@ export default function ScoreCardEditorModal({
           <div className="space-y-2">
             {items.map((item, index) => (
               <div key={item.id} className="flex items-center space-x-2">
+                <span className="text-gray-500">{index + 1}.</span>
                 <input
                   ref={(el) => {
                     inputRefs.current[index] = el;

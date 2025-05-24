@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Printer,
   Download,
@@ -6,14 +6,53 @@ import {
   Save,
   X,
   FileText,
-  CheckCircle,
-  AlertCircle,
+  Calendar,
+  QrCode,
 } from "lucide-react";
-import { useReactToPrint } from "react-to-print";
 import { DataNotFound } from "./ui/DataNotFound";
 import { Button } from "./ui/Button";
 import { cn } from "../lib/util";
-// Reusing the Report interface from the dynamic form
+import { useReactToPrint } from "react-to-print";
+
+const getScoreColorClass = (score: number) => {
+  if (score >= 85) return "text-green-500 dark:text-green-400"; // 85+
+  if (score >= 75) return "text-blue-500 dark:text-blue-400"; // 75–84
+  if (score >= 70) return "text-yellow-500 dark:text-yellow-400"; // 70–74
+  if (score >= 65) return "text-amber-500 dark:text-amber-400"; // 65–69
+  if (score >= 60) return "text-lime-500 dark:text-lime-400"; // 60–64
+  if (score >= 55) return "text-teal-500 dark:text-teal-400"; // 55–59
+  if (score >= 50) return "text-cyan-500 dark:text-cyan-400"; // 50–54
+  return "text-red-500 dark:text-red-400"; // < 50
+};
+
+const getScoreBgClass = (score: number) => {
+  if (score >= 85) return "bg-green-100 dark:bg-green-900/30"; // 85+
+  if (score >= 75) return "bg-blue-100 dark:bg-blue-900/30"; // 75–84
+  if (score >= 70) return "bg-yellow-100 dark:bg-yellow-900/30"; // 70–74
+  if (score >= 65) return "bg-amber-100 dark:bg-amber-900/30"; // 65–69
+  if (score >= 60) return "bg-lime-100 dark:bg-lime-900/30"; // 60–64
+  if (score >= 55) return "bg-teal-100 dark:bg-teal-900/30"; // 55–59
+  if (score >= 50) return "bg-cyan-100 dark:bg-cyan-900/30"; // 50–54
+  return "bg-rose-100 dark:bg-rose-900/30"; // < 50
+};
+
+const getGrade = (score: number): string => {
+  if (score >= 85) return "AAA";
+  if (score >= 75) return "AA";
+  if (score >= 70) return "A";
+  if (score >= 65) return "BBB";
+  if (score >= 60) return "BB";
+  if (score >= 55) return "B";
+  if (score >= 50) return "C";
+  return "D";
+};
+
+const getStatusColor = (status: string) => {
+  return status === "active"
+    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+    : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300";
+};
+
 interface Report {
   id: string;
   productId: string;
@@ -58,35 +97,211 @@ export function ReportDetail({
   const [editedStatus, setEditedStatus] = useState<"active" | "inactive">(
     "active"
   );
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
   const reportRef = useRef<HTMLDivElement>(null);
-  const reactToPrintFn = useReactToPrint({
-    contentRef: reportRef,
-    documentTitle: `ScoreCard Report - ${report?.productName || "Report"}`,
-  });
+  const reactToPrintFn = useReactToPrint({ contentRef: reportRef });
 
-  // Load report from local storage
-  useState(() => {
+  // Generate QR Code
+  const generateQRCode = async (reportId: string) => {
+    try {
+      const QRCode = await import("qrcode");
+      const reportUrl = `${window.location.origin}/reports/${reportId}`;
+      const qrDataUrl = await QRCode.toDataURL(reportUrl, {
+        width: 200,
+        margin: 2,
+        color: {
+          dark: "#1f2937",
+          light: "#ffffff",
+        },
+      });
+      setQrCodeUrl(qrDataUrl);
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+      setQrCodeUrl("/placeholder.svg?height=200&width=200");
+    }
+  };
+
+  // Load report from local storage or use dummy data
+  useEffect(() => {
     setIsLoading(true);
     try {
       const reports = JSON.parse(
         localStorage.getItem("scorecard-reports") || "[]"
       ) as Report[];
-      const foundReport = reports.find((r) => r.id === reportId);
-      if (foundReport) {
-        setReport(foundReport);
-        setEditedStatus(foundReport.status);
+      let foundReport = reports.find((r) => r.id === reportId);
+
+      // If no report found, create dummy data
+      if (!foundReport) {
+        foundReport = {
+          id: reportId,
+          productId: "PROD-001",
+          productName: "Enterprise Security Platform",
+          templateId: "TEMP-SEC-001",
+          templateName: "Security Assessment Template",
+          createdAt: new Date().toISOString(),
+          createdBy: currentUser,
+          status: "active",
+          totalScore: 78.5,
+          sectionScores: [
+            {
+              sectionId: "SEC-001",
+              sectionName: "Authentication & Authorization",
+              score: 85,
+              weight: 30,
+              weightedScore: 25.5,
+              rules: [
+                {
+                  ruleId: "RULE-001",
+                  ruleName: "Multi-Factor Authentication",
+                  value: true,
+                  score: 100,
+                  weight: 40,
+                  weightedScore: 40,
+                },
+                {
+                  ruleId: "RULE-002",
+                  ruleName: "Password Complexity",
+                  value: "Strong",
+                  score: 90,
+                  weight: 30,
+                  weightedScore: 27,
+                },
+                {
+                  ruleId: "RULE-003",
+                  ruleName: "Session Timeout",
+                  value: 30,
+                  score: 75,
+                  weight: 30,
+                  weightedScore: 22.5,
+                },
+              ],
+            },
+            {
+              sectionId: "SEC-002",
+              sectionName: "Data Encryption",
+              score: 72,
+              weight: 25,
+              weightedScore: 18,
+              rules: [
+                {
+                  ruleId: "RULE-004",
+                  ruleName: "Data at Rest Encryption",
+                  value: true,
+                  score: 100,
+                  weight: 50,
+                  weightedScore: 50,
+                },
+                {
+                  ruleId: "RULE-005",
+                  ruleName: "Data in Transit Encryption",
+                  value: "TLS 1.3",
+                  score: 95,
+                  weight: 30,
+                  weightedScore: 28.5,
+                },
+                {
+                  ruleId: "RULE-006",
+                  ruleName: "Key Management",
+                  value: "Basic",
+                  score: 60,
+                  weight: 20,
+                  weightedScore: 12,
+                },
+              ],
+            },
+            {
+              sectionId: "SEC-003",
+              sectionName: "Network Security",
+              score: 68,
+              weight: 20,
+              weightedScore: 13.6,
+              rules: [
+                {
+                  ruleId: "RULE-007",
+                  ruleName: "Firewall Configuration",
+                  value: "Configured",
+                  score: 80,
+                  weight: 40,
+                  weightedScore: 32,
+                },
+                {
+                  ruleId: "RULE-008",
+                  ruleName: "Intrusion Detection",
+                  value: false,
+                  score: 0,
+                  weight: 30,
+                  weightedScore: 0,
+                },
+                {
+                  ruleId: "RULE-009",
+                  ruleName: "VPN Access",
+                  value: true,
+                  score: 100,
+                  weight: 30,
+                  weightedScore: 30,
+                },
+              ],
+            },
+            {
+              sectionId: "SEC-004",
+              sectionName: "Compliance & Auditing",
+              score: 82,
+              weight: 25,
+              weightedScore: 20.5,
+              rules: [
+                {
+                  ruleId: "RULE-010",
+                  ruleName: "Audit Logging",
+                  value: true,
+                  score: 100,
+                  weight: 40,
+                  weightedScore: 40,
+                },
+                {
+                  ruleId: "RULE-011",
+                  ruleName: "Compliance Reports",
+                  value: "Monthly",
+                  score: 85,
+                  weight: 35,
+                  weightedScore: 29.75,
+                },
+                {
+                  ruleId: "RULE-012",
+                  ruleName: "Data Retention Policy",
+                  value: "Defined",
+                  score: 75,
+                  weight: 25,
+                  weightedScore: 18.75,
+                },
+              ],
+            },
+          ],
+        };
+
+        // Save dummy data to localStorage
+        const updatedReports = [...reports, foundReport];
+        localStorage.setItem(
+          "scorecard-reports",
+          JSON.stringify(updatedReports)
+        );
       }
+
+      setReport(foundReport);
+      setEditedStatus(foundReport.status);
+
+      // Generate QR code for the report
+      generateQRCode(foundReport.id);
     } catch (error) {
       console.error("Error loading report:", error);
     } finally {
       setIsLoading(false);
     }
-  });
+  }, [reportId, currentUser]);
 
   // Handle printing
   const handlePrint = async () => {
     if (reportRef.current) {
-      await reactToPrintFn();
+      reactToPrintFn();
     }
   };
 
@@ -112,10 +327,18 @@ export function ReportDetail({
     }
   };
 
+  // Handle downloading QR code
+  const handleDownloadQR = () => {
+    if (qrCodeUrl) {
+      const link = document.createElement("a");
+      link.download = `report-${report?.id}-qr.png`;
+      link.href = qrCodeUrl;
+      link.click();
+    }
+  };
+
   // Handle downloading as PDF
   const handleDownload = () => {
-    // In a real app, this would generate a PDF
-    // For now, we'll just trigger the print dialog
     handlePrint();
   };
 
@@ -129,22 +352,6 @@ export function ReportDetail({
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
-
-  // Get score color class
-  const getScoreColorClass = (score: number) => {
-    if (score >= 80) return "text-green-500 dark:text-green-400";
-    if (score >= 60) return "text-blue-500 dark:text-blue-400";
-    if (score >= 40) return "text-yellow-500 dark:text-yellow-400";
-    return "text-red-500 dark:text-red-400";
-  };
-
-  // Get score background class
-  const getScoreBgClass = (score: number) => {
-    if (score >= 80) return "bg-green-100 dark:bg-green-900/30";
-    if (score >= 60) return "bg-blue-100 dark:bg-blue-900/30";
-    if (score >= 40) return "bg-yellow-100 dark:bg-yellow-900/30";
-    return "bg-red-100 dark:bg-red-900/30";
   };
 
   if (isLoading) {
@@ -177,9 +384,6 @@ export function ReportDetail({
           <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
             {report.productName} Report
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Template: {report.templateName}
-          </p>
         </div>
         <div className="flex space-x-2">
           {onClose && (
@@ -232,26 +436,43 @@ export function ReportDetail({
 
       {/* Report Content */}
       <div ref={reportRef} className="p-6">
-        {/* Report Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-gray-50 dark:bg-gray-750 p-4 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Report Information</h3>
+        {/* Report Info and QR Code */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {/* Report Information */}
+          <div className="md:col-span-2 bg-gray-50 dark:bg-gray-750 p-4 rounded-lg">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
+              Report Information
+            </h3>
             <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Report ID:
+              <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Report ID
                 </span>
-                <span>{report.id}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Created:
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 font-mono">
+                  {report.id}
                 </span>
-                <span>{formatDate(report.createdAt)}</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600 dark:text-gray-400">
-                  Status:
+              <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Product
+                </span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  {report.productName}
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400 flex items-center">
+                  <Calendar className="w-4 h-4" />
+                  <span className="ml-2">Created</span>
+                </span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  {formatDate(report.createdAt)}
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-3">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Status
                 </span>
                 {isEditing ? (
                   <select
@@ -259,19 +480,16 @@ export function ReportDetail({
                     onChange={(e) =>
                       setEditedStatus(e.target.value as "active" | "inactive")
                     }
-                    className="px-2 py-1 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800"
+                    className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="active">Active</option>
                     <option value="inactive">Inactive</option>
                   </select>
                 ) : (
                   <span
-                    className={cn(
-                      "px-2 py-1 rounded-full text-xs font-medium",
-                      report.status === "active"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                        : "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300"
-                    )}
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+                      report.status
+                    )}`}
                   >
                     {report.status.charAt(0).toUpperCase() +
                       report.status.slice(1)}
@@ -281,45 +499,97 @@ export function ReportDetail({
             </div>
           </div>
 
-          <div className="bg-gray-50 dark:bg-gray-750 p-4 rounded-lg flex flex-col justify-between">
-            <h3 className="text-lg font-semibold mb-2">Overall Score</h3>
-            <div className="flex items-center justify-between">
-              <div className="text-4xl font-bold flex items-center">
+          {/* QR Code Section */}
+          <div className="bg-gray-50 dark:bg-gray-750 p-4 rounded-lg text-center">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center justify-center">
+              <QrCode className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
+              Quick Access
+            </h3>
+            <div className="space-y-4">
+              <div className="flex justify-center">
+                <div className="p-3 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600">
+                  {qrCodeUrl ? (
+                    <img
+                      src={qrCodeUrl || "/placeholder.svg"}
+                      alt="Report QR Code"
+                      className="w-32 h-32"
+                    />
+                  ) : (
+                    <div className="w-32 h-32 bg-gray-200 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                      <QrCode className="h-8 w-8 text-gray-400" />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="text-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                  Scan to view report online
+                </p>
+                <Button
+                  variant="outline"
+                  onClick={handleDownloadQR}
+                  className="w-full text-xs py-2"
+                  disabled={!qrCodeUrl}
+                >
+                  <Download size={14} className="mr-1" />
+                  Download QR
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Overall Score */}
+        <div className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-blue-900/20 dark:to-green-900/20 p-6 rounded-lg mb-8 border border-blue-100 dark:border-blue-800">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
+                Overall Score
+              </h3>
+              <div className="text-5xl font-bold flex items-center">
                 <span className={getScoreColorClass(report.totalScore)}>
                   {Math.round(report.totalScore)}
                 </span>
-                <span className="text-gray-400 dark:text-gray-500 text-lg ml-1">
+                <span className="text-gray-400 dark:text-gray-500 text-2xl ml-2">
                   /100
                 </span>
               </div>
-              <div
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                Grade:{" "}
+                <span className="font-semibold">
+                  {getGrade(report.totalScore)}
+                </span>
+              </p>
+            </div>
+            <div
+              className={cn(
+                "w-32 h-32 rounded-full flex items-center justify-center text-3xl font-bold border-4",
+                getScoreBgClass(report.totalScore),
+                report.totalScore >= 50
+                  ? "border-green-300 dark:border-green-600"
+                  : "border-red-300 dark:border-red-600"
+              )}
+            >
+              <span
                 className={cn(
-                  "w-24 h-24 rounded-full flex items-center justify-center text-2xl font-bold",
-                  getScoreBgClass(report.totalScore)
+                  "text-2xl",
+                  report.totalScore >= 50
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400"
                 )}
               >
-                {report.totalScore >= 60 ? (
-                  <CheckCircle
-                    size={36}
-                    className="text-green-500 dark:text-green-400"
-                  />
-                ) : (
-                  <AlertCircle
-                    size={36}
-                    className="text-red-500 dark:text-red-400"
-                  />
-                )}
-              </div>
+                {getGrade(report.totalScore)}
+              </span>
             </div>
-            <div className="mt-2">
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                <div
-                  className="h-2.5 rounded-full bg-gradient-to-r from-blue-500 to-green-400"
-                  style={{
-                    width: `${Math.min(100, Math.max(0, report.totalScore))}%`,
-                  }}
-                ></div>
-              </div>
+          </div>
+          <div className="mt-4">
+            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+              <div
+                className="h-3 rounded-full bg-gradient-to-r from-blue-500 to-green-400 transition-all duration-500"
+                style={{
+                  width: `${Math.min(100, Math.max(0, report.totalScore))}%`,
+                }}
+              ></div>
             </div>
           </div>
         </div>
@@ -337,16 +607,20 @@ export function ReportDetail({
                   <div>
                     <h4 className="font-medium">{section.sectionName}</h4>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Weight: {(section.weight * 100).toFixed(0)}%
+                      Weight: {section.weight.toFixed(0)}%
                     </p>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl font-bold">
-                      <span className={getScoreColorClass(section.score)}>
+                      <span
+                        className={getScoreColorClass(
+                          (section.score / section.weight) * 100
+                        )}
+                      >
                         {Math.round(section.score)}
                       </span>
                       <span className="text-gray-400 dark:text-gray-500 text-sm ml-1">
-                        /100
+                        /{section.weight.toFixed(0)}
                       </span>
                     </div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -359,19 +633,13 @@ export function ReportDetail({
                   <table className="w-full">
                     <thead className="text-left">
                       <tr className="border-b border-gray-200 dark:border-gray-700">
-                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400">
+                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400  w-2/5">
                           Rule
                         </th>
-                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400">
+                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400 w-2/5">
                           Value
                         </th>
-                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400">
-                          Score
-                        </th>
-                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400">
-                          Weight
-                        </th>
-                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400 text-right">
+                        <th className="pb-2 font-medium text-gray-600 dark:text-gray-400 text-right w-1/5">
                           Weighted Score
                         </th>
                       </tr>
@@ -382,23 +650,23 @@ export function ReportDetail({
                           key={rule.ruleId}
                           className="border-b border-gray-100 dark:border-gray-800"
                         >
-                          <td className="py-3">{rule.ruleName}</td>
-                          <td className="py-3">
-                            {typeof rule.value === "boolean"
-                              ? rule.value
-                                ? "Yes"
-                                : "No"
-                              : String(rule.value)}
+                          <td className="py-3 px-3">{rule.ruleName}</td>
+                          <td className="py-3 px-3">
+                            {typeof rule.value === "boolean" ? (
+                              <span
+                                className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                  rule.value
+                                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
+                                    : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                                }`}
+                              >
+                                {rule.value ? "Yes" : "No"}
+                              </span>
+                            ) : (
+                              String(rule.value)
+                            )}
                           </td>
-                          <td className="py-3">
-                            <span className={getScoreColorClass(rule.score)}>
-                              {Math.round(rule.score)}
-                            </span>
-                          </td>
-                          <td className="py-3">
-                            {(rule.weight * 100).toFixed(0)}%
-                          </td>
-                          <td className="py-3 text-right">
+                          <td className="py-3 text-right font-medium px-3">
                             {rule.weightedScore.toFixed(2)}
                           </td>
                         </tr>
@@ -412,9 +680,18 @@ export function ReportDetail({
         </div>
 
         {/* Footer */}
-        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400 flex justify-between">
-          <div>Generated by Smart Scorecard</div>
-          <div>Report ID: {report.id}</div>
+        <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-700 text-sm text-gray-500 dark:text-gray-400 flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <span>Generated by Smart Scorecard</span>
+            <span>•</span>
+            <span>{formatDate(new Date().toISOString())}</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <span>Report ID:</span>
+            <span className="font-mono bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+              {report.id}
+            </span>
+          </div>
         </div>
       </div>
     </div>
