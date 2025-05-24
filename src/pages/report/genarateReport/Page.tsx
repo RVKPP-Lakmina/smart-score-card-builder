@@ -1,26 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
-import { CableCar, ChevronRight, ClipboardPlus, Package } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { Package } from "lucide-react";
 import { Search } from "../../../components/ui/SearchBox";
 import { DataNotFound } from "../../../components/ui/DataNotFound";
-import { ReportDetail } from "../../../components/ReportDetail";
 import { DynamicRuleForm } from "../../../components/DynamicRuleForm";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "../../../components/ui/BreadCrumb";
-
-// Types
-interface Product {
-  id: string;
-  name: string;
-  description?: string;
-  templateId: string;
-}
+import { fetchTemplates } from "../../../services/services";
+import { Templates } from "../../../types/responseTypes";
 
 interface Report {
   id: string;
@@ -51,51 +36,38 @@ interface Report {
 
 export default function GenerateReportPage({
   onPageChange,
-  page,
 }: {
-  onPageChange: (page: "report" | "generate-report") => void;
-  page: string;
+  onPageChange: (
+    page: "report" | "generate-report" | "report-output",
+    params: Record<string, string>
+  ) => void;
 }) {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Templates>({} as Templates);
+  const [selectedProduct, setSelectedProduct] = useState<
+    Templates[string] | null
+  >(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [generatedReport, setGeneratedReport] = useState<Report | null>(null);
+
+  const getTemplates = useCallback(async () => {
+    const response = await fetchTemplates();
+
+    if (response) {
+      setProducts(response);
+    }
+    setIsLoading(false);
+  }, []);
 
   // Load products
   useEffect(() => {
     setIsLoading(true);
-    // In a real app, this would be an API call
-    setTimeout(() => {
-      // Mock products data
-      const mockProducts: Product[] = [
-        {
-          id: "product-1",
-          name: "Personal Finance",
-          description: "Standard personal loan product with risk assessment",
-          templateId: "template-1",
-        },
-        {
-          id: "product-2",
-          name: "Personal Finance Model - Joint Borrowers",
-          description:
-            "Small Personal Finance Model - Joint Borrowers with comprehensive risk evaluation",
-          templateId: "template-2",
-        },
-        {
-          id: "product-3",
-          name: "Mortgage Loan",
-          description: "Home mortgage loan with property valuation",
-          templateId: "template-3",
-        },
-      ];
-      setProducts(mockProducts);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+    getTemplates();
+
+    setIsLoading(false);
+  }, [getTemplates]);
 
   // Filter products based on search term
-  const filteredProducts = products.filter(
+  const filteredProducts = Object.values(products).filter(
     (product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (product.description &&
@@ -103,85 +75,22 @@ export default function GenerateReportPage({
   );
 
   // Handle product selection
-  const handleProductSelect = (product: Product) => {
+  const handleProductSelect = (product: Templates[string]) => {
     setSelectedProduct(product);
-    setGeneratedReport(null);
+    onPageChange("generate-report", {
+      productName: product.name,
+    } as Record<string, string>);
   };
 
   // Handle report generation
   const handleReportGenerated = (report: Report) => {
-    setGeneratedReport(report);
-    // Scroll to the report section
-    setTimeout(() => {
-      document
-        .getElementById("report-section")
-        ?.scrollIntoView({ behavior: "smooth" });
-    }, 100);
+    onPageChange("report-output", {
+      reportId: report.id,
+    } as Record<string, string>);
   };
 
   return (
     <div>
-      <div className="mb-6">
-        <Breadcrumb>
-          <BreadcrumbList key={`div-div-BreadcrumbList`}>
-            <BreadcrumbItem key={`div-div-Breadcrumb-fragment-BreadcrumbList`}>
-              <BreadcrumbLink
-                key={`div-div-Breadcrumb-BreadcrumbLink-${page}`}
-                isHome={page === "generate-report"}
-                onClick={() => onPageChange("report")}
-                href="#"
-                className="flex items-center"
-              >
-                <ClipboardPlus size={16} className="mr-1" />
-                Reports
-              </BreadcrumbLink>
-
-              <BreadcrumbSeparator
-                key={`div-div-Breadcrumb-fragment-BreadcrumbSeparator-${page}`}
-              >
-                <ChevronRight size={16} />
-              </BreadcrumbSeparator>
-
-              {selectedProduct ? (
-                <>
-                  <BreadcrumbLink
-                    key={`div-div-Breadcrumb-BreadcrumbLink-2-${page}`}
-                    isHome={page === "generate-report"}
-                    onClick={() => setSelectedProduct(null)}
-                    href="#"
-                    className="flex items-center"
-                  >
-                    <CableCar size={16} className="mr-1" />
-                    Generate Report
-                  </BreadcrumbLink>
-
-                  <BreadcrumbSeparator
-                    key={`div-div-Breadcrumb-fragment-BreadcrumbSeparator-2-${page}`}
-                  >
-                    <ChevronRight size={16} />
-                  </BreadcrumbSeparator>
-
-                  <BreadcrumbPage
-                    key={`div-div-Breadcrumb-BreadcrumbPage-${page}`}
-                    className="flex items-center"
-                  >
-                    {selectedProduct.name.charAt(0).toUpperCase() +
-                      selectedProduct.name.slice(1)}
-                  </BreadcrumbPage>
-                </>
-              ) : (
-                <BreadcrumbPage
-                  key={`div-div-Breadcrumb-BreadcrumbPage-${page}`}
-                  className="flex items-center"
-                >
-                  Generate Report
-                </BreadcrumbPage>
-              )}
-            </BreadcrumbItem>
-          </BreadcrumbList>
-        </Breadcrumb>
-      </div>
-
       {!selectedProduct && (
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
           <div className="mb-6">
@@ -242,15 +151,6 @@ export default function GenerateReportPage({
                 onScoreGenerated={handleReportGenerated}
               />
             </div>
-
-            {generatedReport && (
-              <div id="report-section" className="mb-8">
-                <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-green-500 bg-clip-text text-transparent">
-                  Generated Report
-                </h2>
-                <ReportDetail reportId={generatedReport.id} />
-              </div>
-            )}
           </>
         )}
       </div>

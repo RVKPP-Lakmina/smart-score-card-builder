@@ -9,7 +9,6 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import { useModal } from "../../hooks/useModal";
 import { Search } from "../../components/ui/SearchBox";
 import { cn } from "../../lib/util";
 import { Button } from "../../components/ui/Button";
@@ -49,7 +48,10 @@ const ITEMS_PER_PAGE = 10;
 export default function ReportsPage({
   onPageChange,
 }: {
-  onPageChange: (page: "report" | "generate-report") => void;
+  onPageChange: (
+    page: "report" | "generate-report" | "report-output",
+    params?: Record<string, string>
+  ) => void;
 }) {
   const [reports, setReports] = useState<Report[]>([]);
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
@@ -61,7 +63,7 @@ export default function ReportsPage({
   const [currentPage, setCurrentPage] = useState(1);
   // const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
 
-  const { openModal } = useModal();
+  // const { openModal } = useModal();
 
   // Load reports from local storage
   useEffect(() => {
@@ -123,17 +125,17 @@ export default function ReportsPage({
   };
 
   // View report details
-  const viewReportDetails = (reportId: string) => {
-    // setSelectedReportId(reportId);
-    openModal({
-      childrenkey: "reportDetail",
-      size: "2xl",
-      closeOnOutsideClick: true,
-      props: {
-        reportId,
-      },
-    });
-  };
+  // const viewReportDetails = (reportId: string) => {
+  //   // setSelectedReportId(reportId);
+  //   openModal({
+  //     childrenkey: "reportDetail",
+  //     size: "2xl",
+  //     closeOnOutsideClick: true,
+  //     props: {
+  //       reportId,
+  //     },
+  //   });
+  // };
 
   // Get score color class
   const getScoreColorClass = (score: number) => {
@@ -257,10 +259,10 @@ export default function ReportsPage({
                     className="hover:bg-gray-50 dark:hover:bg-gray-750"
                   >
                     <td className="px-4 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
-                      {report.productName}
+                      {report.productName.split("Template")[0]}
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      {report.templateName}
+                      {report.productName}
                     </td>
                     <td className="px-4 py-4 text-sm text-gray-500 dark:text-gray-400">
                       {formatDate(report.createdAt)}
@@ -313,7 +315,12 @@ export default function ReportsPage({
                     <td className="px-4 py-4 text-sm">
                       <div className="flex space-x-2">
                         <button
-                          onClick={() => viewReportDetails(report.id)}
+                          onClick={() =>
+                            onPageChange("report-output", {
+                              productName: report.productName,
+                              reportId: report.id,
+                            })
+                          }
                           className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center"
                         >
                           <Eye size={16} className="mr-1" />
