@@ -447,6 +447,22 @@ export function ReportDetail({
             <div className="space-y-2">
               <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Customer Name
+                </span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  Xgen Admin
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Customer NIC
+                </span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  200016203278
+                </span>
+              </div>
+              <div className="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
                   Report ID
                 </span>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300 font-mono">
